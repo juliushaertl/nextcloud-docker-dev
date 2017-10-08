@@ -1,0 +1,49 @@
+version: '2'
+
+services:
+  nc-server-sqlite:
+    image: nextcloud-dev
+    environment:
+      SQL: 'sqlite'
+      NEXTCLOUD_AUTOINSTALL:
+      NEXTCLOUD_AUTOAPPS:
+    volumes:
+      - '${NEXTCLOUD_ROOT}:/var/www/html'
+      - nc-data-sqlite:/var/www/html/data
+      - nc-config-sqlite:/var/www/html/config
+    ports:
+      - 8010:80
+
+  nc-server-mysql:
+    image: nextcloud-dev
+    environment:
+      SQL: 'mysql'
+      NEXTCLOUD_AUTOINSTALL:
+      NEXTCLOUD_AUTOAPPS:
+      MYSQL_ROOT_PASSWORD: 'jah1Yohfureeg8shoosee7ie'
+      MYSQL_PASSWORD: 'nextcloud'
+      MYSQL_USER: 'nextcloud'
+      MYSQL_DATABASE: 'nextcloud'
+    volumes_from:
+      - nc-server-sqlite
+    volumes:
+      - nc-data-mysql:/var/www/html/data
+      - nc-config-mysql:/var/www/html/config
+    ports:
+      - 8011:80
+
+  nc-database-mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: 'jah1Yohfureeg8shoosee7ie'
+      MYSQL_PASSWORD: 'nextcloud'
+      MYSQL_USER: 'nextcloud'
+      MYSQL_DATABASE: 'nextcloud'
+
+volumes:
+  nc-data-sqlite:
+  nc-data-mysql:
+  nc-config-sqlite:
+  nc-config-mysql:
+
+
