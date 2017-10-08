@@ -8,7 +8,7 @@ services:
       NEXTCLOUD_AUTOINSTALL:
       NEXTCLOUD_AUTOAPPS:
     volumes:
-      - '${NEXTCLOUD_ROOT}:/var/www/html'
+      - '${NEXTCLOUD_SOURCE}:/var/www/html'
       - nc-data-sqlite:/var/www/html/data
       - nc-config-sqlite:/var/www/html/config
     ports:
