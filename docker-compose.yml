@@ -2,7 +2,7 @@ version: '2'
 
 services:
   nc-server-sqlite:
-    image: nextcloud-dev
+    image: juliushaertl/nextcloud-dev
     environment:
       SQL: 'sqlite'
       NEXTCLOUD_AUTOINSTALL:
@@ -15,7 +15,7 @@ services:
       - 8010:80
 
   nc-server-mysql:
-    image: nextcloud-dev
+    image: juliushaertl/nextcloud-dev
     environment:
       SQL: 'mysql'
       NEXTCLOUD_AUTOINSTALL:
