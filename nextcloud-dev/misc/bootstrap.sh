@@ -35,7 +35,7 @@ then
 		$OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL --database-name=nextcloud --database-host=nc-database-mysql --database-user=nextcloud --database-pass=nextcloud
 	fi;
 
-	for app in $NEXTCLOUD_AUTOAPPS; do
+	for app in $NEXTCLOUD_AUTOINSTALL_APPS; do
 		echo "Enable app ${app}"
 		$OCC app:enable $app
 	done
