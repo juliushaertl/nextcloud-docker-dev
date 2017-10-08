@@ -9,7 +9,7 @@ RUN yes | pecl install xdebug
         
 ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php configs/s3.php configs/config.php /root/
 
-ADD misc/bootstrap.sh /usr/local/bin/
+ADD misc/bootstrap.sh misc/occ /usr/local/bin/
 
 ENV WEBROOT /var/www/html
 
