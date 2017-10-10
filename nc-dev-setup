@@ -10,7 +10,8 @@ for entry in "$HOME/.nextcloud/nc-dev-setup"/*.conf
 Usage: `basename "$0"` CONFIGURATION COMMAND ARGS...
 
 Possible commands
-	start
+    create
+    start
 	stop
 	status
 	live
@@ -51,15 +52,17 @@ export COMPOSE_FILE=$HOME/.nextcloud/nc-dev-setup/docker-compose.yml
 
 if [ "$2" = "status" ]; then
 	docker-compose ps
+elif [ "$2" = "init" ]; then
+	docker-compose create
 elif [ "$2" = "live" ]; then
-	docker-compose up
+	docker-compose up "${@:3}"
 elif [ "$2" = "start" ]; then
 	docker-compose start
 elif [ "$2" = "stop" ]; then
 	docker-compose stop
 elif [ "$2" = "delete" ]; then
 	docker-compose stop
-	docker-compose rm
+    docker-compose rm -fv
 elif [ "$2" = "occ" ]; then
 	if [ "$3" = "" ]; then
 	    echo "No database type provided."

@@ -9,11 +9,14 @@ then
 	# wait until mysql is ready
 	while ! timeout 1 bash -c "echo > /dev/tcp/nc-database-mysql/3306"; do sleep 2; done
 	cp /root/autoconfig_mysql.php $WEBROOT/config/autoconfig.php
+    SQLHOST=nc-database-mysql
 fi
 
 if [ "$SQL" = "pgsql" ]
 then
+	while ! timeout 1 bash -c "echo > /dev/tcp/nc-database-postgres/5432"; do sleep 2; done
 	cp /root/autoconfig_pgsql.php $WEBROOT/config/autoconfig.php
+    SQLHOST=nc-database-postgres
 fi
 
 if [ "$SQL" = "oci" ]
@@ -29,10 +32,9 @@ if [ "$NEXTCLOUD_AUTOINSTALL" = "YES" ]
 then
 	echo "Starting auto installation"
 	if [ "$SQL" = "oci" ]; then
-		# oracle is a special snowflake
-		$OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL --database-name=xe --database-host=$SQL --database-user=system --database-pass=oracle
+		$OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL --database-name=xe --database-host=$SQLHOST --database-user=system --database-pass=oracle
 	else
-		$OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL --database-name=nextcloud --database-host=nc-database-mysql --database-user=nextcloud --database-pass=nextcloud
+		$OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL --database-name=nextcloud --database-host=$SQLHOST --database-user=nextcloud --database-pass=nextcloud
 	fi;
 
 	for app in $NEXTCLOUD_AUTOINSTALL_APPS; do

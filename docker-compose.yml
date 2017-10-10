@@ -6,7 +6,7 @@ services:
     environment:
       SQL: 'sqlite'
       NEXTCLOUD_AUTOINSTALL:
-      NEXTCLOUD_AUTOAPPS:
+      NEXTCLOUD_AUTOINSTALL_APPS:
     volumes:
       - '${NEXTCLOUD_SOURCE}:/var/www/html'
       - nc-data-sqlite:/var/www/html/data
@@ -19,18 +19,30 @@ services:
     environment:
       SQL: 'mysql'
       NEXTCLOUD_AUTOINSTALL:
-      NEXTCLOUD_AUTOAPPS:
-      MYSQL_ROOT_PASSWORD: 'jah1Yohfureeg8shoosee7ie'
-      MYSQL_PASSWORD: 'nextcloud'
-      MYSQL_USER: 'nextcloud'
-      MYSQL_DATABASE: 'nextcloud'
-    volumes_from:
-      - nc-server-sqlite
+      NEXTCLOUD_AUTOINSTALL_APPS:
     volumes:
+      - '${NEXTCLOUD_SOURCE}:/var/www/html'
       - nc-data-mysql:/var/www/html/data
       - nc-config-mysql:/var/www/html/config
     ports:
       - 8011:80
+    depends_on:
+      - nc-database-mysql
+
+  nc-server-postgres:
+    image: juliushaertl/nextcloud-dev
+    environment:
+      SQL: 'pgsql'
+      NEXTCLOUD_AUTOINSTALL:
+      NEXTCLOUD_AUTOINSTALL_APPS:
+    volumes:
+      - '${NEXTCLOUD_SOURCE}:/var/www/html'
+      - nc-data-postgres:/var/www/html/data
+      - nc-config-postgres:/var/www/html/config
+    ports:
+      - 8012:80
+    depends_on:
+      - nc-database-postgres
 
   nc-database-mysql:
     image: mysql:latest
@@ -40,10 +52,20 @@ services:
       MYSQL_USER: 'nextcloud'
       MYSQL_DATABASE: 'nextcloud'
 
+  nc-database-postgres:
+    image: postgres:9
+    environment:
+      POSTGRES_USER: 'nextcloud'
+      POSTGRES_PASSWORD: 'nextcloud'
+      POSTGRES_DB: 'nextcloud'
+
 volumes:
   nc-data-sqlite:
   nc-data-mysql:
+  nc-data-postgres:
   nc-config-sqlite:
   nc-config-mysql:
+  nc-config-postgres:
+  nc-db-postgres:
 
 
