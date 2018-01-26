@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  nc-ldap:
+    image: osixia/openldap
+    command: --copy-service
+    volumes:
+      - ./exampledata/example.ldif:/container/service/slapd/assets/config/bootstrap/ldif/50-bootstrap.ldif
+    environment:
+      LDAP_DOMAIN: example.com
+      LDAP_ADMIN_PASSWORD: 'nextcloud'
+
+
+volumes:
+  nc-data-ldap:
+
+

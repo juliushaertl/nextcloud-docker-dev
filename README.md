@@ -52,7 +52,6 @@ If you want to use multiple nextcloud versions in parallel, you can easily add a
 
 
 
+## LDAP
 
-
-
-
+Example ldif is generated using http://ldapwiki.com/wiki/LDIF%20Generator
