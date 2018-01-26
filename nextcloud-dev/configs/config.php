@@ -1,4 +1,5 @@
 <?php $CONFIG=[
+  'debug' => true,
   'apps_paths' => 
   array (
     0 => 
