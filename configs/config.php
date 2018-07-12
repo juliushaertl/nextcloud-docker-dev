@@ -12,6 +12,12 @@
     array (
       'path' => '/var/www/html/apps-extra',
       'url' => '/apps-extra',
+      'writable' => false,
+    ),
+    2 => 
+    array (
+      'path' => '/var/www/html/apps-writable',
+      'url' => '/apps-writable',
       'writable' => true,
     ),
   ),

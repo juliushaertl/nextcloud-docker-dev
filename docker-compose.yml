@@ -7,12 +7,19 @@ services:
       SQL: 'sqlite'
       NEXTCLOUD_AUTOINSTALL:
       NEXTCLOUD_AUTOINSTALL_APPS:
+      BLACKFIRE_CLIENT_ID:
+      BLACKFIRE_CLIENT_TOKEN:
+      BLACKFIRE_SERVER_ID:
+      BLACKFIRE_SERVER_TOKEN:
     volumes:
       - '${NEXTCLOUD_SOURCE}:/var/www/html'
       - nc-data-sqlite:/var/www/html/data
       - nc-config-sqlite:/var/www/html/config
+      - /var/www/html/apps-writable
     ports:
-      - 8010:80
+      - "${NEXTCLOUD_SQLITE_PORT}:80"
+    depends_on:
+      - nc-cache-redis
 
   nc-server-mysql:
     image: juliushaertl/nextcloud-dev
@@ -24,8 +31,9 @@ services:
       - '${NEXTCLOUD_SOURCE}:/var/www/html'
       - nc-data-mysql:/var/www/html/data
       - nc-config-mysql:/var/www/html/config
+      - /var/www/html/apps-writable
     ports:
-      - 8011:80
+      - "${NEXTCLOUD_MYSQL_PORT}:80"
     depends_on:
       - nc-database-mysql
 
@@ -39,15 +47,16 @@ services:
       - '${NEXTCLOUD_SOURCE}:/var/www/html'
       - nc-data-postgres:/var/www/html/data
       - nc-config-postgres:/var/www/html/config
+      - /var/www/html/apps-writable
     ports:
-      - 8012:80
+      - "${NEXTCLOUD_POSTGRES_PORT}:80"
     depends_on:
       - nc-database-postgres
 
   nc-database-mysql:
-    image: mysql:latest
+    image: mariadb:latest
     environment:
-      MYSQL_ROOT_PASSWORD: 'jah1Yohfureeg8shoosee7ie'
+      MYSQL_ROOT_PASSWORD: 'nextcloud'
       MYSQL_PASSWORD: 'nextcloud'
       MYSQL_USER: 'nextcloud'
       MYSQL_DATABASE: 'nextcloud'
@@ -58,6 +67,8 @@ services:
       POSTGRES_USER: 'nextcloud'
       POSTGRES_PASSWORD: 'nextcloud'
       POSTGRES_DB: 'nextcloud'
+  nc-cache-redis:
+    image: redis:3
 
 volumes:
   nc-data-sqlite:
@@ -69,3 +80,10 @@ volumes:
   nc-db-postgres:
 
 
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.20.0/24
+          gateway: 192.168.20.1

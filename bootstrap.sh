@@ -27,9 +27,10 @@ setup() {
         cp /root/autoconfig_oci.php $WEBROOT/config/autoconfig.php
     fi
 
+    # We copy the default config to the container
     cp /root/config.php /var/www/html/config/config.php
 
-    chown -R www-data:www-data $WEBROOT/data $WEBROOT/config $WEBROOT/apps-extra
+    chown -R www-data:www-data $WEBROOT/data $WEBROOT/config $WEBROOT/apps-writable
 
     USER=admin
     PASSWORD=admin
@@ -49,26 +50,26 @@ setup() {
     fi;
 
 
-    echo "Starting server using $SQL database…"
-
-    tail --follow --retry $WEBROOT/data/nextcloud.log &
-
-    DOCKER_HOST=`/sbin/ip route|awk '/default/ { print $3 }'`
-
-    echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini 
-    echo "xdebug.remote_connect_back=on" >> /usr/local/etc/php/conf.d/xdebug.ini 
-    echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/xdebug.ini
-    echo "xdebug.remote_host=${DOCKER_HOST}" >> /usr/local/etc/php/conf.d/xdebug.ini
-    echo "xdebug.remote_autostart=1" >> /usr/local/etc/php/conf.d/xdebug.ini
-
-    # run custom shell script from nc root
-
-    bash /var/www/html/nc-dev-autosetup.sh
 }
 
 if [[ "$STATUS" != *"installed: true"* ]]
 then
     setup
+    echo "Starting server using $SQL database…"
+    #OCKER_HOST=`/sbin/ip route|awk '/default/ { print $3 }'`
+
+    #echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini 
+    #echo "xdebug.remote_connect_back=on" >> /usr/local/etc/php/conf.d/xdebug.ini 
+    #echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/xdebug.ini
+    #echo "xdebug.remote_host=${DOCKER_HOST}" >> /usr/local/etc/php/conf.d/xdebug.ini
+    #echo "xdebug.remote_autostart=1" >> /usr/local/etc/php/conf.d/xdebug.ini
+
+    # run custom shell script from nc root
+    bash /var/www/html/nc-dev-autosetup.sh
 fi
 
-apache2-foreground
+tail --follow --retry $WEBROOT/data/nextcloud.log &
+
+set -e
+
+exec "$@"
