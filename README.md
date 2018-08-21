@@ -35,23 +35,23 @@ Clone the repo to some location of your choice
 
 Create a configuration directory
 
-    mkdir -p ~/.nextcloud/nc-dev-setup/
+    mkdir -p ~/.nextcloud/nc-dev-server/
 
 Symlink docker-compose file and binary
     
-    ln -s nc-dev-setup /usr/local/bin/nc-dev
-    ln -s docker-compose.yml ~/.nextcloud/nc-dev-setup/docker-compose.yml
+    # why this? ln -s nc-dev-setup /usr/local/bin/nc-dev
+    ln -s $PWD/docker-compose.yml ~/.nextcloud/nc-dev-server/docker-compose.yml
 
 Create a configuration file for your source tree:
 
-    echo "NEXTCLOUD_SOURCE=~/repos/nextcloud/server" > ~/.nextcloud/nc-dev-server/master.conf
+    echo "NEXTCLOUD_SOURCE=~/path/to/repos/nextcloud/server" > ~/.nextcloud/nc-dev-server/master.conf
     echo "NEXTCLOUD_AUTOINSTALL=YES" >> ~/.nextcloud/nc-dev-server/master.conf
     echo "NEXTCLOUD_AUTOINSTALL_APPS=YES" >> ~/.nextcloud/nc-dev-server/master.conf
 
 If you want to use multiple nextcloud versions in parallel, you can easily add another configuration file for that:
 
 
-    echo "NEXTCLOUD_SOURCE=~/repos/nextcloud/server" > ~/.nextcloud/nc-dev-server/stable12.conf
+    echo "NEXTCLOUD_SOURCE=~/path/to/repos/nextcloud/server" > ~/.nextcloud/nc-dev-server/stable12.conf
     echo "NEXTCLOUD_AUTOINSTALL=YES" >> ~/.nextcloud/nc-dev-server/stable12.conf
     echo "NEXTCLOUD_AUTOINSTALL_APPS=YES" >> ~/.nextcloud/nc-dev-server/stable12.conf
 
