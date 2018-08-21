@@ -8,11 +8,16 @@ Nextcloud development environment using docker-compose
 - mysql setup running on localhost:8011
 - Xdebug enabled
 
-## Getting startd
+## Getting started
 
-    git clone git@github.com:nextcloud/server.git
+(with docker.io as root)
+
+    git clone https://github.com/juliushaertl/nextcloud-docker-dev
+    cd nextcloud-docker-dev
+    git@github.com:nextcloud/server.git
     cd server
     export NEXTCLOUD_SOURCE=$PWD
+    cd ..
     docker-compose up
 
 ## Environment variables
