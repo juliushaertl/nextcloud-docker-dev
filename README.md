@@ -13,7 +13,7 @@ Nextcloud development environment using docker-compose
 (with docker.io as root)
 
     git clone https://github.com/juliushaertl/nextcloud-docker-dev
-    git@github.com:nextcloud/server.git
+    git clone git@github.com:nextcloud/server.git
     export NEXTCLOUD_SOURCE=$PWD/server
     docker-compose up
 
@@ -25,10 +25,10 @@ Nextcloud development environment using docker-compose
 
 ## Using the nc-dev-setup script
 
-Clone the repo to some location of your choice
+Clone the repos
 
     git clone https://github.com/juliushaertl/nextcloud-docker-dev.git
-    cd nextcloud-docker-dev
+    git clone https://github.com/nextcloud/server.git
 
 Create a configuration directory
 
@@ -37,18 +37,18 @@ Create a configuration directory
 Symlink docker-compose file and binary
     
     # why this? ln -s nc-dev /usr/local/bin/nc-dev-setup
-    ln -s $PWD/docker-compose.yml ~/.nextcloud/nc-dev-setup/docker-compose.yml
+    ln -s $PWD/nextcloud-docker-dev/docker-compose.yml ~/.nextcloud/nc-dev-setup/docker-compose.yml
 
 Create a configuration file for your source tree:
 
-    echo "NEXTCLOUD_SOURCE=~/path/to/repos/nextcloud/server" > ~/.nextcloud/nc-dev-setup/master.conf
+    echo "NEXTCLOUD_SOURCE=$PWD/server" > ~/.nextcloud/nc-dev-setup/master.conf
     echo "NEXTCLOUD_AUTOINSTALL=YES" >> ~/.nextcloud/nc-dev-setup/master.conf
     echo "NEXTCLOUD_AUTOINSTALL_APPS=YES" >> ~/.nextcloud/nc-dev-setup/master.conf
 
 If you want to use multiple nextcloud versions in parallel, you can easily add another configuration file for that:
 
 
-    echo "NEXTCLOUD_SOURCE=~/path/to/repos/nextcloud/server" > ~/.nextcloud/nc-dev-setup/stable12.conf
+    echo "NEXTCLOUD_SOURCE=$PWD/server" > ~/.nextcloud/nc-dev-setup/stable12.conf
     echo "NEXTCLOUD_AUTOINSTALL=YES" >> ~/.nextcloud/nc-dev-setup/stable12.conf
     echo "NEXTCLOUD_AUTOINSTALL_APPS=YES" >> ~/.nextcloud/nc-dev-setup/stable12.conf
 
