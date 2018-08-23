@@ -36,7 +36,7 @@ Create a configuration directory
 
 Symlink docker-compose file and binary
     
-    # why this? ln -s nc-dev /usr/local/bin/nc-dev-setup
+    ln -s $PWD/nc-dev /usr/local/bin/nc-dev
     ln -s $PWD/nextcloud-docker-dev/docker-compose.yml ~/.nextcloud/nc-dev-setup/docker-compose.yml
 
 Create a configuration file for your source tree:
@@ -47,12 +47,9 @@ Create a configuration file for your source tree:
 
 If you want to use multiple nextcloud versions in parallel, you can easily add another configuration file for that:
 
-
     echo "NEXTCLOUD_SOURCE=$PWD/server" > ~/.nextcloud/nc-dev-setup/stable12.conf
     echo "NEXTCLOUD_AUTOINSTALL=YES" >> ~/.nextcloud/nc-dev-setup/stable12.conf
     echo "NEXTCLOUD_AUTOINSTALL_APPS=YES" >> ~/.nextcloud/nc-dev-setup/stable12.conf
-
-
 
 ## LDAP
 
