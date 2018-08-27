@@ -1,0 +1,28 @@
+version: '2'
+
+services:
+  nc-server-sqlite:
+    build:
+      context: .
+    environment:
+      SQL: 'sqlite'
+      NEXTCLOUD_AUTOINSTALL:
+      NEXTCLOUD_AUTOINSTALL_APPS: "deck"
+    volumes:
+      - '/home/jus/repos/nextcloud/server:/var/www/html'
+      - nc-data-sqlite:/var/www/html/data
+      - nc-config-sqlite:/var/www/html/config
+    ports:
+      - "8000:80"
+
+volumes:
+  nc-data-sqlite:
+  nc-config-sqlite:
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.21.0/24
+          gateway: 192.168.21.1

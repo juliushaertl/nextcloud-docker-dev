@@ -52,6 +52,16 @@ export NEXTCLOUD_POSTGRES_PORT
 
 export COMPOSE_PROJECT_NAME=$CONTAINER_SET
 export COMPOSE_FILE=$HOME/.nextcloud/nc-dev-setup/docker-compose.yml
+export COMPOSE_FILE=$HOME/repos/nextcloud/nc-dev/docker-compose.yml
+
+echo $COMPOSE_FILE
+LDAP_FILE=$HOME/repos/nextcloud/nc-dev/docker-compose.ldap.yml
+ELASTIC_FILE=$HOME/repos/nextcloud/nc-dev/docker-compose.elasticsearch.yml
+if [ -z ${ENABLE_LDAP+x} ]; then true; else export COMPOSE_FILE=$COMPOSE_FILE:$LDAP_FILE ; fi
+if [ -z ${ENABLE_ELASTIC+x} ]; then true; else export COMPOSE_FILE=$COMPOSE_FILE:$ELASTIC_FILE ; fi
+
+echo $COMPOSE_FILE
+
 
 if [ "$2" = "status" ]; then
 	docker-compose ps
@@ -82,4 +92,13 @@ elif [ "$2" = "shell" ]; then
 	fi
 	CONTAINER_NAME="${CONTAINER_SET}_nc-server-${SETUP_TYPE}_1"
 	docker exec -ti $CONTAINER_NAME /bin/bash
+elif [ "$2" = "blackfire" ]; then
+    if [ ! "$(docker ps -q -f name=nc-blackfire)" ]; then
+        if [ "$(docker ps -aq -f status=exited -f name=nc-blackfire)" ]; then
+            # cleanup
+            docker rm nc-blackfire
+        fi
+        # run your container
+        docker run --name="nc-blackfire" --network="${CONTAINER_SET}_default" -d -e BLACKFIRE_SERVER_ID=$BLACKFIRE_SERVER_ID -e BLACKFIRE_SERVER_TOKEN=$BLACKFIRE_SERVER_TOKEN -e BLACKFIRE_LOG_LEVEL=4 blackfire/blackfire
+    fi
 fi

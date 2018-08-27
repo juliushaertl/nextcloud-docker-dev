@@ -1,17 +1,37 @@
 version: '2'
 
 services:
-  nc-ldap:
+  nc-server-ldap:
+    image: juliushaertl/nextcloud-dev
+    environment:
+      SQL: 'sqlite'
+      NEXTCLOUD_AUTOINSTALL: "YES"
+      NEXTCLOUD_AUTOINSTALL_APPS: "user_ldap"
+      # auto provision ldap config
+    volumes:
+      - /home/jus/repos/nextcloud/server:/var/www/html
+      - nc-data-ldap:/var/www/html/data
+      - nc-apps-ldap:/var/www/html/apps-writable
+      - nc-config-ldap:/var/www/html/config
+    ports:
+      - "8000:80"
+  # use same setup for ldap severs since replication seems broken on osixia/openldap
+  ldap.example.org:
     image: osixia/openldap
-    command: --copy-service
+    command: --copy-service --loglevel debug
     volumes:
       - ./exampledata/example.ldif:/container/service/slapd/assets/config/bootstrap/ldif/50-bootstrap.ldif
-    environment:
-      LDAP_DOMAIN: example.com
-      LDAP_ADMIN_PASSWORD: 'nextcloud'
+  ldap2.example.org:
+    image: osixia/openldap
+    command: --copy-service --loglevel debug
+    volumes:
+      - ./exampledata/example.ldif:/container/service/slapd/assets/config/bootstrap/ldif/50-bootstrap.ldif
+  nc-cache-redis:
+    image: redis:3
+
 
 
 volumes:
   nc-data-ldap:
-
-
+  nc-config-ldap:
+  nc-apps-ldap:
