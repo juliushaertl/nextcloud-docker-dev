@@ -2,18 +2,6 @@
 
 Nextcloud development environment using docker-compose 
 
-## Features
-
-
-## TODO
-
-- [ ] Add S3 storage service
-- [ ] Add SMB storage service
-- [ ] blackfire
-- [ ] Postgres
-- [ ] LDAP: Auto config
-- [ ] SAML: Auto config
-
 ## Reverse Proxy
 
 Used for SSL termination
@@ -22,11 +10,35 @@ Used for SSL termination
 
 Sending/receiving mails can be tested with mailhog which is available on ports 1025 (SMTP) and 8025 (HTTP).
 
+## Blackfire
+
+Blackfire needs to use a hostname/ip that is resolvable from within the blackfire container. Their free version is [limited to local profiling](https://support.blackfire.io/troubleshooting/hack-edition-users-cannot-profile-non-local-http-applications) so we need to browse Nextcloud though its local docker IP.
+
+Secrets need to be added to the environment:
+
+```
+BLACKFIRE_CLIENT_ID=
+BLACKFIRE_CLIENT_TOKEN=
+BLACKFIRE_SERVER_ID=
+BLACKFIRE_SERVER_TOKEN=
+```
+
+### Using with curl
+
+```
+alias blackfire='docker-compose -p master -f docker-compose.yml exec \
+    -e BLACKFIRE_CLIENT_ID=$BLACKFIRE_CLIENT_ID \
+    -e BLACKFIRE_CLIENT_TOKEN=$BLACKFIRE_CLIENT_TOKEN \
+blackfire blackfire'
+blackfire curl http://192.168.21.8/
+```
+
 ## LDAP
 
 Example ldif is generated using http://ldapwiki.com/wiki/LDIF%20Generator
 
 
+```
 occ ldap:show-config
 +-------------------------------+--------------------------------------------------------------------+
 | Configuration                 |                                                                    |
@@ -87,3 +99,4 @@ occ ldap:show-config
 | turnOnPasswordChange          | 0                                                                  |
 | useMemberOfToDetectMembership | 1                                                                  |
 +-------------------------------+--------------------------------------------------------------------+
+```

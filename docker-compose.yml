@@ -30,7 +30,7 @@ services:
       - config:/var/www/html/config
       - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
-      - ./data/additional.config.php:/var/www/html/config/additional.config.php
+      - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
     ports:
       - "${PORTBASE:-800}0:80"
     depends_on:
@@ -94,6 +94,12 @@ services:
 
   # TODO: Add S3 storage
   # TODO: Add SMB server
+
+  blackfire:
+    image: blackfire/blackfire
+    environment:
+      - BLACKFIRE_SERVER_ID
+      - BLACKFIRE_SERVER_TOKEN
 
 volumes:
   data:
