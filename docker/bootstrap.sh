@@ -56,8 +56,6 @@ setup() {
 		    $OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL --database-name=nextcloud --database-host=$SQLHOST --database-user=nextcloud --database-pass=nextcloud
 	    fi;
 
-	    $OCC config:system:set trusted_domains 1 --type string --value="local.dev.bitgrid.net"
-
 	    for app in $NEXTCLOUD_AUTOINSTALL_APPS; do
 		    echo "Enable app ${app}"
 		    $OCC app:enable $app
