@@ -1,83 +1,101 @@
-version: '2'
+version: '3'
 
 services:
-  nc-server-sqlite:
-    image: juliushaertl/nextcloud-dev
-    environment:
-      SQL: 'sqlite'
-      NEXTCLOUD_AUTOINSTALL:
-      NEXTCLOUD_AUTOINSTALL_APPS:
-      BLACKFIRE_CLIENT_ID:
-      BLACKFIRE_CLIENT_TOKEN:
-      BLACKFIRE_SERVER_ID:
-      BLACKFIRE_SERVER_TOKEN:
-    volumes:
-      - '${NEXTCLOUD_SOURCE}:/var/www/html'
-      - nc-data-sqlite:/var/www/html/data
-      - nc-config-sqlite:/var/www/html/config
-      - /var/www/html/apps-writable
-    ports:
-      - "${NEXTCLOUD_SQLITE_PORT}:80"
-    depends_on:
-      - nc-cache-redis
 
-  nc-server-mysql:
-    image: juliushaertl/nextcloud-dev
+  # Proxy for ssl termination and easier hostname access
+  # Hostnames: 
+  # - nextcloud.local.dev.bitgrid.net
+  # SSL certificates with the virtual host name need to be added to ./data/ssl
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./data/ssl/:/etc/nginx/certs
+
+  nextcloud:
+    build:
+      context: ./docker/
     environment:
       SQL: 'mysql'
-      NEXTCLOUD_AUTOINSTALL:
-      NEXTCLOUD_AUTOINSTALL_APPS:
+      NEXTCLOUD_AUTOINSTALL: "YES"
+      NEXTCLOUD_AUTOINSTALL_APPS: "deck social text"
+      WITH_REDIS: "YES"
+      VIRTUAL_HOST: nextcloud.local.dev.bitgrid.net
     volumes:
-      - '${NEXTCLOUD_SOURCE}:/var/www/html'
-      - nc-data-mysql:/var/www/html/data
-      - nc-config-mysql:/var/www/html/config
+      - '/home/jus/repos/nextcloud/server:/var/www/html'
+      - data:/var/www/html/data
+      - config:/var/www/html/config
       - /var/www/html/apps-writable
     ports:
-      - "${NEXTCLOUD_MYSQL_PORT}:80"
+      - "${PORTBASE:-800}0:80"
     depends_on:
-      - nc-database-mysql
+      - database-mysql
+      - redis
 
-  nc-server-postgres:
-    image: juliushaertl/nextcloud-dev
-    environment:
-      SQL: 'pgsql'
-      NEXTCLOUD_AUTOINSTALL:
-      NEXTCLOUD_AUTOINSTALL_APPS:
-    volumes:
-      - '${NEXTCLOUD_SOURCE}:/var/www/html'
-      - nc-data-postgres:/var/www/html/data
-      - nc-config-postgres:/var/www/html/config
-      - /var/www/html/apps-writable
-    ports:
-      - "${NEXTCLOUD_POSTGRES_PORT}:80"
-    depends_on:
-      - nc-database-postgres
+  # Separate app server
 
-  nc-database-mysql:
+  # nextcloud-2:
+  #   build:
+  #     context: ./docker/
+  #   environment:
+  #     SQL: 'mysql'
+  #     NEXTCLOUD_AUTOINSTALL: "NO"
+  #     NEXTCLOUD_AUTOINSTALL_APPS: ""
+  #   volumes:
+  #     - '/home/jus/repos/nextcloud/server:/var/www/html'
+  #     - data:/var/www/html/data
+  #     - config:/var/www/html/config
+  #     - /var/www/html/apps-writable
+  #   ports:
+  #     - "${PORTBASE:-800}1:80"
+  #   depends_on:
+  #     - database-mysql
+  #     - redis
+
+  database-mysql:
     image: mariadb:latest
     environment:
       MYSQL_ROOT_PASSWORD: 'nextcloud'
       MYSQL_PASSWORD: 'nextcloud'
       MYSQL_USER: 'nextcloud'
       MYSQL_DATABASE: 'nextcloud'
+    ports:
+      - "${PORTBASE:-800}2:80"
 
-  nc-database-postgres:
-    image: postgres:9
-    environment:
-      POSTGRES_USER: 'nextcloud'
-      POSTGRES_PASSWORD: 'nextcloud'
-      POSTGRES_DB: 'nextcloud'
-  nc-cache-redis:
+  redis:
     image: redis:3
 
+  ldap:
+    image: osixia/openldap
+    command: --copy-service --loglevel debug
+    volumes:
+      - ./data/example.ldif:/container/service/slapd/assets/config/bootstrap/ldif/50-bootstrap.ldif
+
+  # Using https://github.com/kristophjunge/docker-test-saml-idp
+
+  # saml:
+  #   image: kristophjunge/test-saml-idp
+  #   environment:
+  #     SIMPLESAMLPHP_SP_ENTITY_ID: http://nextcloud/
+  #     SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost/simplesaml/module.php/saml/sp/saml2-acs.php/test-sp
+  #     SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost/simplesaml/module.php/saml/sp/saml2-logout.php/test-sp
+  #   ports:
+  #     - "${PORTBASE:-800}8:8080"
+
+  mail:
+    image: mailhog/mailhog
+    ports:
+      - "${PORTBASE:-800}9:8025"
+
+  # TODO: Add S3 storage
+  # TODO: Add SMB server
+
 volumes:
-  nc-data-sqlite:
-  nc-data-mysql:
-  nc-data-postgres:
-  nc-config-sqlite:
-  nc-config-mysql:
-  nc-config-postgres:
-  nc-db-postgres:
+  data:
+  config:
 
 
 networks:
@@ -85,5 +103,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 192.168.20.0/24
-          gateway: 192.168.20.1
+        - subnet: 192.168.21.0/24

@@ -2,8 +2,8 @@
 
 $AUTOCONFIG = [
   'dbname' => 'nextcloud',
-  'dbhost' => 'nc-database-mysql',
+  'dbhost' => 'database-postgres',
   'dbuser' => 'nextcloud',
   'dbpass' => 'nextcloud',
-  'dbtype' => 'mysql'
+  'dbtype' => 'pgsql'
 ]; 
