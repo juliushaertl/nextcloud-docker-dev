@@ -3,8 +3,6 @@ version: '3'
 services:
 
   # Proxy for ssl termination and easier hostname access
-  # Hostnames: 
-  # - nextcloud.local.dev.bitgrid.net
   # SSL certificates with the virtual host name need to be added to ./data/ssl
   proxy:
     image: jwilder/nginx-proxy
@@ -23,7 +21,8 @@ services:
       NEXTCLOUD_AUTOINSTALL: "YES"
       NEXTCLOUD_AUTOINSTALL_APPS:
       WITH_REDIS: "YES"
-      VIRTUAL_HOST: nextcloud.local.dev.bitgrid.net
+      VIRTUAL_HOST: "${NEXTCLOUD_DOMAIN:-nextcloud.local}"
+      ADDITIONAL_APPS_PATH:
     volumes:
       - '${REPO_PATH_SERVER:-/home/jus/repos/nextcloud/server}:/var/www/html'
       - data:/var/www/html/data
@@ -113,4 +112,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 192.168.21.0/24
+        - subnet: ${DOCKER_SUBNET:-192.168.21.0/24}

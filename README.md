@@ -2,6 +2,36 @@
 
 Nextcloud development environment using docker-compose 
 
+## Start all
+
+- Start full setup: `docker-compose up`
+- Minimum: `docker-compose up nextcloud`
+
+## Environment variables
+
+```
+COMPOSE_PROJECT_NAME=master
+REPO_PATH_SERVER=/home/jus/repos/nextcloud/server
+ADDITIONAL_APPS_PATH=/home/jus/repos/nextcloud/server/apps-extra
+NEXTCLOUD_DOMAIN=nextcloud.local.dev.bitgrid.net
+NEXTCLOUD_AUTOINSTALL_APPS="viewer activity"
+BLACKFIRE_CLIENT_ID=
+BLACKFIRE_CLIENT_TOKEN=
+BLACKFIRE_SERVER_ID=
+BLACKFIRE_SERVER_TOKEN=
+
+## can be used to run separate setups besides each other
+DOCKER_SUBNET=192.168.15.0/24
+PORTBASE=815
+```
+
+Switching to different env settings:
+
+```
+set -a; . stable15.env; set +a
+docker-compose up nextcloud
+```
+
 ## Reverse Proxy
 
 Used for SSL termination

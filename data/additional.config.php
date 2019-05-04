@@ -11,6 +11,8 @@ $CONFIG = array (
 		4 => 'nextcloud'
 	],
 
-	'overwrite.cli.url' => 'https://nextcloud.local.dev.bitgrid.net/',
+	'overwrite.cli.url' => 'https://nextcloud.local.dev.bitgrid.net',
 
+
+	'htaccess.RewriteBase' => '/',
   );
