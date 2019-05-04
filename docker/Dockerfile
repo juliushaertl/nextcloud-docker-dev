@@ -45,14 +45,12 @@ RUN pecl install APCu-5.1.11; \
 
 # dev tools 
 RUN apt-get install -y --no-install-recommends \
-    git curl vim sudo iputils-ping
+    git curl vim sudo
 
 RUN bash -c 'echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini; \
     echo "xdebug.remote_connect_back=on" >> /usr/local/etc/php/conf.d/xdebug.ini; \
     echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/xdebug.ini; \
-    echo "xdebug.remote_autostart=1" >> /usr/local/etc/php/conf.d/xdebug.ini; \
-    echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" >> /usr/local/etc/php/conf.d/xdebug.ini \
-'
+    echo "xdebug.remote_autostart=1" >> /usr/local/etc/php/conf.d/xdebug.ini'
 
 RUN { \
         echo 'opcache.enable=1'; \

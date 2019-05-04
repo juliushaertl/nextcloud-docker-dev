@@ -1,10 +1,12 @@
 #!/bin/bash
 
-OCC="sudo -u www-data $WEBROOT/occ"
+OCC="sudo -E -u www-data $WEBROOT/occ"
 
 update_permission() {
-	chown -R www-data:www-data $WEBROOT/config
+	chown www-data:www-data $WEBROOT/config
+	chown -R www-data:www-data $WEBROOT/config/config.php
 	chown -R www-data:www-data $WEBROOT/data
+	chown -R www-data:www-data $WEBROOT/apps-writable
 }
 
 wait_for_other_containers() {
@@ -21,7 +23,7 @@ wait_for_other_containers() {
 	fi
 }
 setup() {
-	cp /root/config.php $WEBROOT/config/config.php
+
 
 	if [ "$SQL" = "mysql" ]
 	then
@@ -41,9 +43,10 @@ setup() {
 	fi
 
     # We copy the default config to the container
-    cp /root/config.php /var/www/html/config/config.php
+	cp /root/config.php $WEBROOT/config/config.php
+	chown -R www-data:www-data $WEBROOT/config/config.php
 
-    chown -R www-data:www-data $WEBROOT/data $WEBROOT/config $WEBROOT/apps-writable
+    update_permission
 
     USER=admin
     PASSWORD=admin
@@ -70,15 +73,26 @@ setup() {
 
 }
 
+add_user() {
+	export OC_PASS=$1
+	$OCC user:add --password-from-env $1
+}
+
 install() {
 	STATUS=`$OCC status`
-	echo $STATUS
 	if [[ "$STATUS" != *"installed: true"* ]]
 	then
 		setup
 
+		add_user user1
+		add_user user2
+		add_user user3
+		add_user user4
+		add_user user5
+		add_user user6
+
 	    # run custom shell script from nc root
-	    [ -e /var/www/html/nc-dev-autosetup.sh ] && bash /var/www/html/nc-dev-autosetup.sh
+	    # [ -e /var/www/html/nc-dev-autosetup.sh ] && bash /var/www/html/nc-dev-autosetup.sh
 
 	    echo "Finished setup using $SQL database…"
 	else
@@ -87,8 +101,8 @@ install() {
 }
 
 wait_for_other_containers
-update_permission
 install
+update_permission
 
 echo "=> Watching log file"
 tail --follow --retry $WEBROOT/data/nextcloud.log &

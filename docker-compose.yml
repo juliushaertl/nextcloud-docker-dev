@@ -6,7 +6,7 @@ services:
   # Hostnames: 
   # - nextcloud.local.dev.bitgrid.net
   # SSL certificates with the virtual host name need to be added to ./data/ssl
-  nginx-proxy:
+  proxy:
     image: jwilder/nginx-proxy
     ports:
       - "80:80"
@@ -21,13 +21,14 @@ services:
     environment:
       SQL: 'mysql'
       NEXTCLOUD_AUTOINSTALL: "YES"
-      NEXTCLOUD_AUTOINSTALL_APPS: "deck social text"
+      NEXTCLOUD_AUTOINSTALL_APPS:
       WITH_REDIS: "YES"
       VIRTUAL_HOST: nextcloud.local.dev.bitgrid.net
     volumes:
-      - '/home/jus/repos/nextcloud/server:/var/www/html'
+      - '${REPO_PATH_SERVER:-/home/jus/repos/nextcloud/server}:/var/www/html'
       - data:/var/www/html/data
       - config:/var/www/html/config
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
       - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
@@ -36,6 +37,7 @@ services:
     depends_on:
       - database-mysql
       - redis
+      - mail
 
   # Separate app server
 
