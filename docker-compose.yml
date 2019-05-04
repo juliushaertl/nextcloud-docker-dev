@@ -29,6 +29,8 @@ services:
       - data:/var/www/html/data
       - config:/var/www/html/config
       - /var/www/html/apps-writable
+      - ./data/skeleton/:/skeleton
+      - ./data/additional.config.php:/var/www/html/config/additional.config.php
     ports:
       - "${PORTBASE:-800}0:80"
     depends_on:

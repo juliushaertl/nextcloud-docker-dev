@@ -21,13 +21,6 @@
 			'writable' => true,
 		),
 	),
-	'trusted_domains' => [
-		0 => 'localhost',
-		1 => 'local.dev.bitgrid.net',
-		2 => 'nextcloud.local.dev.bitgrid.net'
-	],
-
-	'overwrite.cli.url' => 'https://nextcloud.local.dev.bitgrid.net/'
 
 	// config for mailhog
 	'mail_from_address' => 'admin',
@@ -36,6 +29,8 @@
 	'mail_domain' => 'localhost',
 	'mail_smtphost' => 'mail',
 	'mail_smtpport' => '1025',
+
+	'skeletondirectory' => '/skeleton',
 
 	//PLACEHOLDER
 ];
