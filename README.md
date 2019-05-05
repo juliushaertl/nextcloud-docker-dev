@@ -81,6 +81,8 @@ LDAP can be setup by running the following command to autoprovision the config f
 ```
 docker-compose exec nextcloud occ app:enable user_ldap
 
+curl -X POST https://admin:admin@nextcloud.local.dev.bitgrid.net/ocs/v2.php/apps/user_ldap/api/v1/config -H "OCS-APIREQUEST: true"
+
 curl -X PUT https://admin:admin@nextcloud.local.dev.bitgrid.net/ocs/v2.php/apps/user_ldap/api/v1/config/s01 -H "OCS-APIREQUEST: true" -d @data/ldap.json --header "Content-Type: application/json"
 
 docker-compose exec nextcloud occ ldap:test-config s01

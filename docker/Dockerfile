@@ -12,8 +12,9 @@ RUN apt-get install -y --no-install-recommends \
         libpng-dev \
         libpq-dev \
         libxml2-dev \
-	libmagickwand-dev \
-	libmagickcore-6.q16-3-extra
+        libmagickwand-dev \
+        libmagickcore-6.q16-3-extra \
+        && rm -rf /var/lib/apt/lists/*
 
 RUN debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
     docker-php-ext-configure gd --with-freetype-dir=/usr --with-png-dir=/usr --with-jpeg-dir=/usr; \
@@ -43,19 +44,16 @@ RUN pecl install APCu-5.1.11; \
         xdebug \
 	imagick
 
-# dev tools 
+# dev tools separate install so we quickly change without rebuilding all php extenions
 RUN apt update && apt-get install -y --no-install-recommends \
-    git curl vim sudo cron smbclient
+    git curl vim sudo cron smbclient \
+        && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir --parent /var/log/cron
 ADD configs/cron.conf /etc/nc-cron.conf
 RUN crontab /etc/nc-cron.conf
 
-RUN bash -c 'echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini; \
-    echo "xdebug.remote_connect_back=on" >> /usr/local/etc/php/conf.d/xdebug.ini; \
-    echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/xdebug.ini; \
-    echo "xdebug.remote_autostart=1" >> /usr/local/etc/php/conf.d/xdebug.ini'
-
+# PHP configuration
 RUN { \
         echo 'opcache.enable=1'; \
         echo 'opcache.enable_cli=1'; \
@@ -65,11 +63,16 @@ RUN { \
         echo 'opcache.save_comments=1'; \
         echo 'opcache.revalidate_freq=1'; \
     } > /usr/local/etc/php/conf.d/opcache-recommended.ini; \
-    \
+    { \
+        echo 'xdebug.remote_enable=on'; \
+        echo 'xdebug.remote_connect_back=on'; \
+        echo 'xdebug.idekey=PHPSTORM'; \
+        echo 'xdebug.remote_autostart=1'; \
+    } > /usr/local/etc/php/conf.d/xdebug.ini; \
     echo 'apc.enable_cli=1' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini; \
-    \
     echo 'memory_limit=512M' > /usr/local/etc/php/conf.d/memory-limit.ini
 
+# Setup blackfire probe
 ENV current_os=linux
 RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
     && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/$current_os/amd64/$version \
@@ -85,7 +88,6 @@ ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig
 ADD bootstrap.sh occ /usr/local/bin/
 
 ENV WEBROOT /var/www/html
-
 WORKDIR /var/www/html
 
 ENTRYPOINT  ["/usr/local/bin/bootstrap.sh"]
