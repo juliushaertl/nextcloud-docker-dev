@@ -21,10 +21,12 @@ A `.env` file should be created in the repository root, to keep configuration de
 
 ```
 COMPOSE_PROJECT_NAME=master
+
 REPO_PATH_SERVER=/home/jus/repos/nextcloud/server
 ADDITIONAL_APPS_PATH=/home/jus/repos/nextcloud/server/apps-extra
-NEXTCLOUD_DOMAIN=nextcloud.local.dev.bitgrid.net
+
 NEXTCLOUD_AUTOINSTALL_APPS="viewer activity"
+
 BLACKFIRE_CLIENT_ID=
 BLACKFIRE_CLIENT_TOKEN=
 BLACKFIRE_SERVER_ID=
@@ -35,8 +37,8 @@ DOCKER_SUBNET=192.168.15.0/24
 PORTBASE=815
 
 # Main dns names for ssl proxy
-NEXTCLOUD_DOMAIN=nextcloud
-COLLABORA_DOMAIN=collabora
+NEXTCLOUD_DOMAIN=nextcloud.local
+COLLABORA_DOMAIN=collabora.local
 ```
 
 ### Starting the containers
@@ -56,6 +58,13 @@ docker-compose up nextcloud
 ## 🔒 Reverse Proxy
 
 Used for SSL termination. To setup SSL support provide a proper NEXTCLOUD_DOMAIN environment variable and put the certificates to ./data/ssl/ named by the domain name.
+
+You might need to add the domains to your `/etc/hosts` file:
+
+```
+127.0.0.1 nextcloud.local
+127.0.0.1 collabora.local
+```
 
 ## ✉ Mail
 
