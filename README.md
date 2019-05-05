@@ -2,6 +2,17 @@
 
 Nextcloud development environment using docker-compose 
 
+Features
+
+- ☁ Nextcloud
+- 🔒 Nginx proxy with SSL termination
+- 💾 MySQL
+- 💡 Redis
+- 👥 LDAP with example user data
+- ✉ Mailhog
+- 🚀 Blackfire
+- 📄 Collabora
+
 ## Getting started
 
 ### Environment variables
