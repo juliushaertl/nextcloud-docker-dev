@@ -2,3 +2,4 @@ data/ssl/
 .env
 *.env
 .*
+data/skeleton/
