@@ -18,6 +18,7 @@ services:
       default:
         aliases:
           - ${NEXTCLOUD_DOMAIN}
+          - ${NEXTCLOUD_DOMAIN_FEDERATED}
           - ${COLLABORA_DOMAIN}
 
   nextcloud:
@@ -42,6 +43,30 @@ services:
       - "${PORTBASE:-800}0:80"
     depends_on:
       - database-mysql
+      - redis
+      - mail
+
+  nextcloud-federated:
+    build:
+      context: ./docker/
+    environment:
+      SQL: 'sqlite'
+      NEXTCLOUD_AUTOINSTALL: "YES"
+      NEXTCLOUD_AUTOINSTALL_APPS:
+      WITH_REDIS: "YES"
+      VIRTUAL_HOST: "${NEXTCLOUD_DOMAIN_FEDERATED:-nextcloud-federated.local}"
+      ADDITIONAL_APPS_PATH:
+    volumes:
+      - '${REPO_PATH_SERVER:-/home/jus/repos/nextcloud/server}:/var/www/html'
+      - data-federated:/var/www/html/data
+      - config-federated:/var/www/html/config
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
+      - /var/www/html/apps-writable
+      - ./data/skeleton/:/skeleton
+      - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+    ports:
+      - "${PORTBASE:-800}2:80"
+    depends_on:
       - redis
       - mail
 
@@ -72,8 +97,6 @@ services:
       MYSQL_PASSWORD: 'nextcloud'
       MYSQL_USER: 'nextcloud'
       MYSQL_DATABASE: 'nextcloud'
-    ports:
-      - "${PORTBASE:-800}2:80"
 
   redis:
     image: redis:3
@@ -138,6 +161,8 @@ services:
 volumes:
   data:
   config:
+  data-federated:
+  config-federated:
 
 
 networks:
