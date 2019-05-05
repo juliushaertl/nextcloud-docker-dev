@@ -44,8 +44,12 @@ RUN pecl install APCu-5.1.11; \
 	imagick
 
 # dev tools 
-RUN apt-get install -y --no-install-recommends \
-    git curl vim sudo
+RUN apt update && apt-get install -y --no-install-recommends \
+    git curl vim sudo cron smbclient
+
+RUN mkdir --parent /var/log/cron
+ADD configs/cron.conf /etc/nc-cron.conf
+RUN crontab /etc/nc-cron.conf
 
 RUN bash -c 'echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini; \
     echo "xdebug.remote_connect_back=on" >> /usr/local/etc/php/conf.d/xdebug.ini; \
@@ -78,7 +82,6 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
 RUN a2enmod rewrite
 
 ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php configs/s3.php configs/config.php configs/redis.config.php /root/
-
 ADD bootstrap.sh occ /usr/local/bin/
 
 ENV WEBROOT /var/www/html

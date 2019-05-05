@@ -22,6 +22,10 @@ BLACKFIRE_SERVER_TOKEN=
 # can be used to run separate setups besides each other
 DOCKER_SUBNET=192.168.15.0/24
 PORTBASE=815
+
+# Main dns names for ssl proxy
+NEXTCLOUD_DOMAIN=nextcloud
+COLLABORA_DOMAIN=collabora
 ```
 
 ### Starting the containers
@@ -38,15 +42,15 @@ set -a; . stable15.env; set +a
 docker-compose up nextcloud
 ```
 
-## Reverse Proxy
+## 🔒 Reverse Proxy
 
 Used for SSL termination. To setup SSL support provide a proper NEXTCLOUD_DOMAIN environment variable and put the certificates to ./data/ssl/ named by the domain name.
 
-## Mail
+## ✉ Mail
 
 Sending/receiving mails can be tested with [mailhog](https://github.com/mailhog/MailHog) which is available on ports 1025 (SMTP) and 8025 (HTTP).
 
-## Blackfire
+## 🚀 Blackfire
 
 Blackfire needs to use a hostname/ip that is resolvable from within the blackfire container. Their free version is [limited to local profiling](https://support.blackfire.io/troubleshooting/hack-edition-users-cannot-profile-non-local-http-applications) so we need to browse Nextcloud though its local docker IP or add the hostname to `/etc/hosts`.
 
@@ -57,70 +61,21 @@ alias blackfire='docker-compose exec -e BLACKFIRE_CLIENT_ID=$BLACKFIRE_CLIENT_ID
 blackfire curl http://192.168.21.8/
 ```
 
-## LDAP
+## 👥 LDAP
 
 Example ldif is generated using http://ldapwiki.com/wiki/LDIF%20Generator
 
+LDAP can be setup by running the following command to autoprovision the config from data/ldap.json:
 
 ```
-occ ldap:show-config
-+-------------------------------+--------------------------------------------------------------------+
-| Configuration                 |                                                                    |
-+-------------------------------+--------------------------------------------------------------------+
-| hasMemberOfFilterSupport      | 0                                                                  |
-| hasPagedResultSupport         |                                                                    |
-| homeFolderNamingRule          |                                                                    |
-| lastJpegPhotoLookup           | 0                                                                  |
-| ldapAgentName                 | cn=admin,dc=example,dc=org                                         |
-| ldapAgentPassword             | ***                                                                |
-| ldapAttributesForGroupSearch  |                                                                    |
-| ldapAttributesForUserSearch   |                                                                    |
-| ldapBackupHost                | ldap2.example.org                                                  |
-| ldapBackupPort                | 389                                                                |
-| ldapBase                      | dc=example,dc=org                                                  |
-| ldapBaseGroups                |                                                                    |
-| ldapBaseUsers                 |                                                                    |
-| ldapCacheTTL                  | 600                                                                |
-| ldapConfigurationActive       | 1                                                                  |
-| ldapDefaultPPolicyDN          |                                                                    |
-| ldapDynamicGroupMemberURL     |                                                                    |
-| ldapEmailAttribute            | mail                                                               |
-| ldapExperiencedAdmin          | 0                                                                  |
-| ldapExpertUUIDGroupAttr       |                                                                    |
-| ldapExpertUUIDUserAttr        |                                                                    |
-| ldapExpertUsernameAttr        |                                                                    |
-| ldapGidNumber                 | gidNumber                                                          |
-| ldapGroupDisplayName          | cn                                                                 |
-| ldapGroupFilter               | (&(|(objectclass=organizationalUnit)))                             |
-| ldapGroupFilterGroups         |                                                                    |
-| ldapGroupFilterMode           | 0                                                                  |
-| ldapGroupFilterObjectclass    | organizationalUnit                                                 |
-| ldapGroupMemberAssocAttr      | uniqueMember                                                       |
-| ldapHost                      | ldap.example.org                                                   |
-| ldapIgnoreNamingRules         |                                                                    |
-| ldapLoginFilter               | (&(|(objectclass=inetOrgPerson)(objectclass=person))(|(uid=%uid))) |
-| ldapLoginFilterAttributes     | uid                                                                |
-| ldapLoginFilterEmail          | 0                                                                  |
-| ldapLoginFilterMode           | 0                                                                  |
-| ldapLoginFilterUsername       | 1                                                                  |
-| ldapNestedGroups              | 0                                                                  |
-| ldapOverrideMainServer        |                                                                    |
-| ldapPagingSize                | 500                                                                |
-| ldapPort                      | 389                                                                |
-| ldapQuotaAttribute            |                                                                    |
-| ldapQuotaDefault              |                                                                    |
-| ldapTLS                       | 0                                                                  |
-| ldapUserAvatarRule            | default                                                            |
-| ldapUserDisplayName           | cn                                                                 |
-| ldapUserDisplayName2          |                                                                    |
-| ldapUserFilter                | (|(objectclass=inetOrgPerson)(objectclass=person))                 |
-| ldapUserFilterGroups          |                                                                    |
-| ldapUserFilterMode            | 0                                                                  |
-| ldapUserFilterObjectclass     | inetOrgPerson;person                                               |
-| ldapUuidGroupAttribute        | auto                                                               |
-| ldapUuidUserAttribute         | auto                                                               |
-| turnOffCertCheck              | 0                                                                  |
-| turnOnPasswordChange          | 0                                                                  |
-| useMemberOfToDetectMembership | 1                                                                  |
-+-------------------------------+--------------------------------------------------------------------+
+docker-compose exec nextcloud occ app:enable user_ldap
+
+curl -X PUT https://admin:admin@nextcloud.local.dev.bitgrid.net/ocs/v2.php/apps/user_ldap/api/v1/config/s01 -H "OCS-APIREQUEST: true" -d @data/ldap.json --header "Content-Type: application/json"
+
+docker-compose exec nextcloud occ ldap:test-config s01
 ```
+
+## 🚧 SAML
+
+## 🚧 Object storage
+

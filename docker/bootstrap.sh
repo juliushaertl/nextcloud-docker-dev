@@ -70,7 +70,29 @@ setup() {
 	fi
 	$OCC user:setting admin settings email admin@example.net
 
+	# Setup initial configuration
+	add_user user1
+	add_user user2
+	add_user user3
+	add_user user4
+	add_user user5
+	add_user user6
 
+	$OCC background:cron
+
+	# run custom shell script from nc root
+	# [ -e /var/www/html/nc-dev-autosetup.sh ] && bash /var/www/html/nc-dev-autosetup.sh
+
+	echo "Finished setup using $SQL database…"
+
+}
+
+configure_ldap() {
+	timeout 5 bash -c 'until echo > /dev/tcp/ldap/389; do sleep 0.5; done'
+	if [ $? -eq 0 ]; then
+		echo "LDAP server available"
+		$OCC app:enable user_ldap
+	fi
 }
 
 add_user() {
@@ -83,18 +105,6 @@ install() {
 	if [[ "$STATUS" != *"installed: true"* ]]
 	then
 		setup
-
-		add_user user1
-		add_user user2
-		add_user user3
-		add_user user4
-		add_user user5
-		add_user user6
-
-	    # run custom shell script from nc root
-	    # [ -e /var/www/html/nc-dev-autosetup.sh ] && bash /var/www/html/nc-dev-autosetup.sh
-
-	    echo "Finished setup using $SQL database…"
 	else
 		echo "Nextcloud already installed ... skipping setup"
 	fi
@@ -104,8 +114,12 @@ wait_for_other_containers
 install
 update_permission
 
+touch /var/log/cron/nextcloud.log
+
 echo "=> Watching log file"
-tail --follow --retry $WEBROOT/data/nextcloud.log &
+tail --follow --retry $WEBROOT/data/nextcloud.log /var/log/cron/nextcloud.log &
+
+/usr/sbin/cron -f &
 
 echo "=> Starting apache"
 exec "$@"

@@ -12,6 +12,13 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./data/ssl/:/etc/nginx/certs
+    depends_on:
+      - nextcloud
+    networks:
+      default:
+        aliases:
+          - ${NEXTCLOUD_DOMAIN}
+          - ${COLLABORA_DOMAIN}
 
   nextcloud:
     build:
@@ -74,6 +81,9 @@ services:
   ldap:
     image: osixia/openldap
     command: --copy-service --loglevel debug
+    expose:
+      - 389
+      - 636
     volumes:
       - ./data/example.ldif:/container/service/slapd/assets/config/bootstrap/ldif/50-bootstrap.ldif
 
@@ -101,6 +111,29 @@ services:
     environment:
       - BLACKFIRE_SERVER_ID
       - BLACKFIRE_SERVER_TOKEN
+
+  collabora:
+    image: collabora/code
+    expose:
+      - 9980
+    cap_add:
+      - MKNOD
+    environment:
+      domain: ${NEXTCLOUD_DOMAIN}
+      username: admin
+      password: admin
+      VIRTUAL_HOST: ${COLLABORA_DOMAIN}
+      VIRTUAL_PORT: 9980
+      VIRTUAL_PROTO: https
+
+  s3.minio:
+    image: minio/minio
+    environment:
+      MINIO_ACCESS_KEY: nextcloud
+      MINIO_SECRET_KEY: nextcloud
+    ports:
+      - "${PORTBASE:-800}5:9000"
+    command: server /data
 
 volumes:
   data:
