@@ -30,6 +30,7 @@ services:
       WITH_REDIS: "YES"
       VIRTUAL_HOST: "${NEXTCLOUD_DOMAIN:-nextcloud.local}"
       ADDITIONAL_APPS_PATH:
+      NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
       - '${REPO_PATH_SERVER:-/home/jus/repos/nextcloud/server}:/var/www/html'
       - data:/var/www/html/data

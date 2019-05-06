@@ -46,7 +46,7 @@ RUN pecl install APCu-5.1.11; \
 
 # dev tools separate install so we quickly change without rebuilding all php extenions
 RUN apt update && apt-get install -y --no-install-recommends \
-    git curl vim sudo cron smbclient \
+    git curl vim sudo cron smbclient iproute2 \
         && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir --parent /var/log/cron
