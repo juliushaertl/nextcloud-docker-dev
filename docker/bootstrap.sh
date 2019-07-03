@@ -109,6 +109,7 @@ install() {
 		done
 	fi
 	$OCC config:system:set overwrite.cli.url --value $VIRTUAL_HOST
+	$OCC config:system:set overwriteprotocol --value https
 
 
 	# Setup initial configuration
