@@ -88,6 +88,17 @@ services:
     volumes:
       - ./data/example.ldif:/container/service/slapd/assets/config/bootstrap/ldif/50-bootstrap.ldif
 
+  saml:
+    image: unicon/simplesamlphp
+    volumes:
+      - ./docker/saml/var-simplesamlphp/config:/var/simplesamlphp/config
+      - ./docker/saml/var-simplesamlphp/cert:/var/simplesamlphp/cert
+      - ./docker/saml/var-simplesamlphp/metadata:/var/simplesamlphp/metadata
+    environment:
+      VIRTUAL_HOST: "sso.local.dev.bitgrid.net"
+    expose:
+      - 80
+    
   # Using https://github.com/kristophjunge/docker-test-saml-idp
 
   # saml:

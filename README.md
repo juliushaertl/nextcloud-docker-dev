@@ -2,6 +2,8 @@
 
 Nextcloud development environment using docker-compose 
 
+⚠ **DO NOT USE THIS IN PRODUCTION** Various settings in this setup are considered insecure and default passwords and secrets are used all over the place
+
 Features
 
 - ☁ Nextcloud
@@ -97,7 +99,20 @@ curl -X PUT https://admin:admin@nextcloud.local/ocs/v2.php/apps/user_ldap/api/v1
 docker-compose exec nextcloud occ ldap:test-config s01
 ```
 
-## 🚧 SAML
+## Collabora
+
+- set `'overwriteprotocol' => 'https'` to make sure proper URLs are handed over to collabora
+
+## SAML
+
+```
+docker-compose up -d proxy nextcloud saml
+```
+
+- uid mapping: `urn:oid:0.9.2342.19200300.100.1.1`
+- idp entity id: `https://sso.local.dev.bitgrid.net/simplesaml/saml2/idp/metadata.php`
+- single sign on service url: `https://sso.local.dev.bitgrid.net/simplesaml/saml2/idp/SSOService.php`
+- singlie log out service url: `https://sso.local.dev.bitgrid.net/simplesaml/saml2/idp/SingleLogoutService.php`
 
 ## 🚧 Object storage
 
