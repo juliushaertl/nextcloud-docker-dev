@@ -122,6 +122,8 @@ services:
     expose:
       - 389
       - 636
+    ports:
+      - 3389:389
     volumes:
       - ./data/example.ldif:/container/service/slapd/assets/config/bootstrap/ldif/50-bootstrap.ldif
 
