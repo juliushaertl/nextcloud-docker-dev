@@ -151,7 +151,22 @@ services:
     ports:
       - "${PORTBASE:-800}9:8025"
 
-  # TODO: Add SMB server
+  smb:
+    image: dperson/samba
+    ports: 
+      - 139
+      - 445
+    environment:
+      # -u "<username;password>[;ID;group;GID]"
+      USER: "admin;admin"
+      USER2: "user1;user1"
+      USER3: "user1;user1"
+      # -s "<name;/path>[;browse;readonly;guest;users;admins;writelist;comment]"
+      SHARE: "public;/smbmount;yes;no;yes"
+      SHARE2: "user1 private share;/smb/user1;no;no;no;user1"
+      SHARE3: "user2 private share;/smb/user2;no;no;no;user2"
+    volumes:
+      - smb:/smbmount
 
   blackfire:
     image: blackfire/blackfire
@@ -227,6 +242,7 @@ volumes:
   document_log:
   objectstorage_fakes3:
   objectstorage_minio:
+  smb:
 
 networks:
   default:

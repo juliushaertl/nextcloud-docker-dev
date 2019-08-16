@@ -14,6 +14,7 @@ RUN apt-get install -y --no-install-recommends \
         libxml2-dev \
         libmagickwand-dev \
         libmagickcore-6.q16-3-extra \
+        libsmbclient-dev \
         && rm -rf /var/lib/apt/lists/*
 
 RUN debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
@@ -36,18 +37,27 @@ RUN pecl install APCu-5.1.11; \
     pecl install redis-4.2.0; \
     pecl install xdebug; \
     pecl install imagick; \
+    pecl install smbclient; \
     \
     docker-php-ext-enable \
         apcu \
         memcached \
         redis \
         xdebug \
-	imagick
+	imagick \
+        smbclient
 
 # dev tools separate install so we quickly change without rebuilding all php extenions
 RUN apt update && apt-get install -y --no-install-recommends \
     git curl vim sudo cron smbclient iproute2 \
         && rm -rf /var/lib/apt/lists/*
+
+RUN { \
+        echo '[global]'; \
+        echo 'client min protocol = SMB2'; \
+        echo 'client max protocol = SMB3'; \
+        echo 'hide dot files = no'; \
+} > /etc/samba/smb.conf
 
 RUN mkdir --parent /var/log/cron
 ADD configs/cron.conf /etc/nc-cron.conf
