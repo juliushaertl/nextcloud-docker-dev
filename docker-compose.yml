@@ -12,6 +12,9 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./data/ssl/:/etc/nginx/certs
+      - ./data/ssl/dhparams.pem:/etc/nginx/dhparam/dhparam.pem
+    environment:
+      DHPARAM_GENERATION: "false"
     depends_on:
       - nextcloud
     networks:
@@ -19,6 +22,10 @@ services:
         aliases:
           - ${NEXTCLOUD_DOMAIN}
           - ${COLLABORA_DOMAIN}
+          - onlyoffice.local.dev.bitgrid.net
+          - collabora2.local.dev.bitgrid.net
+          - nextcloud2.local.dev.bitgrid.net
+          - nextcloud3.local.dev.bitgrid.net
 
   nextcloud:
     build:
@@ -46,25 +53,55 @@ services:
       - redis
       - mail
 
-  # Separate app server
+  nextcloud2:
+    build:
+      context: ./docker/
+    environment:
+      SQL: 'sqlite'
+      NEXTCLOUD_AUTOINSTALL: "YES"
+      NEXTCLOUD_AUTOINSTALL_APPS:
+      WITH_REDIS: "YES"
+      VIRTUAL_HOST: nextcloud2.local.dev.bitgrid.net
+      ADDITIONAL_APPS_PATH:
+      NEXTCLOUD_TRUSTED_DOMAINS:
+    volumes:
+      - '${REPO_PATH_SERVER:-/home/jus/repos/nextcloud/server}:/var/www/html'
+      - data2:/var/www/html/data
+      - config2:/var/www/html/config
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
+      - /var/www/html/apps-writable
+      - ./data/skeleton/:/skeleton
+      - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+    ports:
+      - "${PORTBASE:-800}1:80"
+    depends_on:
+      - redis
+      - mail
 
-  # nextcloud-2:
-  #   build:
-  #     context: ./docker/
-  #   environment:
-  #     SQL: 'mysql'
-  #     NEXTCLOUD_AUTOINSTALL: "NO"
-  #     NEXTCLOUD_AUTOINSTALL_APPS: ""
-  #   volumes:
-  #     - '/home/jus/repos/nextcloud/server:/var/www/html'
-  #     - data:/var/www/html/data
-  #     - config:/var/www/html/config
-  #     - /var/www/html/apps-writable
-  #   ports:
-  #     - "${PORTBASE:-800}1:80"
-  #   depends_on:
-  #     - database-mysql
-  #     - redis
+  nextcloud3:
+    build:
+      context: ./docker/
+    environment:
+      SQL: 'sqlite'
+      NEXTCLOUD_AUTOINSTALL: "YES"
+      NEXTCLOUD_AUTOINSTALL_APPS:
+      WITH_REDIS: "YES"
+      VIRTUAL_HOST: nextcloud3.local.dev.bitgrid.net
+      ADDITIONAL_APPS_PATH:
+      NEXTCLOUD_TRUSTED_DOMAINS:
+    volumes:
+      - '${REPO_PATH_SERVER:-/home/jus/repos/nextcloud/server}:/var/www/html'
+      - data3:/var/www/html/data
+      - config3:/var/www/html/config
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
+      - /var/www/html/apps-writable
+      - ./data/skeleton/:/skeleton
+      - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+    ports:
+      - "${PORTBASE:-800}3:80"
+    depends_on:
+      - redis
+      - mail
 
   database-mysql:
     image: mariadb:latest
@@ -88,6 +125,14 @@ services:
     volumes:
       - ./data/example.ldif:/container/service/slapd/assets/config/bootstrap/ldif/50-bootstrap.ldif
 
+  ldapadmin:
+    image: osixia/phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: ldap
+      PHPLDAPADMIN_HTTPS: 'false'
+    ports:
+      - "${PORTBASE:-800}8:80"
+
   saml:
     image: unicon/simplesamlphp
     volumes:
@@ -98,24 +143,12 @@ services:
       VIRTUAL_HOST: "sso.local.dev.bitgrid.net"
     expose:
       - 80
-    
-  # Using https://github.com/kristophjunge/docker-test-saml-idp
-
-  # saml:
-  #   image: kristophjunge/test-saml-idp
-  #   environment:
-  #     SIMPLESAMLPHP_SP_ENTITY_ID: http://nextcloud/
-  #     SIMPLESAMLPHP_SP_ASSERTION_CONSUMER_SERVICE: http://localhost/simplesaml/module.php/saml/sp/saml2-acs.php/test-sp
-  #     SIMPLESAMLPHP_SP_SINGLE_LOGOUT_SERVICE: http://localhost/simplesaml/module.php/saml/sp/saml2-logout.php/test-sp
-  #   ports:
-  #     - "${PORTBASE:-800}8:8080"
 
   mail:
     image: mailhog/mailhog
     ports:
       - "${PORTBASE:-800}9:8025"
 
-  # TODO: Add S3 storage
   # TODO: Add SMB server
 
   blackfire:
@@ -137,20 +170,61 @@ services:
       VIRTUAL_HOST: ${COLLABORA_DOMAIN}
       VIRTUAL_PORT: 9980
       VIRTUAL_PROTO: https
+  
+  collabora2:
+    image: collabora/code
+    restart: on-failure
+    expose:
+      - 9980
+    cap_add:
+      - MKNOD
+    environment:
+      domain: nextcloud2.local.dev.bitgrid.net
+      username: admin
+      password: admin
+      VIRTUAL_HOST: collabora2.local.dev.bitgrid.net
+      VIRTUAL_PORT: 9980
+      VIRTUAL_PROTO: https
 
-  s3.minio:
+  onlyoffice:
+    image: onlyoffice/documentserver:latest
+    environment:
+      VIRTUAL_HOST: onlyoffice.local.dev.bitgrid.net
+    expose:
+      - '80'
+    volumes:
+      - document_data:/var/www/onlyoffice/Data
+      - document_log:/var/log/onlyoffice
+
+  minio:
     image: minio/minio
     environment:
       MINIO_ACCESS_KEY: nextcloud
       MINIO_SECRET_KEY: nextcloud
     ports:
       - "${PORTBASE:-800}5:9000"
+    volumes:
+      - objectstorage_minio:/data
     command: server /data
+
+  s3:
+    image: lphoward/fake-s3
+    expose:
+      - 4569
+    volumes:
+      - objectstorage_fakes3:/fakes3_root
 
 volumes:
   data:
+  data2:
+  data3:
   config:
-
+  config2:
+  config3:
+  document_data:
+  document_log:
+  objectstorage_fakes3:
+  objectstorage_minio:
 
 networks:
   default:
