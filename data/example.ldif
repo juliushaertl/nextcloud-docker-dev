@@ -54,11 +54,82 @@ ou: Peons
 objectClass: top
 objectClass: organizationalUnit
 
-dn: ou=Planning,dc=example, dc=org
+dn: ou=Groups,dc=example, dc=org
 changetype: add
-ou: Planning
+ou: Groups
 objectClass: top
 objectClass: organizationalUnit
+
+
+dn: cn=Accounting,ou=Groups,dc=example, dc=org
+changetype: add
+cn: Accounting
+gidNumber: 500
+objectClass: top
+objectClass: posixGroup
+
+dn: cn=Product Development,ou=Groups,dc=example, dc=org
+changetype: add
+cn: Product Development
+gidNumber: 501
+objectClass: top
+objectClass: posixGroup
+
+dn: cn=Product Testing,ou=Groups,dc=example, dc=org
+changetype: add
+cn: Product Testing
+gidNumber: 502
+objectClass: top
+objectClass: posixGroup
+
+dn: cn=Human Resources,ou=Groups,dc=example, dc=org
+changetype: add
+cn: Human Resources
+gidNumber: 503
+objectClass: top
+objectClass: posixGroup
+
+dn: cn=Payroll,ou=Groups,dc=example, dc=org
+changetype: add
+cn: Payroll
+gidNumber: 504
+objectClass: top
+objectClass: posixGroup
+
+dn: cn=Janitorial,ou=Groups,dc=example, dc=org
+changetype: add
+cn: Janitorial
+gidNumber: 505
+objectClass: top
+objectClass: posixGroup
+
+dn: cn=Management,ou=Groups,dc=example, dc=org
+changetype: add
+cn: Management
+gidNumber: 506
+objectClass: top
+objectClass: posixGroup
+
+dn: cn=Administrative,ou=Groups,dc=example, dc=org
+changetype: add
+cn: Administrative
+gidNumber: 507
+objectClass: top
+objectClass: posixGroup
+
+dn: cn=Peons,ou=Groups,dc=example, dc=org
+changetype: add
+cn: Peons
+gidNumber: 508
+objectClass: top
+objectClass: posixGroup
+
+dn: cn=Planning,ou=Groups,dc=example, dc=org
+changetype: add
+cn: Planning
+gidNumber: 509
+objectClass: top
+objectClass: posixGroup
 
 dn: cn=Mohammad Kerwin,ou=Product Testing,dc=example, dc=org
 changetype: add
