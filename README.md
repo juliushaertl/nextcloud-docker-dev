@@ -46,7 +46,7 @@ COLLABORA_DOMAIN=collabora.local
 ### Starting the containers
 
 - Start full setup: `docker-compose up`
-- Minimum: `docker-compose up nextcloud` (nextcloud mysql redis mailhog)
+- Minimum: `docker-compose up proxy nextcloud` (nextcloud mysql redis mailhog)
 
 ### Switching to different env settings
 
@@ -54,7 +54,7 @@ This can be useful if you wish to run different Nextcloud versions besides each 
 
 ```
 set -a; . stable15.env; set +a
-docker-compose up nextcloud
+docker-compose up proxy nextcloud
 ```
 
 ## 🔒 Reverse Proxy
@@ -123,4 +123,3 @@ docker-compose up -d proxy nextcloud saml
 set XDEBUG_CONFIG=idekey=PHPSTORM
 sudo -E -u www-data php -dxdebug.remote_host=192.168.21.1 occ
 
-###
