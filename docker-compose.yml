@@ -194,7 +194,7 @@ services:
       - BLACKFIRE_SERVER_TOKEN
 
   collabora:
-    image: collabora/code
+    image: collabora/code:4.2-snapshot
     expose:
       - 9980
     cap_add:
