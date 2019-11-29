@@ -5,7 +5,8 @@ services:
   # Proxy for ssl termination and easier hostname access
   # SSL certificates with the virtual host name need to be added to ./data/ssl
   proxy:
-    image: jwilder/nginx-proxy
+    build:
+      context: ./docker/nginx
     ports:
       - "80:80"
       - "443:443"
