@@ -25,7 +25,6 @@ RUN debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
         gd \
         intl \
         ldap \
-        mcrypt \
         opcache \
         pcntl \
         pdo_mysql \
@@ -95,7 +94,7 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
 RUN a2enmod rewrite
 
 ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php configs/s3.php configs/config.php configs/redis.config.php /root/
-ADD bootstrap.sh occ /usr/local/bin/
+ADD apache-all/bootstrap.sh apache-all/occ /usr/local/bin/
 
 ENV WEBROOT /var/www/html
 WORKDIR /var/www/html
