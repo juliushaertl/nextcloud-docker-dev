@@ -153,9 +153,9 @@ services:
   saml:
     image: unicon/simplesamlphp
     volumes:
-      - ./docker/config/var-simplesamlphp/config:/var/simplesamlphp/config
-      - ./docker/config/var-simplesamlphp/cert:/var/simplesamlphp/cert
-      - ./docker/config/var-simplesamlphp/metadata:/var/simplesamlphp/metadata
+      - ./docker/configs/var-simplesamlphp/config:/var/simplesamlphp/config
+      - ./docker/configs/var-simplesamlphp/cert:/var/simplesamlphp/cert
+      - ./docker/configs/var-simplesamlphp/metadata:/var/simplesamlphp/metadata
     environment:
       VIRTUAL_HOST: "sso.local.dev.bitgrid.net"
     expose:

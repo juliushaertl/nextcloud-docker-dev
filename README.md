@@ -112,7 +112,8 @@ docker-compose up -d proxy nextcloud saml
 - uid mapping: `urn:oid:0.9.2342.19200300.100.1.1`
 - idp entity id: `https://sso.local.dev.bitgrid.net/simplesaml/saml2/idp/metadata.php`
 - single sign on service url: `https://sso.local.dev.bitgrid.net/simplesaml/saml2/idp/SSOService.php`
-- singlie log out service url: `https://sso.local.dev.bitgrid.net/simplesaml/saml2/idp/SingleLogoutService.php`
+- single log out service url: `https://sso.local.dev.bitgrid.net/simplesaml/saml2/idp/SingleLogoutService.php`
+- use certificate from docker/configs/var-simplesamlphp/cert/example.org.crt
 
 ## 🚧 Object storage
 
