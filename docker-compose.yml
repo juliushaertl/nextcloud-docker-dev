@@ -194,7 +194,7 @@ services:
       - BLACKFIRE_SERVER_TOKEN
 
   collabora:
-    image: collabora/code:4.2-snapshot
+    image: collabora/code:latest
     expose:
       - 9980
     cap_add:
@@ -250,6 +250,15 @@ services:
     volumes:
       - objectstorage_fakes3:/fakes3_root
 
+  elasticsearch:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.elasticsearch
+    environment: 
+      discovery.type: single-node
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+
 volumes:
   data:
   data2:
@@ -262,6 +271,7 @@ volumes:
   objectstorage_fakes3:
   objectstorage_minio:
   smb:
+  elasticsearch_data:
 
 networks:
   default:

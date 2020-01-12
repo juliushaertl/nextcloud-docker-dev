@@ -115,6 +115,14 @@ docker-compose up -d proxy nextcloud saml
 - single log out service url: `https://sso.local.dev.bitgrid.net/simplesaml/saml2/idp/SingleLogoutService.php`
 - use certificate from docker/configs/var-simplesamlphp/cert/example.org.crt
 
+## Fulltextsearch
+
+```
+docker-compose up -d elasticsearch
+```
+
+`sudo sysctl -w vm.max_map_count=262144`
+
 ## 🚧 Object storage
 
 ## Development
