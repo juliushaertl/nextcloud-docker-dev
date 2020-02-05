@@ -5,7 +5,7 @@ $metadata['https://nextcloud.local.dev.bitgrid.net/index.php/apps/user_saml/saml
     array (
     ),
     'metadata-set' => 'saml20-sp-remote',
-    'expire' => 1562336801,
+    'expire' => 2212072296,
     'AssertionConsumerService' => 
     array (
       0 => 
