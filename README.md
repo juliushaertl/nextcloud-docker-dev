@@ -39,8 +39,8 @@ DOCKER_SUBNET=192.168.15.0/24
 PORTBASE=815
 
 # Main dns names for ssl proxy
-NEXTCLOUD_DOMAIN=nextcloud.local
-COLLABORA_DOMAIN=collabora.local
+# This can be used to append a custom domain name to the container names
+DOMAIN_SUFFIX=nextcloud.local
 ```
 
 ### Starting the containers
@@ -70,7 +70,7 @@ allowing you to run `docker-compose up` again from a clean slate.
 
 ## 🔒 Reverse Proxy
 
-Used for SSL termination. To setup SSL support provide a proper NEXTCLOUD_DOMAIN environment variable and put the certificates to ./data/ssl/ named by the domain name.
+Used for SSL termination. To setup SSL support provide a proper DOMAIN_SUFFIX environment variable and put the certificates to ./data/ssl/ named by the domain name.
 
 You might need to add the domains to your `/etc/hosts` file:
 
@@ -78,6 +78,8 @@ You might need to add the domains to your `/etc/hosts` file:
 127.0.0.1 nextcloud.local
 127.0.0.1 collabora.local
 ```
+
+This is assuming you have set `DOMAIN_SUFFIX=.local`
 
 ## ✉ Mail
 
