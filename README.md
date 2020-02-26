@@ -57,6 +57,10 @@ set -a; . stable15.env; set +a
 docker-compose up proxy nextcloud
 ```
 
+Besides that there are also stable containers now in the main
+`docker-compose.yml` file, which makes it a bit easier to run them side by
+side. However the source location needs to be adjusted for this.
+
 ### Running into errors
 
 If your setup isn't working and you can not figure out the reason why, running
