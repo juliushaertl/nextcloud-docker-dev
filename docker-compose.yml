@@ -51,6 +51,7 @@ services:
       - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+      - ./data/shared:/shared
     ports:
       - "${PORTBASE:-800}0:80"
     depends_on:
