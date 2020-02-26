@@ -40,7 +40,7 @@ PORTBASE=815
 
 # Main dns names for ssl proxy
 # This can be used to append a custom domain name to the container names
-DOMAIN_SUFFIX=nextcloud.local
+DOMAIN_SUFFIX=.local
 ```
 
 ### Starting the containers
