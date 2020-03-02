@@ -16,6 +16,7 @@ services:
       - ./data/ssl/:/etc/nginx/certs
       - ./data/ssl/dhparams.pem:/etc/nginx/dhparam/dhparam.pem
     environment:
+      DHPARAM_BITS: 2048
       DHPARAM_GENERATION: "false"
       HTTPS_METHOD: "noredirect"
       HSTS: "off"
