@@ -17,6 +17,20 @@ Features
 
 ## Getting started
 
+### Nextcloud Code
+
+The Nextcloud code base needs to be available including the `3rdparty` submodule.
+To clone it from github run:
+
+```
+git clone https://github.com/nextcloud/server.git
+cd server
+git submodule update --init
+pwd
+```
+The last command prints the path to the Nextcloud server directory.
+Use it for setting the `REPO_PATH_SERVER` in the next step.
+
 ### Environment variables
 
 A `.env` file should be created in the repository root, to keep configuration default on the dev setup:
