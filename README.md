@@ -64,11 +64,10 @@ DOMAIN_SUFFIX=.local
 
 ### Switching to different env settings
 
-This can be useful if you wish to run different Nextcloud versions besides each other:
+This can be useful if you wish to run different setups besides each other:
 
 ```
-set -a; . stable15.env; set +a
-docker-compose up proxy nextcloud
+docker-compose --env-file stable15.env up proxy nextcloud
 ```
 
 Besides that there are also stable containers now in the main
@@ -94,6 +93,12 @@ You might need to add the domains to your `/etc/hosts` file:
 ```
 
 This is assuming you have set `DOMAIN_SUFFIX=.local`
+
+You can generate selfsigned certificates using:
+
+```
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout  nextcloud.local.key -out nextcloud.local.crt
+```
 
 ## ✉ Mail
 
