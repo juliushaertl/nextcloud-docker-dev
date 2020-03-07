@@ -76,14 +76,14 @@ install() {
 		cp /root/autoconfig_oci.php $WEBROOT/config/autoconfig.php
 	fi
 
-    # We copy the default config to the container
+	# We copy the default config to the container
 	cp /root/config.php $WEBROOT/config/config.php
 	chown -R www-data:www-data $WEBROOT/config/config.php
 
-    update_permission
+	update_permission
 
-    USER=admin
-    PASSWORD=admin
+	USER=admin
+	PASSWORD=admin
 
 	echo "🔧 Starting auto installation"
 	if [ "$SQL" = "oci" ]; then
@@ -106,7 +106,7 @@ install() {
 	fi
 	OCC user:setting admin settings email admin@example.net
 
-	# Setup domains 
+	# Setup domains
 	# localhost is at index 0 due to the installation
 	INTERNAL_IP_ADDRESS=`ip a show type veth | grep -o "inet [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*"`
 	NEXTCLOUD_TRUSTED_DOMAINS="${NEXTCLOUD_TRUSTED_DOMAINS:-nextcloud} ${VIRTUAL_HOST} ${INTERNAL_IP_ADDRESS} localhost"
@@ -144,17 +144,23 @@ install() {
 
 }
 
+add_hosts() {
+	echo "Add the host IP as host.docker.internal to /etc/hosts ..."
+	ip -4 route list match 0/0 | awk '{print $3 "   host.docker.internal"}' >> /etc/hosts
+}
+
 setup() {
 	STATUS=`OCC status`
 	if [[ "$STATUS" != *"installed: true"* ]]
 	then
-	    if [ "$NEXTCLOUD_AUTOINSTALL" = "YES" ]
-    	then
+		if [ "$NEXTCLOUD_AUTOINSTALL" = "YES" ]
+		then
+			add_hosts
 			install
 		fi
 	else
 		echo "🚀 Nextcloud already installed ... skipping setup"
-		
+
 		# configuration that should be applied on each start
 		configure_ssl_proxy
 	fi
