@@ -1,6 +1,6 @@
 # nextcloud-dev-docker-compose
 
-Nextcloud development environment using docker-compose 
+Nextcloud development environment using docker-compose
 
 ⚠ **DO NOT USE THIS IN PRODUCTION** Various settings in this setup are considered insecure and default passwords and secrets are used all over the place
 
@@ -19,8 +19,7 @@ Features
 
 ### Nextcloud Code
 
-The Nextcloud code base needs to be available including the `3rdparty` submodule.
-To clone it from github run:
+The Nextcloud code base needs to be available including the `3rdparty` submodule. To clone it from github run:
 
 ```
 git clone https://github.com/nextcloud/server.git
@@ -57,6 +56,22 @@ PORTBASE=815
 DOMAIN_SUFFIX=.local
 ```
 
+### Setting the PHP version to be used
+
+The nextcloud instance is setup to run with PHP 7.2 by default, if you wish to use a different version of PHP, update the following value in `docker-compose.yml` file under the `nextcloud` service.
+
+```
+# Replace with Dockerfile.php73 if you'd like to use PHP 7.3
+dockerfile: Dockerfile.php72
+```
+
+Following versions of PHP are supported,
+
+1. PHP 7.1 (`Dockerfile.php71`)
+2. PHP 7.2 (`Dockerfile.php72`)
+3. PHP 7.3 (`Dockerfile.php73`)
+
+
 ### Starting the containers
 
 - Start full setup: `docker-compose up`
@@ -79,7 +94,6 @@ side. However the source location needs to be adjusted for this.
 If your setup isn't working and you can not figure out the reason why, running
 `docker-compose down -v` will remove the relevant containers and volumes,
 allowing you to run `docker-compose up` again from a clean slate.
-
 
 ## 🔒 Reverse Proxy
 

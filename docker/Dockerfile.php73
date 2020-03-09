@@ -1,0 +1,103 @@
+FROM php:7.3-apache
+
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends \
+        libcurl4-openssl-dev \
+        libfreetype6-dev \
+        libicu-dev \
+        libjpeg-dev \
+        libldap2-dev \
+        libmcrypt-dev \
+        libmemcached-dev \
+        libpng-dev \
+        libpq-dev \
+        libxml2-dev \
+        libzip-dev \
+        libmagickwand-dev \
+        libmagickcore-6.q16-3-extra \
+        libsmbclient-dev \
+        && rm -rf /var/lib/apt/lists/*
+
+RUN debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
+    docker-php-ext-configure gd --with-freetype-dir=/usr --with-png-dir=/usr --with-jpeg-dir=/usr; \
+    docker-php-ext-configure ldap --with-libdir="lib/$debMultiarch"; \
+    docker-php-ext-install \
+        exif \
+        gd \
+        intl \
+        ldap \
+        opcache \
+        pcntl \
+        pdo_mysql \
+        pdo_pgsql \
+        zip
+
+RUN pecl install APCu-5.1.18; \
+    pecl install memcached-3.1.5; \
+    pecl install redis-5.2.0; \
+    pecl install xdebug; \
+    pecl install imagick; \
+    pecl install smbclient; \
+    pecl install mcrypt; \
+    \
+    docker-php-ext-enable \
+        apcu \
+        memcached \
+        redis \
+        xdebug \
+	imagick \
+        smbclient
+
+# dev tools separate install so we quickly change without rebuilding all php extenions
+RUN apt update && apt-get install -y --no-install-recommends \
+    git curl vim sudo cron smbclient iproute2 \
+        && rm -rf /var/lib/apt/lists/*
+
+RUN { \
+        echo '[global]'; \
+        echo 'client min protocol = SMB2'; \
+        echo 'client max protocol = SMB3'; \
+        echo 'hide dot files = no'; \
+} > /etc/samba/smb.conf
+
+RUN mkdir --parent /var/log/cron
+ADD configs/cron.conf /etc/nc-cron.conf
+RUN crontab /etc/nc-cron.conf
+
+# PHP configuration
+RUN { \
+        echo 'opcache.enable=1'; \
+        echo 'opcache.enable_cli=1'; \
+        echo 'opcache.interned_strings_buffer=8'; \
+        echo 'opcache.max_accelerated_files=10000'; \
+        echo 'opcache.memory_consumption=128'; \
+        echo 'opcache.save_comments=1'; \
+        echo 'opcache.revalidate_freq=1'; \
+    } > /usr/local/etc/php/conf.d/opcache-recommended.ini; \
+    echo 'apc.enable_cli=1' >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini; \
+    echo 'memory_limit=512M' > /usr/local/etc/php/conf.d/memory-limit.ini
+
+ADD configs/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
+# Setup blackfire probe
+ENV current_os=linux
+RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
+    && curl -A "Docker" -o /tmp/blackfire-probe.tar.gz -D - -L -s https://blackfire.io/api/v1/releases/probe/php/$current_os/amd64/$version \
+    && mkdir -p /tmp/blackfire \
+    && tar zxpf /tmp/blackfire-probe.tar.gz -C /tmp/blackfire \
+    && mv /tmp/blackfire/blackfire-*.so $(php -r "echo ini_get('extension_dir');")/blackfire.so \
+    && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://blackfire:8707\n" > $PHP_INI_DIR/conf.d/blackfire.ini \
+    && rm -rf /tmp/blackfire /tmp/blackfire-probe.tar.gz
+
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+RUN a2enmod rewrite
+
+ENV WEBROOT /var/www/html
+WORKDIR /var/www/html
+
+ENTRYPOINT  ["/usr/local/bin/bootstrap.sh"]
+CMD ["apache2-foreground"]
+
+ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php configs/s3.php configs/config.php configs/redis.config.php /root/
+ADD bin/bootstrap.sh bin/occ /usr/local/bin/
