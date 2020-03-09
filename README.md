@@ -69,7 +69,7 @@ Following versions of PHP are supported,
 
 1. PHP 7.1 (`Dockerfile.php71`)
 2. PHP 7.2 (`Dockerfile.php72`)
-3. PHP 7.2 (`Dockerfile.php73`)
+3. PHP 7.3 (`Dockerfile.php73`)
 
 
 ### Starting the containers
