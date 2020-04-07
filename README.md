@@ -181,6 +181,8 @@ docker-compose up -d proxy nextcloud saml
   Z1tiHzYOVtEs4UNGOtz1Jg==
   -----END CERTIFICATE-----
   ```
+- cn `urn:oid:2.5.4.3`
+- email `urn:oid:0.9.2342.19200300.100.1.3`
 ## Fulltextsearch
 
 ```
