@@ -263,15 +263,14 @@ services:
       - BLACKFIRE_SERVER_TOKEN
 
   collabora:
-    #image: collabora/code:4.0.9.4
-    image: collabora/online
+    image: collabora/code:latest
     expose:
       - 9980
     cap_add:
       - MKNOD
     environment:
       domain: nextcloud${DOMAIN_SUFFIX}
-      dictionaries: de_DE en_US en_GB ar
+      dictionaries: de_DE en_US en_GB
       username: admin
       password: admin
       VIRTUAL_HOST: collabora${DOMAIN_SUFFIX}
