@@ -131,21 +131,9 @@ blackfire curl http://192.168.21.8/
 
 ## 👥 LDAP
 
-Example ldif is generated using http://ldapwiki.com/wiki/LDIF%20Generator
+The LDAP sample data is based on https://github.com/rroemhild/docker-test-openldap and extended with randomly generated users/groups. For details see [data/ldap-generator/](https://github.com/juliushaertl/nextcloud-docker-dev/tree/master/data/ldap-generator). LDAP will be configured automatically if the ldap container is available during installation.
 
-LDAP can be setup by running the following command to autoprovision the config from data/ldap.json:
-
-```
-docker-compose exec nextcloud occ app:enable user_ldap
-
-curl -X POST https://admin:admin@nextcloud.local/ocs/v2.php/apps/user_ldap/api/v1/config -H "OCS-APIREQUEST: true"
-
-curl -X PUT https://admin:admin@nextcloud.local/ocs/v2.php/apps/user_ldap/api/v1/config/s01 -H "OCS-APIREQUEST: true" -d @data/ldap.json --header "Content-Type: application/json"
-
-docker-compose exec nextcloud occ ldap:test-config s01
-```
-
-Example users are: `KerwinM SuwanawV WalkinsD DeluceL MaliepaM FabijanD ShiS HalpinM` The default password for all ldap users is `Password1`
+Example users are: `leela fry bender zoidberg hermes professor`. The password is the same as the uid.
 
 ## Collabora
 
