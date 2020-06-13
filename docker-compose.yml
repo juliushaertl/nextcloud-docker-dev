@@ -210,8 +210,11 @@ services:
       - 636
     ports:
       - 3389:389
+    environment:
+      LDAP_DOMAIN: planetexpress.com
+      LDAP_BASE_DN: dc=planetexpress,dc=com
     volumes:
-      - ./data/example.ldif:/container/service/slapd/assets/config/bootstrap/ldif/50-bootstrap.ldif
+      - ./data/ldap:/container/service/slapd/assets/config/bootstrap/ldif/custom
 
   ldapadmin:
     image: osixia/phpldapadmin
