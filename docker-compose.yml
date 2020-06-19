@@ -47,7 +47,7 @@ services:
   nextcloud:
     build:
       context: ./docker
-      dockerfile: Dockerfile.php72
+      dockerfile: Dockerfile.php${PHP_VERSION:-72}
     environment:
       # SQL: 'sqlite'
       # SQL: 'mysql'
@@ -79,7 +79,7 @@ services:
   nextcloud2:
     build:
       context: ./docker
-      dockerfile: Dockerfile.php72
+      dockerfile: Dockerfile.php${PHP_VERSION:-72}
     environment:
       # SQL: 'sqlite'
       # SQL: 'mysql'
@@ -110,7 +110,7 @@ services:
   stable16:
     build:
       context: ./docker
-      dockerfile: Dockerfile.php72
+      dockerfile: Dockerfile.php${PHP_VERSION:-72}
     environment:
       SQL: 'sqlite'
       NEXTCLOUD_AUTOINSTALL: "YES"
@@ -135,7 +135,7 @@ services:
   stable17:
     build:
       context: ./docker
-      dockerfile: Dockerfile.php72
+      dockerfile: Dockerfile.php${PHP_VERSION:-72}
     environment:
       SQL: 'sqlite'
       NEXTCLOUD_AUTOINSTALL: "YES"
@@ -160,7 +160,7 @@ services:
   stable18:
     build:
       context: ./docker
-      dockerfile: Dockerfile.php72
+      dockerfile: Dockerfile.php${PHP_VERSION:-72}
     environment:
       SQL: 'sqlite'
       NEXTCLOUD_AUTOINSTALL: "YES"
