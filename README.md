@@ -35,42 +35,22 @@ Use it for setting the `REPO_PATH_SERVER` in the next step.
 A `.env` file should be created in the repository root, to keep configuration default on the dev setup:
 
 ```
-COMPOSE_PROJECT_NAME=master
-
-REPO_PATH_SERVER=/home/jus/repos/nextcloud/server
-ADDITIONAL_APPS_PATH=/home/jus/repos/nextcloud/server/apps-extra
-
-NEXTCLOUD_AUTOINSTALL_APPS="viewer activity"
-
-BLACKFIRE_CLIENT_ID=
-BLACKFIRE_CLIENT_TOKEN=
-BLACKFIRE_SERVER_ID=
-BLACKFIRE_SERVER_TOKEN=
-
-# can be used to run separate setups besides each other
-DOCKER_SUBNET=192.168.15.0/24
-PORTBASE=815
-
-# Main dns names for ssl proxy
-# This can be used to append a custom domain name to the container names
-DOMAIN_SUFFIX=.local
+cp example.env .env
 ```
+
+Replace `REPO_PATH_SERVER` with the path from above.
 
 ### Setting the PHP version to be used
 
-The nextcloud instance is setup to run with PHP 7.2 by default, if you wish to use a different version of PHP, update the following value in `docker-compose.yml` file under the `nextcloud` service.
+The Nextcloud instance is setup to run with PHP 7.2 by default.
+If you wish to use a different version of PHP, set the `PHP_VERSION` `.env` variable.
 
-```
-# Replace with Dockerfile.php73 if you'd like to use PHP 7.3
-dockerfile: Dockerfile.php72
-```
+The variable supports the following values:
 
-Following versions of PHP are supported,
-
-1. PHP 7.1 (`Dockerfile.php71`)
-2. PHP 7.2 (`Dockerfile.php72`)
-3. PHP 7.3 (`Dockerfile.php73`)
-
+1. PHP 7.1: `71`
+1. PHP 7.2: `72`
+1. PHP 7.3: `73`
+1. PHP 7.4: `74`
 
 ### Starting the containers
 
@@ -111,6 +91,7 @@ This is assuming you have set `DOMAIN_SUFFIX=.local`
 You can generate selfsigned certificates using:
 
 ```
+cd data/ssl
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout  nextcloud.local.key -out nextcloud.local.crt
 ```
 
@@ -185,7 +166,7 @@ docker-compose up -d elasticsearch
 
 ### OCC
 
-Run inside of the nextcloud container:
+Run inside of the Nextcloud container:
 ```
 set XDEBUG_CONFIG=idekey=PHPSTORM
 sudo -E -u www-data php -dxdebug.remote_host=192.168.21.1 occ

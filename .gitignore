@@ -2,5 +2,6 @@ data/ssl/
 data/shared/
 .env
 *.env
+!example.env
 .*
 data/skeleton/
