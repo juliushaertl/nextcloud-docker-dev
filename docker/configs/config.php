@@ -22,6 +22,9 @@
 		),
 	),
 
+	// allow local remote senders
+	'allow_local_remote_servers' => true,
+
 	// config for mailhog
 	'mail_from_address' => 'admin',
 	'mail_smtpmode' => 'smtp',
