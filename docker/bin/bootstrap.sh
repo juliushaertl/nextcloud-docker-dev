@@ -65,9 +65,11 @@ configure_ssl_proxy() {
 	if [ $? -eq 0 ]; then
 		echo "🔑 SSL proxy available, configuring proxy settings"
 		OCC config:system:set overwriteprotocol --value https
+		OCC config:system:set overwrite.cli.url --value "https://$VIRTUAL_HOST"
 	else
 		echo "🗝 No SSL proxy, removing overwriteprotocol"
 		OCC config:system:set overwriteprotocol --value ""
+		OCC config:system:set overwrite.cli.url --value "http://$VIRTUAL_HOST"
 	fi
 }
 
@@ -141,7 +143,6 @@ install() {
 			NC_TRUSTED_DOMAIN_IDX=$(($NC_TRUSTED_DOMAIN_IDX+1))
 		done
 	fi
-	OCC config:system:set overwrite.cli.url --value $VIRTUAL_HOST
 	configure_ssl_proxy
 
 
