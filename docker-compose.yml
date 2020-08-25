@@ -121,10 +121,10 @@ services:
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
-      - /home/jus/repos/nextcloud/stable16:/var/www/html
+      - '${STABLE_ROOT_PATH:-/home/jus/repos/nextcloud}/stable16:/var/www/html'
+      - '${STABLE_ROOT_PATH:-/home/jus/repos/nextcloud}/stable16/app-extra:/var/www/html/app-extra'
       - /var/www/html/data
       - /var/www/html/config
-      - /home/jus/repos/nextcloud/stable16/apps-extra:/var/www/html/apps-extra
       - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
@@ -146,8 +146,8 @@ services:
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
-      - /home/jus/repos/nextcloud/stable17:/var/www/html
-      - /home/jus/repos/nextcloud/stable17/apps-extra:/var/www/html/apps-extra
+      - '${STABLE_ROOT_PATH:-/home/jus/repos/nextcloud}/stable17:/var/www/html'
+      - '${STABLE_ROOT_PATH:-/home/jus/repos/nextcloud}/stable17/apps-extra:/var/www/html/app-extra'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -171,8 +171,8 @@ services:
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
-      - /home/jus/repos/nextcloud/stable18:/var/www/html
-      - /home/jus/repos/nextcloud/stable18/apps-extra:/var/www/html/apps-extra
+      - '${STABLE_ROOT_PATH:-/home/jus/repos/nextcloud}/stable18:/var/www/html'
+      - '${STABLE_ROOT_PATH:-/home/jus/repos/nextcloud}/stable18/apps-extra:/var/www/html/app-extra'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
