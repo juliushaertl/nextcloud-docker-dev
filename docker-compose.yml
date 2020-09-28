@@ -296,7 +296,7 @@ services:
       VIRTUAL_PROTO: https
 
   onlyoffice:
-    image: onlyoffice/documentserver:latest
+    image: onlyoffice/documentserver-ie:latest
     environment:
       VIRTUAL_HOST: onlyoffice${DOMAIN_SUFFIX}
     expose:
