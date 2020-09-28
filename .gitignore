@@ -1,5 +1,6 @@
 data/ssl/
 data/shared/
+workspace/
 .env
 *.env
 !example.env
