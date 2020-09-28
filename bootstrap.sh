@@ -50,7 +50,7 @@ mkdir -p workspace/
 ( 
 	(
 		echo "🌏 Fetching server" &&
-			git clone --depth 1 https://github.com/nextcloud/server.git workspace/server 2>&1 | indent_cli &&
+			git clone https://github.com/nextcloud/server.git workspace/server 2>&1 | indent_cli &&
 			cd workspace/server && git submodule update --init 2>&1 | indent_cli
 	) || echo "❌ Failed to clone Nextcloud server code"
 ) | indent
