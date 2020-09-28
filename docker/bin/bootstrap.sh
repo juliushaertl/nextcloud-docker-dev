@@ -114,8 +114,10 @@ install() {
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL --database-name=xe --database-host=$SQLHOST --database-user=system --database-pass=oracle
 	elif [ "$SQL" = "pgsql" ]; then
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL --database-name=nextcloud --database-host=$SQLHOST --database-user=postgres --database-pass=postgres
-	else
+	elif [ "$SQL" = "mysql" ]; then
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL --database-name=nextcloud --database-host=$SQLHOST --database-user=nextcloud --database-pass=nextcloud
+	else
+		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL
 	fi;
 
 	OCC app:disable password_policy
