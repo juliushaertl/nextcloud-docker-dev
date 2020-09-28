@@ -50,8 +50,10 @@ RUN pecl install APCu-5.1.18; \
 
 # dev tools separate install so we quickly change without rebuilding all php extenions
 RUN apt update && apt-get install -y --no-install-recommends \
-    git curl vim sudo cron smbclient iproute2 \
+    git curl vim sudo cron smbclient iproute2 lnav \
         && rm -rf /var/lib/apt/lists/*
+
+RUN wget https://gist.githubusercontent.com/nickvergessen/e21ee0a09ee3b3f7fd1b04c83dd3e114/raw/83142be1e50c23e8de1bd7aae88a95e5d6ae1ce2/nextcloud_log.json && lnav -i nextcloud_log.json && rm nextcloud_log.json
 
 RUN { \
         echo '[global]'; \
