@@ -70,8 +70,8 @@ install_app files_pdfviewer
 echo
 echo
 echo "⏩ Setup your environment in an .env file"
-
-cat <<EOT >>greetings.txt
+if [ ! -f ".env" ]; then
+cat <<EOT >.env
 COMPOSE_PROJECT_NAME=nextcloud
 DOMAIN_SUFFIX=.local
 REPO_PATH_SERVER=$PWD/workspace/server
@@ -80,7 +80,7 @@ NEXTCLOUD_AUTOINSTALL_APPS="viewer"
 DOKER_SUBNET=192.168.21.0/24
 PORTBASE=821
 EOT
-
+fi
 cat <<EOF
 
 
