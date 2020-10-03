@@ -45,13 +45,11 @@ services:
       - ./docker/configs/haproxy.conf:/usr/local/etc/haproxy/haproxy.cfg:ro
 
   nextcloud:
-    build:
-      context: ./docker
-      dockerfile: Dockerfile.php${PHP_VERSION:-72}
+    image: juliushaertl/nextcloud-dev:php7.4
     environment:
       # SQL: 'sqlite'
-      # SQL: 'mysql'
-      SQL: 'pgsql'
+      SQL: 'mysql'
+      #SQL: 'pgsql'
       NEXTCLOUD_AUTOINSTALL: "YES"
       NEXTCLOUD_AUTOINSTALL_APPS:
       WITH_REDIS: "YES"
@@ -71,8 +69,8 @@ services:
     ports:
       - "${PORTBASE:-800}0:80"
     depends_on:
-      #- database-mysql
-      - database-postgres
+      - database-mysql
+      #- database-postgres
       - redis
       - mail
 
