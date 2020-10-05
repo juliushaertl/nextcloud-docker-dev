@@ -17,6 +17,18 @@ Features
 
 ## Getting started
 
+To get the setup running:
+
+```
+git clone https://github.com/juliushaertl/nextcloud-docker-dev
+cd nextcloud-docker-dev
+./bootstrap.sh
+sudo sh -c "echo '127.0.0.1 nextcloud.local' >> /etc/hosts"
+docker-compose up nextcloud proxy
+```
+
+## Manual setup
+
 ### Nextcloud Code
 
 The Nextcloud code base needs to be available including the `3rdparty` submodule. To clone it from github run:

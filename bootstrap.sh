@@ -49,7 +49,7 @@ echo "⏩ Setting up folder structure and fetching repositories"
 mkdir -p workspace/
 ( 
 	(
-		echo "🌏 Fetching server" &&
+		echo "🌏 Fetching server (this might take a while to finish)" &&
 			git clone https://github.com/nextcloud/server.git workspace/server 2>&1 | indent_cli &&
 			cd workspace/server && git submodule update --init 2>&1 | indent_cli
 	) || echo "❌ Failed to clone Nextcloud server code"
