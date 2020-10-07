@@ -188,7 +188,7 @@ services:
       MYSQL_USER: 'nextcloud'
       MYSQL_DATABASE: 'nextcloud'
     ports:
-      - "${PORTBASE:-800}2:80"
+      - "${PORTBASE:-800}2:3306"
 
   database-postgres:
     image: postgres:latest
