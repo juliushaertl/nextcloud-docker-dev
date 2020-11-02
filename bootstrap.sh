@@ -9,10 +9,10 @@ indent() {
 }
 
 indent_cli() {
-  if [[ "$OSTYPE" == "darwin"* ]]; then
-  	sed -l 's/^/   > /'
-  else
-	  sed -u 's/^/   > /'
+	if [[ "$OSTYPE" == "darwin"* ]]; then
+		sed -l 's/^/   > /'
+	else
+		sed -u 's/^/   > /'
 	fi
 }
 
