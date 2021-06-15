@@ -198,7 +198,7 @@ services:
       - 5432
 
   redis:
-    image: redis:3
+    image: redis:6
 
   ldap:
     image: osixia/openldap
