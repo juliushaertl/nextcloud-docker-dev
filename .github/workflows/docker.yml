@@ -8,7 +8,7 @@ on:
 
 jobs:
   push_to_registry:
-    name: Push Docker image to GitHub Packages
+    name: Build image
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -43,7 +43,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          context: docker/Dockerfile.${{ matrix.container }}
+          context: docker/
+          file: Dockerfile.${{ matrix.container }}
           tags: |
             ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}
 
