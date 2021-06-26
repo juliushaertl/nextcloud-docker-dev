@@ -44,7 +44,7 @@ jobs:
         with:
           push: true
           context: docker/
-          file: Dockerfile.${{ matrix.container }}
+          file: docker/Dockerfile.${{ matrix.container }}
           tags: |
             ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}
 
