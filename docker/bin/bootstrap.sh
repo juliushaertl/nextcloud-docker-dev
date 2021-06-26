@@ -6,10 +6,10 @@ OCC() {
 }
 
 update_permission() {
-	chown www-data:www-data $WEBROOT/config
-	chown -R www-data:www-data $WEBROOT/config/config.php
-	chown -R www-data:www-data $WEBROOT/data
 	chown -R www-data:www-data $WEBROOT/apps-writable
+	chown -R www-data:www-data $WEBROOT/data
+	chown www-data:www-data $WEBROOT/config
+	chown www-data:www-data $WEBROOT/config/config.php 2>/dev/null
 }
 
 wait_for_other_containers() {
@@ -34,7 +34,7 @@ configure_ldap() {
 	if [ $? -eq 0 ]; then
 		echo "LDAP server available"
 		export LDAP_USER_FILTER="(|(objectclass=inetOrgPerson))"
-	
+
 		OCC app:enable user_ldap
 		OCC ldap:create-empty-config
 		OCC ldap:set-config s01 ldapAgentName "cn=admin,dc=planetexpress,dc=com"
@@ -125,7 +125,6 @@ install() {
 	for app in $NEXTCLOUD_AUTOINSTALL_APPS; do
 		OCC app:enable $app
 	done
-	configure_ldap
 
 	if [ "$WITH_REDIS" = "YES" ]; then
 		cp /root/redis.config.php $WEBROOT/config/
@@ -147,26 +146,26 @@ install() {
 	fi
 	configure_ssl_proxy
 
-
 	# Setup initial configuration
-	configure_add_user user1
-	configure_add_user user2
-	configure_add_user user3
-	configure_add_user user4
-	configure_add_user user5
-	configure_add_user user6
-	configure_add_user jane
-	configure_add_user john
-	configure_add_user alice
-	configure_add_user bob
-
 	OCC background:cron
 
 	# run custom shell script from nc root
 	# [ -e /var/www/html/nc-dev-autosetup.sh ] && bash /var/www/html/nc-dev-autosetup.sh
 
-	echo "🚀 Finished setup using $SQL database…"
+	echo "🔧 Setting up users and LDAP in the background"
+	configure_add_user user1 &
+	configure_add_user user2 &
+	configure_add_user user3 &
+	configure_add_user user4 &
+	configure_add_user user5 &
+	configure_add_user user6 &
+	configure_add_user jane &
+	configure_add_user john &
+	configure_add_user alice &
+	configure_add_user bob &
+	configure_ldap &
 
+	echo "🚀 Finished setup using $SQL database…"
 }
 
 add_hosts() {
@@ -175,22 +174,22 @@ add_hosts() {
 }
 
 setup() {
+	update_permission
 	STATUS=`OCC status`
-	if [[ "$STATUS" != *"installed: true"* ]]
+	if [[ "$STATUS" = *"installed: true"* ]] || [[ ! -f $WEBROOT/config/config.php ]]
 	then
+		echo "🚀 Nextcloud already installed ... skipping setup"
+
+		# configuration that should be applied on each start
+		configure_ssl_proxy
+	else
 		if [ "$NEXTCLOUD_AUTOINSTALL" = "YES" ]
 		then
 			add_hosts
 			install
 		fi
-	else
-		echo "🚀 Nextcloud already installed ... skipping setup"
-
-		# configuration that should be applied on each start
-		configure_ssl_proxy
 	fi
 
-	update_permission
 }
 
 wait_for_other_containers

@@ -189,6 +189,8 @@ services:
       MYSQL_DATABASE: 'nextcloud'
     ports:
       - "${PORTBASE:-800}2:3306"
+    volumes:
+      - mysql:/var/lib/mysql
 
   database-postgres:
     image: postgres:latest
@@ -196,6 +198,8 @@ services:
       POSTGRES_PASSWORD: postgres
     expose:
       - 5432
+    volumes:
+      - postgres:/var/lib/postgresql
 
   redis:
     image: redis:6
@@ -333,6 +337,8 @@ services:
 volumes:
   data:
   config:
+  mysql:
+  postgres:
   document_data:
   document_log:
   objectstorage_fakes3:
