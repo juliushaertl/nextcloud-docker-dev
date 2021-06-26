@@ -1,0 +1,50 @@
+name: 'Docker Publish'
+
+on:
+  push:
+    branches:
+      - master
+
+
+jobs:
+  push_to_registry:
+    name: Push Docker image to GitHub Packages
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        container:
+          - php74
+          - php73
+          - php72
+          - php71
+          - saml
+          - smb
+          - nginx
+          - elasticsearch
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Log in to GitHub Docker Registry
+        uses: docker/login-action@v1
+        with:
+          registry: docker.pkg.github.com
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build container image
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: docker/Dockerfile.${{ matrix.container }}
+          tags: |
+            ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}
+
+
