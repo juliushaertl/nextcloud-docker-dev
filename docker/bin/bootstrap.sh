@@ -2,14 +2,14 @@
 indent() { sed 's/^/   /'; }
 
 OCC() {
-	sudo -E -u www-data $WEBROOT/occ $@ | indent
+	sudo -E -u www-data "$WEBROOT"/occ $@ | indent
 }
 
 update_permission() {
-	chown -R www-data:www-data $WEBROOT/apps-writable
-	chown -R www-data:www-data $WEBROOT/data
-	chown www-data:www-data $WEBROOT/config
-	chown www-data:www-data $WEBROOT/config/config.php 2>/dev/null
+	chown -R www-data:www-data "$WEBROOT"/apps-writable
+	chown -R www-data:www-data "$WEBROOT"/data
+	chown www-data:www-data "$WEBROOT"/config
+	chown www-data:www-data "$WEBROOT"/config/config.php 2>/dev/null
 }
 
 wait_for_other_containers() {
@@ -76,7 +76,7 @@ configure_ssl_proxy() {
 
 configure_add_user() {
 	export OC_PASS=$1
-	OCC user:add --password-from-env $1
+	OCC user:add --password-from-env "$1"
 }
 
 
@@ -85,24 +85,24 @@ install() {
 
 	if [ "$SQL" = "mysql" ]
 	then
-		cp /root/autoconfig_mysql.php $WEBROOT/config/autoconfig.php
+		cp /root/autoconfig_mysql.php "$WEBROOT"/config/autoconfig.php
 		SQLHOST=database-mysql
 	fi
 
 	if [ "$SQL" = "pgsql" ]
 	then
-		cp /root/autoconfig_pgsql.php $WEBROOT/config/autoconfig.php
+		cp /root/autoconfig_pgsql.php "$WEBROOT"/config/autoconfig.php
 		SQLHOST=database-postgres
 	fi
 
 	if [ "$SQL" = "oci" ]
 	then
-		cp /root/autoconfig_oci.php $WEBROOT/config/autoconfig.php
+		cp /root/autoconfig_oci.php "$WEBROOT"/config/autoconfig.php
 	fi
 
 	# We copy the default config to the container
-	cp /root/config.php $WEBROOT/config/config.php
-	chown -R www-data:www-data $WEBROOT/config/config.php
+	cp /root/config.php "$WEBROOT"/config/config.php
+	chown -R www-data:www-data "$WEBROOT"/config/config.php
 
 	update_permission
 
@@ -111,36 +111,36 @@ install() {
 
 	echo "🔧 Starting auto installation"
 	if [ "$SQL" = "oci" ]; then
-		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL --database-name=xe --database-host=$SQLHOST --database-user=system --database-pass=oracle
+		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name=xe --database-host=$SQLHOST --database-user=system --database-pass=oracle
 	elif [ "$SQL" = "pgsql" ]; then
-		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL --database-name=nextcloud --database-host=$SQLHOST --database-user=postgres --database-pass=postgres
+		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name=nextcloud --database-host=$SQLHOST --database-user=postgres --database-pass=postgres
 	elif [ "$SQL" = "mysql" ]; then
-		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL --database-name=nextcloud --database-host=$SQLHOST --database-user=nextcloud --database-pass=nextcloud
+		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name=nextcloud --database-host=$SQLHOST --database-user=nextcloud --database-pass=nextcloud
 	else
-		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database=$SQL
+		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL"
 	fi;
 
 	OCC app:disable password_policy
 
 	for app in $NEXTCLOUD_AUTOINSTALL_APPS; do
-		OCC app:enable $app
+		OCC app:enable "$app"
 	done
 
 	if [ "$WITH_REDIS" = "YES" ]; then
-		cp /root/redis.config.php $WEBROOT/config/
+		cp /root/redis.config.php "$WEBROOT"/config/
 	fi
 	OCC user:setting admin settings email admin@example.net
 
 	# Setup domains
 	# localhost is at index 0 due to the installation
-	INTERNAL_IP_ADDRESS=`ip a show type veth | grep -o "inet [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*"`
+	INTERNAL_IP_ADDRESS=$(ip a show type veth | grep -o "inet [0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | grep -o "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*")
 	NEXTCLOUD_TRUSTED_DOMAINS="${NEXTCLOUD_TRUSTED_DOMAINS:-nextcloud} ${VIRTUAL_HOST} ${INTERNAL_IP_ADDRESS} localhost"
 	if [ -n "${NEXTCLOUD_TRUSTED_DOMAINS+x}" ]; then
 		echo "🔧 setting trusted domains…"
 		NC_TRUSTED_DOMAIN_IDX=1
 		for DOMAIN in $NEXTCLOUD_TRUSTED_DOMAINS ; do
 			DOMAIN=$(echo "$DOMAIN" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
-			OCC config:system:set trusted_domains $NC_TRUSTED_DOMAIN_IDX --value=$DOMAIN
+			OCC config:system:set trusted_domains $NC_TRUSTED_DOMAIN_IDX --value="$DOMAIN"
 			NC_TRUSTED_DOMAIN_IDX=$(($NC_TRUSTED_DOMAIN_IDX+1))
 		done
 	fi
@@ -175,7 +175,7 @@ add_hosts() {
 
 setup() {
 	update_permission
-	STATUS=`OCC status`
+	STATUS=$(OCC status)
 	if [[ "$STATUS" = *"installed: true"* ]] || [[ ! -f $WEBROOT/config/config.php ]]
 	then
 		echo "🚀 Nextcloud already installed ... skipping setup"
@@ -195,10 +195,10 @@ setup() {
 wait_for_other_containers
 setup
 
-touch /var/log/cron/nextcloud.log $WEBROOT/data/nextcloud.log
+touch /var/log/cron/nextcloud.log "$WEBROOT"/data/nextcloud.log
 
 echo "📰 Watching log file"
-tail --follow $WEBROOT/data/nextcloud.log /var/log/cron/nextcloud.log &
+tail --follow "$WEBROOT"/data/nextcloud.log /var/log/cron/nextcloud.log &
 
 echo "⌚ Starting cron"
 /usr/sbin/cron -f &

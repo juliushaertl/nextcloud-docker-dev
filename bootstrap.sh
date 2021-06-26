@@ -19,7 +19,7 @@ indent_cli() {
 function install_app() {
 	(
 		echo "🌏 Fetching $1"
-		(git clone https://github.com/nextcloud/$1.git workspace/server/apps-extra/$1 2>&1 | indent_cli &&
+		(git clone https://github.com/nextcloud/"$1".git workspace/server/apps-extra/"$1" 2>&1 | indent_cli &&
 			echo "✅ $1 installed") ||
 			echo "❌ Failed to install $1"
 	) | indent
@@ -27,7 +27,7 @@ function install_app() {
 
 function is_installed() {
 	(
-		if [ -x "$(command -v $1)" ]; then
+		if [ -x "$(command -v "$1")" ]; then
 			echo "✅ $1 is properly installed"
 		else
 			echo "❌ Install $1 before running this script"
