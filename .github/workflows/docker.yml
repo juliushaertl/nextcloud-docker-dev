@@ -17,9 +17,8 @@ jobs:
           - php74
           - php73
           - php72
-          - php71
+          # - php71
           - saml
-          - smb
           - nginx
           - elasticsearch
     permissions:
