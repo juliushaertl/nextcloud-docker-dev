@@ -173,7 +173,7 @@ services:
       - mail
 
   database-mysql:
-    image: mariadb:latest
+    image: mariadb:10.5
     environment:
       MYSQL_ROOT_PASSWORD: 'nextcloud'
       MYSQL_PASSWORD: 'nextcloud'
