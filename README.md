@@ -107,6 +107,16 @@ cd data/ssl
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout  nextcloud.local.key -out nextcloud.local.crt
 ```
 
+### Use valid certificates trusted by your system
+
+* Install mkcert https://github.com/FiloSottile/mkcert
+* Go to `data/ssl`
+* `mkcert nextcloud.local`
+
+* `mv nextcloud.local-key.pem nextcloud.local.key`
+* `mv nextcloud.local.pem nextcloud.local.crt`
+* `docker-compose restart proxy`
+
 ## ✉ Mail
 
 Sending/receiving mails can be tested with [mailhog](https://github.com/mailhog/MailHog) which is available on ports 1025 (SMTP) and 8025 (HTTP).
