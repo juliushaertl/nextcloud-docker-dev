@@ -197,3 +197,9 @@ sudo -E -u www-data php -dxdebug.remote_host=192.168.21.1 occ
 ### Useful commands
 
 - Restart apache: `docker-compose kill -s USR1 nextcloud`
+
+## Keycloak
+
+- https://keycloak.local.dev.bitgrid.net/auth/realms/Example/.well-known/openid-configuration
+- nextcloud
+- 09e3c268-d8bc-42f1-b7c6-74d307ef5fde

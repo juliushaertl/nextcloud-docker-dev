@@ -19,8 +19,8 @@ services:
       DHPARAM_GENERATION: "false"
       HTTPS_METHOD: "noredirect"
       HSTS: "off"
-    depends_on:
-      - nextcloud
+    cap_add:
+      - SYS_ADMIN
     networks:
       default:
         aliases:
@@ -34,6 +34,9 @@ services:
           - onlyoffice${DOMAIN_SUFFIX}
           - collabora2${DOMAIN_SUFFIX}
           - proxy${DOMAIN_SUFFIX}
+          - hpb${DOMAIN_SUFFIX}
+          - push${DOMAIN_SUFFIX}
+          - keycloak${DOMAIN_SUFFIX}
 
   haproxy:
     image: haproxy
@@ -290,7 +293,7 @@ services:
       VIRTUAL_PROTO: https
 
   onlyoffice:
-    image: onlyoffice/documentserver-ie:latest
+    image: onlyoffice/documentserver-ee:latest
     environment:
       VIRTUAL_HOST: onlyoffice${DOMAIN_SUFFIX}
     expose:
@@ -302,6 +305,7 @@ services:
   minio:
     image: minio/minio
     environment:
+      VIRTUAL_HOST: minio${DOMAIN_SUFFIX}
       MINIO_ACCESS_KEY: nextcloud
       MINIO_SECRET_KEY: nextcloud
     ports:
@@ -325,6 +329,32 @@ services:
       discovery.type: single-node
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
+
+  push:
+    image: nextcloud_notify_push
+    ports:
+      - '8191:80'
+    environment:
+      RUST_LOG: debug
+      VIRTUAL_HOST: push${DOMAIN_SUFFIX}
+      VIRTUAL_PORT: 8191
+      DATABASE_URL: mysql://nextcloud:nextcloud@master_database-mysql_1/nextcloud
+      REDIS_URL: redis://redis
+      NEXTCLOUD_URL: https://nextcloud.local.dev.bitgrid.net
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:13.0.1
+    expose:
+      - 8080
+    volumes:
+      - ./docker/configs/keycloak:/tmp/keycloak
+    environment:
+      VIRTUAL_HOST: "keycloak${DOMAIN_SUFFIX}"
+      VIRTUAL_PORT: 8080
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      PROXY_ADDRESS_FORWARDING: "true"
+      KEYCLOAK_IMPORT: /tmp/keycloak/realm-export.json
 
 volumes:
   data:

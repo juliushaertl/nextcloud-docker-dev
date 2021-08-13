@@ -60,6 +60,11 @@ configure_ldap() {
 	fi
 }
 
+configure_oidc() {
+	OCC app:enable user_oidc
+	OCC user_oidc:provider Keycloak -c nextcloud -s 09e3c268-d8bc-42f1-b7c6-74d307ef5fde -d https://keycloak.local.dev.bitgrid.net/auth/realms/Example/.well-known/openid-configuration
+}
+
 configure_ssl_proxy() {
 	timeout 5 bash -c 'until echo > /dev/tcp/proxy/443; do sleep 0.5; done'
 	if [ $? -eq 0 ]; then
@@ -68,7 +73,7 @@ configure_ssl_proxy() {
 		OCC config:system:set overwrite.cli.url --value "https://$VIRTUAL_HOST"
 	else
 		echo "🗝 No SSL proxy, removing overwriteprotocol"
-		OCC config:system:set overwriteprotocol --value ""
+		OCC config:system:delete overwriteprotocol
 		OCC config:system:set overwrite.cli.url --value "http://$VIRTUAL_HOST"
 	fi
 }
@@ -81,8 +86,6 @@ configure_add_user() {
 
 
 install() {
-
-
 	if [ "$SQL" = "mysql" ]
 	then
 		cp /root/autoconfig_mysql.php "$WEBROOT"/config/autoconfig.php
@@ -125,6 +128,8 @@ install() {
 	for app in $NEXTCLOUD_AUTOINSTALL_APPS; do
 		OCC app:enable "$app"
 	done
+	configure_ldap
+	configure_oidc
 
 	if [ "$WITH_REDIS" = "YES" ]; then
 		cp /root/redis.config.php "$WEBROOT"/config/

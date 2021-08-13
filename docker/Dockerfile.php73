@@ -53,6 +53,8 @@ RUN apt update && apt-get install -y --no-install-recommends \
     git curl vim sudo cron smbclient iproute2 \
         && rm -rf /var/lib/apt/lists/*
 
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 RUN { \
         echo '[global]'; \
         echo 'client min protocol = SMB2'; \
@@ -100,4 +102,4 @@ ENTRYPOINT  ["/usr/local/bin/bootstrap.sh"]
 CMD ["apache2-foreground"]
 
 ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php configs/s3.php configs/config.php configs/redis.config.php /root/
-ADD bin/bootstrap.sh bin/occ /usr/local/bin/
+ADD bin/* /usr/local/bin/

@@ -373,7 +373,7 @@ $config = array(
         // %username% in this pattern will be replaced with the users username.
         //
         // This option is not used if the search.enable option is set to TRUE.
-        'dnpattern' => 'uid=%username%,dc=example,dc=org',
+        'dnpattern' => 'uid=%username%,dc=planetexpress,dc=com',
 
         // As an alternative to specifying a pattern for the users DN, it is possible to
         // search for the username in a set of attributes. This is enabled by this option.
@@ -382,7 +382,7 @@ $config = array(
         // The DN which will be used as a base for the search.
         // This can be a single string, in which case only that DN is searched, or an
         // array of strings, in which case they will be searched in the order given.
-        'search.base' => 'dc=example,dc=org',
+        'search.base' => 'dc=planetexpress,dc=com',
 
         // The attribute(s) the username should match against.
         //
@@ -392,7 +392,7 @@ $config = array(
 
         // The username & password the SimpleSAMLphp should bind to before searching. If
         // this is left as NULL, no bind will be performed before searching.
-        'search.username' => 'cn=admin,dc=example,dc=org',
+        'search.username' => 'cn=admin,dc=planetexpress,dc=com',
         'search.password' => 'admin',
 
         // If the directory uses privilege separation,
