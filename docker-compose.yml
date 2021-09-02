@@ -309,9 +309,10 @@ services:
       MINIO_SECRET_KEY: nextcloud
     ports:
       - "${PORTBASE:-800}5:9000"
+      - 9001:9001
     volumes:
       - objectstorage_minio:/data
-    command: server /data
+    command: server /data --console-address ":9001"
 
   s3:
     image: lphoward/fake-s3
