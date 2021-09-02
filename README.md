@@ -119,7 +119,9 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout  nextcloud.local.key
 
 ## ✉ Mail
 
-Sending/receiving mails can be tested with [mailhog](https://github.com/mailhog/MailHog) which is available on ports 1025 (SMTP) and 8025 (HTTP).
+Sending/receiving mails can be tested with [mailhog](https://github.com/mailhog/MailHog) which is available on ports 1025 (SMTP).
+
+To use the webui, add `127.0.0.1 mail.local` to your `/etc/hosts` and open [mail.local](http://mail.local).
 
 ## 🚀 Blackfire
 
@@ -141,6 +143,16 @@ Example users are: `leela fry bender zoidberg hermes professor`. The password is
 ## Collabora
 
 - set `'overwriteprotocol' => 'https'` to make sure proper URLs are handed over to collabora
+
+
+## Antivirus
+
+```bash
+docker-compose up -d proxy nextcloud av
+```
+
+The clanav antivirus will then be exposed as a deamon with host `clam` and
+port 3310.
 
 ## SAML
 
@@ -182,7 +194,14 @@ docker-compose up -d elasticsearch
 
 `sudo sysctl -w vm.max_map_count=262144`
 
-## 🚧 Object storage
+## Object storage
+
+In `data/additional.config.php`, uncomment the 'objectstore' config and
+then start docker with minio enabled.
+
+```bash
+docker-composer up proxy nextcloud minio
+```
 
 ## Development
 

@@ -238,7 +238,6 @@ services:
       VIRTUAL_HOST: "mail${DOMAIN_SUFFIX}"
       VIRTUAL_PORT: 8025
 
-
   smb:
     image: dperson/samba
     ports:
@@ -310,9 +309,10 @@ services:
       MINIO_SECRET_KEY: nextcloud
     ports:
       - "${PORTBASE:-800}5:9000"
+      - 9001:9001
     volumes:
       - objectstorage_minio:/data
-    command: server /data
+    command: server /data --console-address ":9001"
 
   s3:
     image: lphoward/fake-s3
@@ -356,6 +356,14 @@ services:
       PROXY_ADDRESS_FORWARDING: "true"
       KEYCLOAK_IMPORT: /tmp/keycloak/realm-export.json
 
+  av:
+    #debian: image: mkodockx/docker-clamav
+    image: mkodockx/docker-clamav:alpine
+    container_name: nextav
+    restart: unless-stopped
+    volumes:
+      - clam:/var/lib/clamav
+
 volumes:
   data:
   config:
@@ -367,6 +375,7 @@ volumes:
   objectstorage_minio:
   smb:
   elasticsearch_data:
+  clam:
 
 networks:
   default:
