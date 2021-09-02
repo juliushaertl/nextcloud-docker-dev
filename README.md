@@ -119,7 +119,9 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout  nextcloud.local.key
 
 ## ✉ Mail
 
-Sending/receiving mails can be tested with [mailhog](https://github.com/mailhog/MailHog) which is available on ports 1025 (SMTP) and 8025 (HTTP).
+Sending/receiving mails can be tested with [mailhog](https://github.com/mailhog/MailHog) which is available on ports 1025 (SMTP).
+
+To use the webui, add `127.0.0.1 mail.local` to your `/etc/hosts` and open [mail.local](http://mail.local).
 
 ## 🚀 Blackfire
 

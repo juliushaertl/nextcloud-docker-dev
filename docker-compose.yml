@@ -238,7 +238,6 @@ services:
       VIRTUAL_HOST: "mail${DOMAIN_SUFFIX}"
       VIRTUAL_PORT: 8025
 
-
   smb:
     image: dperson/samba
     ports:
