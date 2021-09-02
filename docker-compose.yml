@@ -356,6 +356,14 @@ services:
       PROXY_ADDRESS_FORWARDING: "true"
       KEYCLOAK_IMPORT: /tmp/keycloak/realm-export.json
 
+  av:
+    #debian: image: mkodockx/docker-clamav
+    image: mkodockx/docker-clamav:alpine
+    container_name: nextav
+    restart: unless-stopped
+    volumes:
+      - clam:/var/lib/clamav
+
 volumes:
   data:
   config:
@@ -367,6 +375,7 @@ volumes:
   objectstorage_minio:
   smb:
   elasticsearch_data:
+  clam:
 
 networks:
   default:
