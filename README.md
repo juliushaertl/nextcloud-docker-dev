@@ -182,7 +182,14 @@ docker-compose up -d elasticsearch
 
 `sudo sysctl -w vm.max_map_count=262144`
 
-## 🚧 Object storage
+## Object storage
+
+In `data/additional.config.php`, uncomment the 'objectstore' config and
+then start docker with minio enabled.
+
+```bash
+docker-composer up proxy nextcloud minio
+```
 
 ## Development
 
