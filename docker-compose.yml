@@ -274,7 +274,8 @@ services:
       password: admin
       VIRTUAL_HOST: collabora${DOMAIN_SUFFIX}
       VIRTUAL_PORT: 9980
-      VIRTUAL_PROTO: https
+      VIRTUAL_PROTO: http
+      extra_params: "--o:ssl.enable=false"
 
   collabora2:
     image: collabora/code:latest
