@@ -44,6 +44,7 @@ jobs:
         with:
           push: true
           context: docker/
+          platforms: linux/amd64,linux/arm64
           file: docker/Dockerfile.${{ matrix.container }}
           tags: |
             ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}
