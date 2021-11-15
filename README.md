@@ -63,6 +63,7 @@ The variable supports the following values:
 1. PHP 7.2: `72`
 1. PHP 7.3: `73`
 1. PHP 7.4: `74`
+1. PHP 8.0: `80`
 
 ### Starting the containers
 
