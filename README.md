@@ -200,6 +200,39 @@ docker-compose up -d proxy nextcloud saml
   ```
 - cn `urn:oid:2.5.4.3`
 - email `urn:oid:0.9.2342.19200300.100.1.3`
+
+### Environment based SSO
+
+A simple approach to test environment based SSO with the user_saml app is to use apache basic auth with the following configuration:
+
+```
+
+<Location /login>
+	AuthType Basic
+	AuthName "SAML"
+	AuthUserFile /var/www/html/.htpasswd
+	Require valid-user
+</Location>
+<Location /index.php/login>
+	AuthType Basic
+	AuthName "SAML"
+	AuthUserFile /var/www/html/.htpasswd
+	Require valid-user
+</Location>
+<Location /index.php/apps/user_saml/saml/login>
+	AuthType Basic
+	AuthName "SAML"
+	AuthUserFile /var/www/html/.htpasswd
+	Require valid-user
+</Location>
+<Location /apps/user_saml/saml/login>
+	AuthType Basic
+	AuthName "SAML"
+	AuthUserFile /var/www/html/.htpasswd
+	Require valid-user
+</Location>
+```
+
 ## Fulltextsearch
 
 ```
