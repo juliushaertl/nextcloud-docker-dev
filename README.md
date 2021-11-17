@@ -27,6 +27,15 @@ sudo sh -c "echo '127.0.0.1 nextcloud.local' >> /etc/hosts"
 docker-compose up nextcloud proxy
 ```
 
+## dnsmasq to for wildcard domains
+
+Instead of adding the individual container domains to `/etc/hosts` a local dns server like dnsmasq can be used to resolve any domain ending with the configured DOMAIN_SUFFIX in `.env` to localhost.
+
+For dnsmasq adding the following configuration would be sufficient for `DOMAIN_SUFFIX=.dev.local`:
+```
+address=/.dev.local/127.0.0.1
+
+
 ## Manual setup
 
 ### Nextcloud Code
