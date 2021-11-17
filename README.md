@@ -27,15 +27,6 @@ sudo sh -c "echo '127.0.0.1 nextcloud.local' >> /etc/hosts"
 docker-compose up nextcloud proxy
 ```
 
-## dnsmasq to for wildcard domains
-
-Instead of adding the individual container domains to `/etc/hosts` a local dns server like dnsmasq can be used to resolve any domain ending with the configured DOMAIN_SUFFIX in `.env` to localhost.
-
-For dnsmasq adding the following configuration would be sufficient for `DOMAIN_SUFFIX=.dev.local`:
-```
-address=/.dev.local/127.0.0.1
-
-
 ## Manual setup
 
 ### Nextcloud Code
@@ -115,6 +106,15 @@ You can generate selfsigned certificates using:
 ```
 cd data/ssl
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout  nextcloud.local.key -out nextcloud.local.crt
+```
+
+### dnsmasq to resolve wildcard domains
+
+Instead of adding the individual container domains to `/etc/hosts` a local dns server like dnsmasq can be used to resolve any domain ending with the configured DOMAIN_SUFFIX in `.env` to localhost.
+
+For dnsmasq adding the following configuration would be sufficient for `DOMAIN_SUFFIX=.dev.local`:
+```
+address=/.dev.local/127.0.0.1
 ```
 
 ### Use valid certificates trusted by your system
@@ -229,7 +229,7 @@ sudo -E -u www-data php -dxdebug.remote_host=192.168.21.1 occ
 
 ### Useful commands
 
-- Restart apache: `docker-compose kill -s USR1 nextcloud`
+- Restart apache to reload php configuration without a full container restart: `docker-compose kill -s USR1 nextcloud`
 
 ## Keycloak
 
