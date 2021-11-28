@@ -5,9 +5,7 @@ services:
   # Proxy for ssl termination and easier hostname access
   # SSL certificates with the virtual host name need to be added to ./data/ssl
   proxy:
-    build:
-      context: ./docker
-      dockerfile: Dockerfile.nginx
+    image: ghcr.io/juliushaertl/nextcloud-dev-nginx:latest
     ports:
       - "80:80"
       - "443:443"
@@ -233,7 +231,7 @@ services:
       - 80
 
   mail:
-    image: mailhog/mailhog
+    image: ghcr.io/juliushaertl/nextcloud-dev-mailhog:latest
     environment:
       VIRTUAL_HOST: "mail${DOMAIN_SUFFIX}"
       VIRTUAL_PORT: 8025
