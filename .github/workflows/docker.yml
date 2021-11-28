@@ -22,6 +22,7 @@ jobs:
           - saml
           - nginx
           - elasticsearch
+          - mailhog
     permissions:
       packages: write
       contents: read
