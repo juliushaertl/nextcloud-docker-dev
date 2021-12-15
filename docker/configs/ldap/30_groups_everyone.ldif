@@ -1,0 +1,9 @@
+dn: cn=everyone,ou=groups,dc=planetexpress,dc=com
+objectclass: groupOfNames
+objectclass: top
+cn: everyone
+description: Everyone
+member: cn=Philip J. Fry,ou=people,dc=planetexpress,dc=com
+member: cn=Turanga Leela,ou=people,dc=planetexpress,dc=com
+member: cn=Bender Bending Rodríguez,ou=people,dc=planetexpress,dc=com
+

@@ -1,0 +1,7 @@
+dn: cn=admin_staff,ou=groups,dc=planetexpress,dc=com
+objectclass: groupOfNames
+objectclass: top
+cn: admin_staff
+description: Admin staff
+member: cn=Hubert J. Farnsworth,ou=people,dc=planetexpress,dc=com
+member: cn=Hermes Conrad,ou=people,dc=planetexpress,dc=com

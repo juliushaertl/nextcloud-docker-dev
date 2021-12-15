@@ -23,6 +23,7 @@ jobs:
           - nginx
           - elasticsearch
           - mailhog
+          - ldap
     permissions:
       packages: write
       contents: read

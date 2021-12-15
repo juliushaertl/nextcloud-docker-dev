@@ -1,0 +1,11 @@
+dn: ou=people,dc=planetexpress,dc=com
+objectClass: top
+objectClass: organizationalUnit
+description: Planet Express crew
+ou: people
+
+dn: ou=groups,dc=planetexpress,dc=com
+objectClass: top
+objectClass: organizationalUnit
+description: Planet Express Groups
+ou: groups
