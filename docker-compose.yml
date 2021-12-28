@@ -211,6 +211,15 @@ services:
     volumes:
       - ./data/ldap:/container/service/slapd/assets/config/bootstrap/ldif/custom
 
+  phpmyadmin:
+    image: phpmyadmin
+    environment:
+      VIRTUAL_HOST: "phpmyadmin${DOMAIN_SUFFIX}"
+      PMA_ARBITRARY: 1
+      PMA_HOST: database-mysql
+      PMA_USER: root
+      PMA_PASSWORD: nextcloud
+
   ldapadmin:
     image: osixia/phpldapadmin
     environment:
