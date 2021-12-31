@@ -1,8 +1,11 @@
 #!/bin/bash
+# shellcheck disable=SC2181
+
 indent() { sed 's/^/   /'; }
 
 OCC() {
-	sudo -E -u www-data "$WEBROOT"/occ $@ | indent
+	# shellcheck disable=SC2068
+	sudo -E -u www-data "$WEBROOT/occ" $@ | indent
 }
 
 update_permission() {
@@ -109,8 +112,8 @@ install() {
 
 	update_permission
 
-	USER=admin
-	PASSWORD=admin
+	USER="admin"
+	PASSWORD="admin"
 
 	echo "🔧 Starting auto installation"
 	if [ "$SQL" = "oci" ]; then
@@ -146,7 +149,7 @@ install() {
 		for DOMAIN in $NEXTCLOUD_TRUSTED_DOMAINS ; do
 			DOMAIN=$(echo "$DOMAIN" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
 			OCC config:system:set trusted_domains $NC_TRUSTED_DOMAIN_IDX --value="$DOMAIN"
-			NC_TRUSTED_DOMAIN_IDX=$(($NC_TRUSTED_DOMAIN_IDX+1))
+			NC_TRUSTED_DOMAIN_IDX=$((NC_TRUSTED_DOMAIN_IDX + 1))
 		done
 	fi
 	configure_ssl_proxy
