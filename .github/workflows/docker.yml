@@ -18,12 +18,12 @@ jobs:
           - php74
           - php73
           - php72
-          # - php71
           - saml
           - nginx
           - elasticsearch
           - mailhog
           - ldap
+          - lookupserver
     permissions:
       packages: write
       contents: read

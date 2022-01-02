@@ -35,6 +35,10 @@ services:
           - hpb${DOMAIN_SUFFIX}
           - push${DOMAIN_SUFFIX}
           - keycloak${DOMAIN_SUFFIX}
+          - portal${DOMAIN_SUFFIX}
+          - gs1${DOMAIN_SUFFIX}
+          - gs2${DOMAIN_SUFFIX}
+          - lookup${DOMAIN_SUFFIX}
 
   haproxy:
     image: haproxy
@@ -112,7 +116,6 @@ services:
       NEXTCLOUD_AUTOINSTALL_APPS:
       WITH_REDIS: "YES"
       VIRTUAL_HOST: stable16${DOMAIN_SUFFIX}
-      HTTPS_METHOD: "noredirect"
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
@@ -135,7 +138,6 @@ services:
       NEXTCLOUD_AUTOINSTALL_APPS:
       WITH_REDIS: "YES"
       VIRTUAL_HOST: stable17${DOMAIN_SUFFIX}
-      HTTPS_METHOD: "noredirect"
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
@@ -158,7 +160,6 @@ services:
       NEXTCLOUD_AUTOINSTALL_APPS:
       WITH_REDIS: "YES"
       VIRTUAL_HOST: stable18${DOMAIN_SUFFIX}
-      HTTPS_METHOD: "noredirect"
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
@@ -373,6 +374,48 @@ services:
     restart: unless-stopped
     volumes:
       - clam:/var/lib/clamav
+
+  portal:
+    # image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.php73
+    environment:
+      VIRTUAL_HOST: portal${DOMAIN_SUFFIX}
+      SQL: 'mysql'
+      GS_MODE: master
+    volumes:
+      - '${REPO_PATH_SERVER:-/home/jus/repos/nextcloud/server}:/var/www/html'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
+      - /var/www/html/data
+      - /var/www/html/config
+      - /var/www/html/apps-writable
+      - ./data/skeleton/:/skeleton
+      - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+    depends_on:
+      - redis
+      - mail
+
+  gs1:
+    # image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.php73
+    environment:
+      VIRTUAL_HOST: gs1${DOMAIN_SUFFIX}
+      SQL: 'mysql'
+      GS_MODE: slave
+    volumes:
+      - '${REPO_PATH_SERVER:-/home/jus/repos/nextcloud/server}:/var/www/html'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
+      - /var/www/html/data
+      - /var/www/html/config
+      - /var/www/html/apps-writable
+      - ./data/skeleton/:/skeleton
+      - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+    depends_on:
+      - redis
+      - mail
 
 volumes:
   data:

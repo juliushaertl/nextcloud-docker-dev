@@ -1,6 +1,8 @@
 #!/bin/bash
 # shellcheck disable=SC2181
 
+DOMAIN_SUFFIX=".$(echo "$VIRTUAL_HOST" | cut -d '.' -f2-)"
+
 indent() { sed 's/^/   /'; }
 
 OCC() {
@@ -30,6 +32,33 @@ wait_for_other_containers() {
 	fi
 	sleep 2
 	[ $? -eq 0 ] && echo "✅ Database server ready"
+}
+
+configure_gs() {
+	OCC config:system:set lookup_server --value ""
+
+	LOOKUP_SERVER="https://lookup${DOMAIN_SUFFIX}/index.php"
+	MASTER_SERVER="https://portal${DOMAIN_SUFFIX}"
+
+	if [ "$GS_MODE" = "master" ]
+	then
+		OCC app:enable globalsiteselector
+		OCC config:system:set lookup_server --value "$LOOKUP_SERVER"
+		OCC config:system:set gs.enabled --type boolean --value true
+		OCC config:system:set gss.jwt.key --value 'random-key'
+		OCC config:system:set gss.mode --value 'master'
+		OCC config:system:set gss.master.admin 0 --value 'admin'
+	fi
+
+	if [ "$GS_MODE" = "slave" ]
+	then
+		OCC app:enable globalsiteselector
+		OCC config:system:set lookup_server --value "$LOOKUP_SERVER"
+		OCC config:system:set gs.enabled --type boolean --value true
+		OCC config:system:set gss.jwt.key --value 'random-key'
+		OCC config:system:set gss.mode --value 'slave'
+		OCC config:system:set gss.master.url --value "$MASTER_SERVER"
+	fi
 }
 
 configure_ldap() {
@@ -89,15 +118,20 @@ configure_add_user() {
 
 
 install() {
+	DBNAME=$(echo "$VIRTUAL_HOST" | cut -d '.' -f1)
+	echo "database name will be $DBNAME"
+
 	if [ "$SQL" = "mysql" ]
 	then
 		cp /root/autoconfig_mysql.php "$WEBROOT"/config/autoconfig.php
+		sed -i "s/dbname' => 'nextcloud'/dbname' => '$DBNAME'/" $WEBROOT/config/autoconfig.php
 		SQLHOST=database-mysql
 	fi
 
 	if [ "$SQL" = "pgsql" ]
 	then
 		cp /root/autoconfig_pgsql.php "$WEBROOT"/config/autoconfig.php
+		sed -i "s/dbname' => 'nextcloud'/dbname' => '$DBNAME'/" $WEBROOT/config/autoconfig.php
 		SQLHOST=database-postgres
 	fi
 
@@ -119,9 +153,9 @@ install() {
 	if [ "$SQL" = "oci" ]; then
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name=xe --database-host=$SQLHOST --database-user=system --database-pass=oracle
 	elif [ "$SQL" = "pgsql" ]; then
-		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name=nextcloud --database-host=$SQLHOST --database-user=postgres --database-pass=postgres
+		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name=$DBNAME --database-host=$SQLHOST --database-user=postgres --database-pass=postgres
 	elif [ "$SQL" = "mysql" ]; then
-		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name=nextcloud --database-host=$SQLHOST --database-user=nextcloud --database-pass=nextcloud
+		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name=$DBNAME --database-host=$SQLHOST --database-user=root --database-pass=nextcloud
 	else
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL"
 	fi;
@@ -131,10 +165,11 @@ install() {
 	for app in $NEXTCLOUD_AUTOINSTALL_APPS; do
 		OCC app:enable "$app"
 	done
+	configure_gs
 	configure_ldap
 	configure_oidc
 
-	if [ "$WITH_REDIS" = "YES" ]; then
+	if [ "$WITH_REDIS" != "NO" ]; then
 		cp /root/redis.config.php "$WEBROOT"/config/
 	fi
 	OCC user:setting admin settings email admin@example.net
@@ -191,7 +226,7 @@ setup() {
 		# configuration that should be applied on each start
 		configure_ssl_proxy
 	else
-		if [ "$NEXTCLOUD_AUTOINSTALL" = "YES" ]
+		if [ "$NEXTCLOUD_AUTOINSTALL" != "NO" ]
 		then
 			add_hosts
 			install
