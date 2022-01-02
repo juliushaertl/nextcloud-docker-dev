@@ -124,14 +124,14 @@ install() {
 	if [ "$SQL" = "mysql" ]
 	then
 		cp /root/autoconfig_mysql.php "$WEBROOT"/config/autoconfig.php
-		sed -i "s/dbname' => 'nextcloud'/dbname' => '$DBNAME'/" $WEBROOT/config/autoconfig.php
+		sed -i "s/dbname' => 'nextcloud'/dbname' => '$DBNAME'/" "$WEBROOT/config/autoconfig.php"
 		SQLHOST=database-mysql
 	fi
 
 	if [ "$SQL" = "pgsql" ]
 	then
 		cp /root/autoconfig_pgsql.php "$WEBROOT"/config/autoconfig.php
-		sed -i "s/dbname' => 'nextcloud'/dbname' => '$DBNAME'/" $WEBROOT/config/autoconfig.php
+		sed -i "s/dbname' => 'nextcloud'/dbname' => '$DBNAME'/" "$WEBROOT/config/autoconfig.php"
 		SQLHOST=database-postgres
 	fi
 

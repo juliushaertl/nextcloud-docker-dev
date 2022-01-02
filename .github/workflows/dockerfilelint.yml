@@ -14,15 +14,6 @@ jobs:
     - name: lint
       uses: luke142367/Docker-Lint-Action@v1.0.0
       with:
-        target:
-          - docker/Dockerfile.elasticsearch
-          - docker/Dockerfile.ldap
-          - docker/Dockerfile.mailhog
-          - docker/Dockerfile.nginx
-          - docker/Dockerfile.php71
-          - docker/Dockerfile.php72
-          - docker/Dockerfile.php73
-          - docker/Dockerfile.php80
-          - docker/Dockerfile.saml
+        target: "docker/Dockerfile.elasticsearch docker/Dockerfile.ldap docker/Dockerfile.mailhog  docker/Dockerfile.nginx  docker/Dockerfile.php71 docker/Dockerfile.php72 docker/Dockerfile.php73 docker/Dockerfile.php docker/Dockerfile.saml docker/Dockerfile.lookupserver"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
