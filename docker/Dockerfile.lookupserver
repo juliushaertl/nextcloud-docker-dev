@@ -17,7 +17,9 @@ RUN echo 'mariadb-server mysql-server/root_password password $DBPASSWD' | debcon
     mariadb-server \
     mariadb-client \
     cron \
-    unzip
+    unzip && \
+    rm -rf /var/lib/apt/lists/*
+
 
 RUN cd /root/ && \
     unzip lookup-server.zip && \
