@@ -397,10 +397,7 @@ services:
       - mail
 
   gs1:
-    # image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
-    build:
-      context: ./docker
-      dockerfile: Dockerfile.php73
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
     environment:
       VIRTUAL_HOST: gs1${DOMAIN_SUFFIX}
       SQL: 'mysql'
@@ -416,6 +413,34 @@ services:
     depends_on:
       - redis
       - mail
+
+  gs2:
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
+    environment:
+      VIRTUAL_HOST: gs2${DOMAIN_SUFFIX}
+      SQL: 'mysql'
+      GS_MODE: slave
+    volumes:
+      - '${REPO_PATH_SERVER:-/home/jus/repos/nextcloud/server}:/var/www/html'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
+      - /var/www/html/data
+      - /var/www/html/config
+      - /var/www/html/apps-writable
+      - ./data/skeleton/:/skeleton
+      - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+    depends_on:
+      - redis
+      - mail
+
+  lookup:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.lookupserver
+    environment:
+      VIRTUAL_HOST: "lookup${DOMAIN_SUFFIX}"
+    # volumes:
+    #  - '${STABLE_ROOT_PATH:-/home/jus/repos/nextcloud}/lookupserver:/var/www/html'
+
 
 volumes:
   data:

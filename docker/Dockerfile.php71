@@ -1,7 +1,6 @@
 FROM php:7.1-apache
 
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
         libcurl4-openssl-dev \
         libfreetype6-dev \
         libicu-dev \
