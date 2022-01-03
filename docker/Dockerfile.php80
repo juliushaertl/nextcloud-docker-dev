@@ -98,6 +98,8 @@ RUN a2enmod rewrite
 ENV WEBROOT /var/www/html
 WORKDIR /var/www/html
 
+VOLUME ["/var/www/html/data", "/var/www/html/config", "/var/www/html/apps-writable"]
+
 ENTRYPOINT  ["/usr/local/bin/bootstrap.sh"]
 CMD ["apache2-foreground"]
 
