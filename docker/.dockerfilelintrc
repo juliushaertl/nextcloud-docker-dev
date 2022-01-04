@@ -1,0 +1,3 @@
+rules:
+  latest_tag: off
+  sudo_usage: off
