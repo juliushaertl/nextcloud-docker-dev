@@ -197,7 +197,7 @@ install() {
 
 	echo "🔧 Setting up users and LDAP in the background"
 	INSTANCENAME=$(echo "$VIRTUAL_HOST" | cut -d '.' -f1)
-	configure_add_user $INSTANCENAME &
+	configure_add_user "$INSTANCENAME" &
 	configure_add_user user1 &
 	configure_add_user user2 &
 	configure_add_user user3 &

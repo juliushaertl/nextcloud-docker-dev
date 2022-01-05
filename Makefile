@@ -21,4 +21,4 @@ dockerfilelint:
 
 .ONESHELL:
 shellcheck:
-	for file in $(find . -type f -iname '*.sh' -not -path './docker/3rdparty/*'); do shellcheck --format=gcc $file; done;
+	for file in $$(find . -type f -iname '*.sh' -not -path './wip/*'); do shellcheck --format=gcc $$file; done;

@@ -319,7 +319,7 @@ services:
       - elasticsearch_data:/usr/share/elasticsearch/data
 
   push:
-    image: nextcloud_notify_push
+    image: icewind1991/notify_push
     ports:
       - '8191:80'
     environment:
