@@ -105,3 +105,5 @@ CMD ["apache2-foreground"]
 
 ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php configs/s3.php configs/config.php configs/redis.config.php /root/
 ADD bin/bootstrap.sh bin/occ /usr/local/bin/
+
+COPY data/skeleton /skeleton

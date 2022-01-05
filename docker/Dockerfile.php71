@@ -100,3 +100,5 @@ WORKDIR /var/www/html
 
 ENTRYPOINT  ["/usr/local/bin/bootstrap.sh"]
 CMD ["apache2-foreground"]
+
+COPY data/skeleton /skeleton

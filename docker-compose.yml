@@ -278,29 +278,14 @@ services:
     cap_add:
       - MKNOD
     environment:
-      domain: nextcloud${DOMAIN_SUFFIX}
+      domain: nextcloud${DOMAIN_SUFFIX}|.*.local.dev.bitgrid.net
       dictionaries: de_DE en_US en_GB
       username: admin
       password: admin
       VIRTUAL_HOST: collabora${DOMAIN_SUFFIX}
       VIRTUAL_PORT: 9980
-      VIRTUAL_PROTO: http
-      extra_params: "--o:ssl.enable=false"
-
-  collabora2:
-    image: collabora/code:latest
-    restart: on-failure
-    expose:
-      - 9980
-    cap_add:
-      - MKNOD
-    environment:
-      domain: nextcloud${DOMAIN_SUFFIX}
-      username: admin
-      password: admin
-      VIRTUAL_HOST: collabora2${DOMAIN_SUFFIX}
-      VIRTUAL_PORT: 9980
       VIRTUAL_PROTO: https
+      extra_params: "--o:ssl.enable=true"
 
   onlyoffice:
     image: onlyoffice/documentserver-ee:latest
@@ -320,17 +305,9 @@ services:
       MINIO_SECRET_KEY: nextcloud
     ports:
       - "${PORTBASE:-800}5:9000"
-      - 9001:9001
     volumes:
       - objectstorage_minio:/data
-    command: server /data --console-address ":9001"
-
-  s3:
-    image: lphoward/fake-s3
-    expose:
-      - 4569
-    volumes:
-      - objectstorage_fakes3:/fakes3_root
+    command: server /data
 
   elasticsearch:
     build:
@@ -368,7 +345,6 @@ services:
       KEYCLOAK_IMPORT: /tmp/keycloak/realm-export.json
 
   av:
-    #debian: image: mkodockx/docker-clamav
     image: mkodockx/docker-clamav:alpine
     container_name: nextav
     restart: unless-stopped
@@ -433,11 +409,13 @@ volumes:
   config:
   mysql:
   postgres:
+  data2:
+  config2:
   document_data:
   document_log:
-  objectstorage_fakes3:
   objectstorage_minio:
   smb:
+  smbhomes:
   elasticsearch_data:
   clam:
 
