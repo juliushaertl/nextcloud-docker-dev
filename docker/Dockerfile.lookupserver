@@ -41,6 +41,8 @@ RUN a2enmod rewrite && \
 #RUN echo "*/10 * * * * www-data    php -f /var/www/html/replicationcron.php" > /etc/cron.d/lookup-server
 #RUN echo "*/10 * * * * www-data    php -f /var/www/html/verifycron.php" > /etc/cron.d/lookup-server
 
+VOLUME [ "/var/lib/mysql" ]
+
 EXPOSE 80
 
 ENTRYPOINT /usr/sbin/entrypoint.sh
