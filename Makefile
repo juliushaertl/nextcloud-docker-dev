@@ -15,8 +15,10 @@ pull:
 
 check: dockerfilelint shellcheck
 
+.ONESHELL:
 dockerfilelint:
-	for file in $(find docker/ -type f -iname 'Dockerfile.*' -maxdepth 1); do dockerfilelint $file; done;
+	for file in $$(find docker/ -type f -iname 'Dockerfile.*' -maxdepth 1); do dockerfilelint $$file; done;
 
+.ONESHELL:
 shellcheck:
 	for file in $(find . -type f -iname '*.sh' -not -path './docker/3rdparty/*'); do shellcheck --format=gcc $file; done;

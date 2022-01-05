@@ -376,10 +376,7 @@ services:
       - clam:/var/lib/clamav
 
   portal:
-    # image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
-    build:
-      context: ./docker
-      dockerfile: Dockerfile.php73
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
     environment:
       VIRTUAL_HOST: portal${DOMAIN_SUFFIX}
       SQL: 'mysql'
@@ -424,9 +421,7 @@ services:
       - mail
 
   lookup:
-    build:
-      context: ./docker
-      dockerfile: Dockerfile.lookupserver
+    image: ghcr.io/juliushaertl/nextcloud-dev-lookupserver:latest
     environment:
       VIRTUAL_HOST: "lookup${DOMAIN_SUFFIX}"
     # volumes:
