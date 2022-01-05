@@ -12,7 +12,7 @@ $CONFIG = array (
 	//  'htaccess.RewriteBase' => '/',
 
 	// Uncomment to create instances with minio object storage
-	/* /
+	/* */
 	'objectstore' =>
 	array (
 		'class' => 'OC\\Files\\ObjectStore\\S3',

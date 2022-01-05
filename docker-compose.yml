@@ -270,7 +270,6 @@ services:
     volumes:
       - '${STABLE_ROOT_PATH:-/home/jus/repos/nextcloud}/stable23:/var/www/html'
       - '${STABLE_ROOT_PATH:-/home/jus/repos/nextcloud}/stable23/apps-extra:/var/www/html/apps-extra'
-      - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
     depends_on:
       - redis
