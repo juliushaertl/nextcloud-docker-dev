@@ -1,16 +1,18 @@
 <?php
 
-// FIXME: hostname changes when container might be recreated, ideally this should be the instance id
+// set the hostname to the VIRTUAL_HOST set for the docker container, otherwise fallback to the docker hostname
 $hostname = gethostname();
+$virtualHost = isset($_ENV['VIRTUAL_HOST']) ? $_ENV['VIRTUAL_HOST'] : '';
+$virtualHost = explode(".", $virtualHost);
+if (count($virtualHost) > 0) {
+	$hostname = array_shift($virtualHost);
+}
 
 $CONFIG = array (
 	//  'htaccess.RewriteBase' => '/',
 
-	// Disable lookup server as it is not needed for our local ldap test users
-	'lookup_server' => '',
-
-	// Uncomment to create instances with minio object storage/*
-	/** /
+	// Uncomment to create instances with minio object storage
+	/* /
 	'objectstore' =>
 	array (
 		'class' => 'OC\\Files\\ObjectStore\\S3',
@@ -23,10 +25,12 @@ $CONFIG = array (
 			'port' => '9000',
 			'use_ssl' => false,
 			'use_path_style' => true,
+			'autocreate' => true,
 		),
 	),
+	/* */
 
-	/** /
+	/* /
 	'objectstore_multibucket' => array(
 		'class' => 'OC\\Files\\ObjectStore\\S3',
 		'arguments' => array(
@@ -42,5 +46,6 @@ $CONFIG = array (
 			'use_ssl' => false,
 			'use_path_style' => true,
 		),
-	),/**/
+	),
+	/* */
 );
