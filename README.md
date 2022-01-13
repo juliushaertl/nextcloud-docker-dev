@@ -273,3 +273,11 @@ sudo -E -u www-data php -dxdebug.remote_host=192.168.21.1 occ
 - https://keycloak.local.dev.bitgrid.net/auth/realms/Example/.well-known/openid-configuration
 - nextcloud
 - 09e3c268-d8bc-42f1-b7c6-74d307ef5fde
+
+## GS
+
+```
+docker-compose up -d proxy portal gs1 gs2 lookup database-mysql redis collabora
+```
+
+Users are named the same as the instance name, e.g. gs1, gs2
