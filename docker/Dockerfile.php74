@@ -93,7 +93,7 @@ RUN version=$(php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;") \
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-RUN a2enmod rewrite
+RUN a2enmod rewrite && a2enmod headers && a2enmod env
 
 ENV WEBROOT /var/www/html
 WORKDIR /var/www/html
