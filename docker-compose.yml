@@ -54,7 +54,7 @@ services:
       - ./docker/configs/haproxy.conf:/usr/local/etc/haproxy/haproxy.cfg:ro
 
   nextcloud:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-74}:latest
     environment:
       # SQL: 'sqlite'
       SQL: 'mysql'
