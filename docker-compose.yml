@@ -160,7 +160,7 @@ services:
       - mail
 
   stable18:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-72}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
     environment:
       SQL: 'sqlite'
       NEXTCLOUD_AUTOINSTALL: "YES"
@@ -177,6 +177,8 @@ services:
       - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+    ports:
+      - "${PORTBASE:-800}0:80"
     depends_on:
       - redis
       - mail
@@ -504,6 +506,13 @@ services:
       VIRTUAL_HOST: "lookup${DOMAIN_SUFFIX}"
     # volumes:
     #  - '${STABLE_ROOT_PATH:-/home/jus/repos/nextcloud}/lookupserver:/var/www/html'
+
+  previews_hpb:
+    image: h2non/imaginary
+    ports:
+      - "8088:8088"
+    environment:
+      - PORT=8088
 
 
 volumes:
