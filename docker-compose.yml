@@ -97,6 +97,8 @@ services:
       - database-mysql
       - redis
       - mail
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   nextcloud3:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
@@ -113,6 +115,8 @@ services:
       - database-mysql
       - redis
       - mail
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   stable16:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-72}:latest
@@ -135,6 +139,8 @@ services:
     depends_on:
       - redis
       - mail
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   stable17:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-72}:latest
@@ -157,6 +163,8 @@ services:
     depends_on:
       - redis
       - mail
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   stable18:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-72}:latest
@@ -179,6 +187,8 @@ services:
     depends_on:
       - redis
       - mail
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   stable19:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-72}:latest
@@ -198,6 +208,8 @@ services:
     depends_on:
       - redis
       - mail
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   stable20:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-72}:latest
@@ -217,6 +229,8 @@ services:
     depends_on:
       - redis
       - mail
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   stable21:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
@@ -236,6 +250,8 @@ services:
     depends_on:
       - redis
       - mail
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   stable22:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
@@ -255,6 +271,8 @@ services:
     depends_on:
       - redis
       - mail
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   stable23:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
@@ -273,6 +291,8 @@ services:
     depends_on:
       - redis
       - mail
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   database-mysql:
     image: mariadb:10.5
@@ -466,6 +486,8 @@ services:
     depends_on:
       - redis
       - mail
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   gs1:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
@@ -481,6 +503,8 @@ services:
     depends_on:
       - redis
       - mail
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   gs2:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
@@ -496,6 +520,8 @@ services:
     depends_on:
       - redis
       - mail
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   lookup:
     image: ghcr.io/juliushaertl/nextcloud-dev-lookupserver:latest
@@ -503,6 +529,8 @@ services:
       VIRTUAL_HOST: "lookup${DOMAIN_SUFFIX}"
     # volumes:
     #  - '${STABLE_ROOT_PATH:-/home/jus/repos/nextcloud}/lookupserver:/var/www/html'
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
 
 volumes:
