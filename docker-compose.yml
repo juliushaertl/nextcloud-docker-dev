@@ -78,6 +78,8 @@ services:
       - ${DB_SERVICE:-database-mysql}
       - redis
       - mail
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   nextcloud2:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
