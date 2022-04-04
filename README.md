@@ -81,7 +81,7 @@ cd ../stable23
 git submodule update --init
 ```
 
-After adding the worktree you can start the stable container using `docker-compose up -d stable23`.
+After adding the worktree you can start the stable container using `docker-compose up -d stable23`. You can then add stable23.local to your `/etc/hosts` file to access it.
 
 Git worktrees can also be used to have a checkout of an apps stable brach within the server stable directory.
 
