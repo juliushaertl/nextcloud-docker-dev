@@ -70,17 +70,25 @@ The variable supports the following values:
 - Start full setup: `docker-compose up`
 - Minimum: `docker-compose up proxy nextcloud` (nextcloud mysql redis mailhog)
 
-### Switching to different env settings
+### Running stable versions
 
-This can be useful if you wish to run different setups besides each other:
+The docker-compose file provides individual containers for stable Nextcloud releases. In order to run those you will need a checkout of the stable version server branch to your workspace directory. Using [git worktree](https://blog.juliushaertl.de/index.php/2018/01/24/how-to-checkout-multiple-git-branches-at-the-same-time/) makes it easy to have different branches checked out in parallel in separate directories.
 
 ```
-docker-compose --env-file stable15.env up proxy nextcloud
+cd workspace/server
+git worktree add ../stable23 stable23
+cd ../stable23
+git submodule update --init
 ```
 
-Besides that there are also stable containers now in the main
-`docker-compose.yml` file, which makes it a bit easier to run them side by
-side. However the source location needs to be adjusted for this.
+After adding the worktree you can start the stable container using `docker-compose up -d stable23`.
+
+Git worktrees can also be used to have a checkout of an apps stable brach within the server stable directory.
+
+```
+cd workspace/server/apps-extra/text
+git worktree add ../../../stable23/apps-extra/text stable23
+```
 
 ### Running into errors
 
