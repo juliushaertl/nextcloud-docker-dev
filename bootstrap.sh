@@ -71,6 +71,7 @@ mkdir -p workspace/server/apps-extra
 install_app viewer
 install_app recommendations
 install_app files_pdfviewer
+install_app profiler
 
 echo
 echo
@@ -82,7 +83,7 @@ DOMAIN_SUFFIX=.local
 REPO_PATH_SERVER=$PWD/workspace/server
 ADDITIONAL_APPS_PATH=$PWD/workspace/server/apps-extra
 STABLE_ROOT_PATH=$PWD/workspace
-NEXTCLOUD_AUTOINSTALL_APPS="viewer"
+NEXTCLOUD_AUTOINSTALL_APPS="viewer profiler"
 DOCKER_SUBNET=192.168.21.0/24
 PORTBASE=821
 EOT
