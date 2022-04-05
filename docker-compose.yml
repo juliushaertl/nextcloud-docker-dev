@@ -407,8 +407,8 @@ services:
       password: admin
       VIRTUAL_HOST: collabora${DOMAIN_SUFFIX}
       VIRTUAL_PORT: 9980
-      VIRTUAL_PROTO: https
-      extra_params: "--o:ssl.enable=true"
+      VIRTUAL_PROTO: http
+      extra_params: "--o:ssl.enable=false"
 
   onlyoffice:
     image: onlyoffice/documentserver-ee:latest
