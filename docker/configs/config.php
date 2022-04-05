@@ -1,5 +1,6 @@
 <?php $CONFIG=[
 	'debug' => true,
+	'profiler' => true,
 	'apps_paths' => 
 	array (
 		0 => 
