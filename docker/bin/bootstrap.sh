@@ -37,8 +37,9 @@ wait_for_other_containers() {
 configure_gs() {
 	OCC config:system:set lookup_server --value ""
 
-	LOOKUP_SERVER="https://lookup${DOMAIN_SUFFIX}/index.php"
-	MASTER_SERVER="https://portal${DOMAIN_SUFFIX}"
+	get_protocol
+	LOOKUP_SERVER="${PROTOCOL}://lookup${DOMAIN_SUFFIX}/index.php"
+	MASTER_SERVER="${PROTOCOL}://portal${DOMAIN_SUFFIX}"
 
 	if [ "$GS_MODE" = "master" ]
 	then
@@ -55,6 +56,7 @@ configure_gs() {
 		OCC app:enable globalsiteselector
 		OCC config:system:set lookup_server --value "$LOOKUP_SERVER"
 		OCC config:system:set gs.enabled --type boolean --value true
+		OCC config:system:set gs.federation --value 'global'
 		OCC config:system:set gss.jwt.key --value 'random-key'
 		OCC config:system:set gss.mode --value 'slave'
 		OCC config:system:set gss.master.url --value "$MASTER_SERVER"
@@ -94,12 +96,26 @@ configure_ldap() {
 
 configure_oidc() {
 	OCC app:enable user_oidc
-	OCC user_oidc:provider Keycloak -c nextcloud -s 09e3c268-d8bc-42f1-b7c6-74d307ef5fde -d https://keycloak.local.dev.bitgrid.net/auth/realms/Example/.well-known/openid-configuration
+	get_protocol
+	OCC user_oidc:provider Keycloak -c nextcloud -s 09e3c268-d8bc-42f1-b7c6-74d307ef5fde -d $PROTOCOL://keycloak.local.dev.bitgrid.net/auth/realms/Example/.well-known/openid-configuration
+}
+
+PROTOCOL=""
+get_protocol() {
+	if [[ "$PROTOCOL" == "" ]]; then
+		timeout 5 bash -c 'until echo > /dev/tcp/proxy/443; do sleep 0.5; done'
+		if [ $? -eq 0 ]; then
+			echo "🔑 SSL proxy available, configuring proxy settings"
+			PROTOCOL=https
+		else
+			echo "🗝 No SSL proxy, removing overwriteprotocol"
+			PROTOCOL=http
+		fi
+    fi
 }
 
 configure_ssl_proxy() {
-	timeout 5 bash -c 'until echo > /dev/tcp/proxy/443; do sleep 0.5; done'
-	if [ $? -eq 0 ]; then
+	if [[ "$PROTOCOL" == "https" ]]; then
 		echo "🔑 SSL proxy available, configuring proxy settings"
 		OCC config:system:set overwriteprotocol --value https
 		OCC config:system:set overwrite.cli.url --value "https://$VIRTUAL_HOST"
@@ -107,6 +123,7 @@ configure_ssl_proxy() {
 		echo "🗝 No SSL proxy, removing overwriteprotocol"
 		OCC config:system:delete overwriteprotocol
 		OCC config:system:set overwrite.cli.url --value "http://$VIRTUAL_HOST"
+
 	fi
 }
 
