@@ -268,6 +268,9 @@ services:
     volumes:
       - '${STABLE_ROOT_PATH:-/home/jus/repos/nextcloud}/stable22:/var/www/html'
       - '${STABLE_ROOT_PATH:-/home/jus/repos/nextcloud}/stable22/apps-extra:/var/www/html/apps-extra'
+      - /var/www/html/data
+      - /var/www/html/config
+      - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
     depends_on:
