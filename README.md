@@ -158,6 +158,13 @@ The LDAP sample data is based on https://github.com/rroemhild/docker-test-openld
 
 Example users are: `leela fry bender zoidberg hermes professor`. The password is the same as the uid.
 
+Useful commands:
+
+```
+
+docker-compose exec ldap ldapsearch -H 'ldap://localhost' -D "cn=admin,dc=planetexpress,dc=com" -w admin -b "dc=planetexpress,dc=com" "(&(objectclass=inetOrgPerson)(description=*use*))"
+```
+
 ## Collabora
 
 - Make sure to have the collabora hostname setup in your /etc/hosts file: `127.0.0.1 collabora.local`
