@@ -251,10 +251,16 @@ A simple approach to test environment based SSO with the user_saml app is to use
 ## Fulltextsearch
 
 ```
-docker-compose up -d elasticsearch
+docker-compose up -d elasticsearch elasticsearch-ui
 ```
 
+- Address for configuring in Nextcloud: `http://elastic:elastic@elasticsearch:9200`
+- Adress to access elastic search from outside: `http://elastic:elastic@elasticsearch.local`
+- Address for accessing the ui: http://elasticsearch-ui.local/
+
 `sudo sysctl -w vm.max_map_count=262144`
+
+
 
 ## Object storage
 

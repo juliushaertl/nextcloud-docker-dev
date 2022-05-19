@@ -43,6 +43,8 @@ services:
           - gs1${DOMAIN_SUFFIX}
           - gs2${DOMAIN_SUFFIX}
           - lookup${DOMAIN_SUFFIX}
+          - elasticsearch{DOMAIN_SUFFIX}
+          - elasticsearch-ui{DOMAIN_SUFFIX}
 
   haproxy:
     image: haproxy
@@ -427,22 +429,47 @@ services:
     image: minio/minio
     environment:
       VIRTUAL_HOST: minio${DOMAIN_SUFFIX}
-      MINIO_ACCESS_KEY: nextcloud
-      MINIO_SECRET_KEY: nextcloud
-    ports:
-      - "${PORTBASE:-800}5:9000"
+      MINIO_ROOT_USER: nextcloud
+      MINIO_ROOT_PASSWORD: nextcloud
     volumes:
       - objectstorage_minio:/data
-    command: server /data
+    command: server /data --console-address :9001
 
   elasticsearch:
     build:
       context: ./docker
       dockerfile: Dockerfile.elasticsearch
     environment:
-      discovery.type: single-node
+      - ELASTIC_PASSWORD=elastic
+      - discovery.type=single-node
+      - http.port=9200
+      - http.cors.enabled=true
+      - http.cors.allow-origin=http://localhost:1358,http://127.0.0.1:1358,http://elasticsearch-ui.dev.local
+      - http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
+      - http.cors.allow-credentials=true
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - VIRTUAL_HOST=elasticsearch${DOMAIN_SUFFIX}
+      - VIRTUAL_PORT=9200
+      - VIRTUAL_PROTO=http
+    expose:
+      - 9200
+      - 9300
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
+
+  elasticsearch-ui:
+    image: appbaseio/dejavu
+    ports:
+      - 1358:1358
+    expose:
+      - 1358
+    environment:
+      VIRTUAL_HOST: elasticsearch-ui${DOMAIN_SUFFIX}
+      VIRTUAL_PORT: 1358
+      VIRTUAL_PROTO: http
+
 
   push:
     image: icewind1991/notify_push
