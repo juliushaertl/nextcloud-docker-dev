@@ -1,4 +1,4 @@
-
+ #!/usr/bin/env bash
 function OCC () {
     docker compose exec nextcloud sudo -E -u www-data "./occ" "$@"
 }
