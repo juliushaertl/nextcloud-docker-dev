@@ -49,6 +49,7 @@ configure_gs() {
 		OCC config:system:set gss.jwt.key --value 'random-key'
 		OCC config:system:set gss.mode --value 'master'
 		OCC config:system:set gss.master.admin 0 --value 'admin'
+		OCC config:system:set gss.master.csp-allow 0 --value "*${DOMAIN_SUFFIX}"
 	fi
 
 	if [ "$GS_MODE" = "slave" ]
@@ -208,6 +209,9 @@ install() {
 
 	# Setup initial configuration
 	OCC background:cron
+
+	# Trigger initial cron run
+	sudo -E -u www-data php cron.php &
 
 	# run custom shell script from nc root
 	# [ -e /var/www/html/nc-dev-autosetup.sh ] && bash /var/www/html/nc-dev-autosetup.sh
