@@ -33,6 +33,7 @@ services:
           - stable21${DOMAIN_SUFFIX}
           - stable22${DOMAIN_SUFFIX}
           - stable23${DOMAIN_SUFFIX}
+          - stable24${DOMAIN_SUFFIX}
           - collabora${DOMAIN_SUFFIX}
           - onlyoffice${DOMAIN_SUFFIX}
           - proxy${DOMAIN_SUFFIX}
@@ -394,10 +395,13 @@ services:
   blackfire:
     image: blackfire/blackfire:2
     ports:
-      - 8707:8307
+      - 8307:8307
     environment:
       - BLACKFIRE_SERVER_ID
       - BLACKFIRE_SERVER_TOKEN
+      - BLACKFIRE_CLIENT_ID
+      - BLACKFIRE_CLIENT_TOKEN
+      - BLACKFIRE_DISABLE_LEGACY_PORT=yes
 
   collabora:
     image: collabora/code:latest
@@ -406,14 +410,21 @@ services:
     cap_add:
       - MKNOD
     environment:
-      domain: nextcloud${DOMAIN_SUFFIX}|.*.local.dev.bitgrid.net
+      aliasgroup1: http://nextcloud${DOMAIN_SUFFIX}
+      aliasgroup2: http://gs1${DOMAIN_SUFFIX}
+      aliasgroup3: http://gs2${DOMAIN_SUFFIX}
+      aliasgroup4: http://stable20${DOMAIN_SUFFIX}
+      aliasgroup5: http://stable21${DOMAIN_SUFFIX}
+      aliasgroup6: http://stable22${DOMAIN_SUFFIX}
+      aliasgroup7: http://stable23${DOMAIN_SUFFIX}
+      aliasgroup8: http://stable24${DOMAIN_SUFFIX}
       dictionaries: de_DE en_US en_GB
       username: admin
       password: admin
       VIRTUAL_HOST: collabora${DOMAIN_SUFFIX}
       VIRTUAL_PORT: 9980
       VIRTUAL_PROTO: http
-      extra_params: "--o:ssl.enable=false"
+      extra_params: "--o:ssl.enable=false --o:net.frame_ancestors=*.dev.local"
 
   onlyoffice:
     image: onlyoffice/documentserver-ee:latest
