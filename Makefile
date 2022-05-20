@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 .PHONY: images
 .ONESHELL:
 images:
@@ -10,7 +12,7 @@ images:
 .ONESHELL:
 pull:
 	for file in $$(find docker/ -maxdepth 1 -type f -iname 'Dockerfile.*'); do \
-		NAME=$$(echo $$file | sed 's/^.*\.//'); echo "=> Pulling image $$NAME"; docker pull "ghcr.io/juliushaertl/nextcloud-dev-$${NAME}";
+		NAME=$$(echo $$file | sed 's/^.*\.//'); echo "=> Pulling image $$NAME"; docker pull "ghcr.io/juliushaertl/nextcloud-dev-$${NAME}"; \
 	done
 
 check: dockerfilelint shellcheck
