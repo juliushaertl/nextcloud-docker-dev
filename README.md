@@ -302,3 +302,14 @@ docker-compose up -d proxy portal gs1 gs2 lookup database-mysql redis collabora
 ```
 
 Users are named the same as the instance name, e.g. gs1, gs2
+
+## Imaginary 
+
+Enable the imaginary server for generating previews
+
+```bash
+docker-composer up proxy nextcloud previews_hpb
+./scripts/enable-preview-imaginary.sh
+```
+
+
