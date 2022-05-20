@@ -554,8 +554,6 @@ services:
     depends_on:
       - proxy
       - database-mysql
-      - gs1
-      - gs2
       - lookup
       - redis
       - mail
