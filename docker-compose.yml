@@ -44,8 +44,8 @@ services:
           - gs1${DOMAIN_SUFFIX}
           - gs2${DOMAIN_SUFFIX}
           - lookup${DOMAIN_SUFFIX}
-          - elasticsearch{DOMAIN_SUFFIX}
-          - elasticsearch-ui{DOMAIN_SUFFIX}
+          - elasticsearch${DOMAIN_SUFFIX}
+          - elasticsearch-ui${DOMAIN_SUFFIX}
 
   haproxy:
     image: haproxy
