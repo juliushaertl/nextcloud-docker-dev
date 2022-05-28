@@ -447,7 +447,7 @@ services:
       VIRTUAL_HOST: collabora${DOMAIN_SUFFIX}
       VIRTUAL_PORT: 9980
       VIRTUAL_PROTO: http
-      extra_params: "--o:ssl.enable=false --o:net.frame_ancestors=*.dev.local"
+      extra_params: "--o:ssl.enable=false --o:net.frame_ancestors=*${DOMAIN_SUFFIX}"
 
   onlyoffice:
     image: ${CONTAINER_ONLYOFFICE:-onlyoffice/documentserver:latest}

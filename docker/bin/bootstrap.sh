@@ -104,7 +104,8 @@ configure_oidc() {
 PROTOCOL=""
 get_protocol() {
 	if [[ "$PROTOCOL" == "" ]]; then
-		timeout 5 bash -c 'until echo > /dev/tcp/proxy/443; do sleep 0.5; done'
+		echo " Detecting SSL..."
+		timeout 5 bash -c 'until echo > /dev/tcp/proxy/443; do sleep 0.5; done' 2>/dev/null
 		if [ $? -eq 0 ]; then
 			echo "🔑 SSL proxy available, configuring proxy settings"
 			PROTOCOL=https

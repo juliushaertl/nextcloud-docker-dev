@@ -109,6 +109,12 @@ You might need to add the domains to your `/etc/hosts` file:
 
 This is assuming you have set `DOMAIN_SUFFIX=.local`
 
+You can generate it through:
+
+```
+awk -v D=.local '/- [A-z0-9]+\${DOMAIN_SUFFIX}/ {sub("\\$\{DOMAIN_SUFFIX\}", D " 127.0.0.1", $2); print $2}' docker-compose.yml
+```
+
 You can generate selfsigned certificates using:
 
 ```
@@ -120,9 +126,9 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout  nextcloud.local.key
 
 Instead of adding the individual container domains to `/etc/hosts` a local dns server like dnsmasq can be used to resolve any domain ending with the configured DOMAIN_SUFFIX in `.env` to localhost.
 
-For dnsmasq adding the following configuration would be sufficient for `DOMAIN_SUFFIX=.dev.local`:
+For dnsmasq adding the following configuration would be sufficient for `DOMAIN_SUFFIX=.local`:
 ```
-address=/.dev.local/127.0.0.1
+address=/.local/127.0.0.1
 ```
 
 ### Use valid certificates trusted by your system
@@ -161,16 +167,29 @@ Example users are: `leela fry bender zoidberg hermes professor`. The password is
 Useful commands:
 
 ```
-
 docker-compose exec ldap ldapsearch -H 'ldap://localhost' -D "cn=admin,dc=planetexpress,dc=com" -w admin -b "dc=planetexpress,dc=com" "(&(objectclass=inetOrgPerson)(description=*use*))"
 ```
 
 ## Collabora
 
 - Make sure to have the collabora hostname setup in your /etc/hosts file: `127.0.0.1 collabora.local`
-- Start the Collabora Online server in addition to your other containers `docker-compose up -d collabora`
-- Make sure you have the richdocuments app cloned to your apps-extra directory and built the frontend code of the app with `npm ci && npm run build`
-- Enable the app and configure `collabora.local` in the Collabora settings inside of Nextcloud or run `./scripts/enable-collabora`
+- Automatically enable for one of your containers (e.g. the main nextcloud one):
+	- Run `./scripts/enable-collabora nextcloud`
+- Manual setup
+	- Start the Collabora Online server in addition to your other containers `docker-compose up -d collabora`
+	- Make sure you have the richdocuments app cloned to your apps-extra directory and built the frontend code of the app with `npm ci && npm run build`
+	- Enable the app and configure `collabora.local` in the Collabora settings inside of Nextcloud
+
+
+## ONLYOFFICE
+
+- Make sure to have the collabora hostname setup in your /etc/hosts file: `127.0.0.1 onlyoffice.local`
+- Automatically enable for one of your containers (e.g. the main nextcloud one):
+	- Run `./scripts/enable-onlyoffice nextcloud`
+- Manual setup
+	- Start the ONLYOFFICE server in addition to your other containers `docker-compose up -d onlyoffice`
+	- Clone https://github.com/ONLYOFFICE/onlyoffice-nextcloud into your apps directory
+	- Enable the app and configure `onlyoffice.local` in the ONLYOFFICE settings inside of Nextcloud
 
 
 ## Antivirus
@@ -293,15 +312,15 @@ sudo -E -u www-data php -dxdebug.remote_host=192.168.21.1 occ
 - nextcloud
 - 09e3c268-d8bc-42f1-b7c6-74d307ef5fde
 
-## GS
+## Global scale
 
 ```
-docker-compose up -d proxy portal gs1 gs2 lookup database-mysql redis collabora
+docker-compose up -d proxy portal gs1 gs2 lookup database-mysql
 ```
 
 Users are named the same as the instance name, e.g. gs1, gs2
 
-## Imaginary 
+## Imaginary
 
 Enable the imaginary server for generating previews
 
