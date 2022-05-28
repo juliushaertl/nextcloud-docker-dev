@@ -9,7 +9,7 @@ fi
 CONTAINER=$1
 
 function occ() {
-    docker compose exec $CONTAINER sudo -E -u www-data "./occ" "$@"
+    docker compose exec "$CONTAINER" sudo -E -u www-data "./occ" "$@"
 }
 
 source .env
