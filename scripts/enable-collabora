@@ -20,5 +20,5 @@ occ app:enable richdocuments
 occ config:app:set richdocuments wopi_url --value="http://collabora${DOMAIN_SUFFIX}"
 occ config:app:set richdocuments public_wopi_url --value="http://collabora${DOMAIN_SUFFIX}"
 occ config:system:set allow_local_remote_servers --value true --type bool
-occ config:system:set gs.trustedHosts 0 --value"*${DOMAIN_SUFFIX}"
+occ config:system:set gs.trustedHosts 0 --value "*${DOMAIN_SUFFIX}"
 occ richdocuments:activate-config

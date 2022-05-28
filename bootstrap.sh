@@ -88,6 +88,14 @@ DOCKER_SUBNET=192.168.21.0/24
 PORTBASE=821
 EOT
 fi
+
+if [[ $(uname -m) == 'arm64' ]]; then
+	echo "Setting custom containers for arm platform"
+
+	echo "CONTAINER_ONLYOFFICE=onlyoffice/documentserver:latest-arm64" >> .env
+	echo "CONTAINER_KEYCLOAK=mihaibob/keycloak:15.0.1" >> .env
+fi
+
 cat <<EOF
 
 

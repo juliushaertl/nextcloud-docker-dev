@@ -450,7 +450,7 @@ services:
       extra_params: "--o:ssl.enable=false --o:net.frame_ancestors=*.dev.local"
 
   onlyoffice:
-    image: onlyoffice/documentserver-ee:latest
+    image: ${CONTAINER_ONLYOFFICE:-onlyoffice/documentserver:latest}
     environment:
       VIRTUAL_HOST: onlyoffice${DOMAIN_SUFFIX}
     expose:
@@ -518,7 +518,7 @@ services:
       NEXTCLOUD_URL: https://nextcloud.local.dev.bitgrid.net
 
   keycloak:
-    image: quay.io/keycloak/keycloak:13.0.1
+    image: ${CONTAINER_KEYCLOAK:-quay.io/keycloak/keycloak:15.0.1}
     expose:
       - 8080
     volumes:
