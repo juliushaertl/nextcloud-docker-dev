@@ -1,7 +1,6 @@
 FROM php:8.0-apache
 
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
         libcurl4-openssl-dev \
         libfreetype6-dev \
         libicu-dev \
@@ -32,8 +31,8 @@ RUN debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
         pdo_pgsql \
         zip
 
-RUN pecl install APCu-5.1.18; \
-    pecl install memcached-3.1.5; \
+RUN pecl install APCu; \
+    pecl install memcached; \
     pecl install redis; \
     pecl install xdebug; \
     pecl install imagick; \
@@ -45,21 +44,15 @@ RUN pecl install APCu-5.1.18; \
         memcached \
         redis \
         xdebug \
-	imagick \
-        smbclient
+        imagick \
+        smbclient; \
+	docker-php-source delete && \
+		rm -r /tmp/* /var/cache/*
 
 # dev tools separate install so we quickly change without rebuilding all php extenions
 RUN apt update && apt-get install -y --no-install-recommends \
-    git curl vim sudo cron smbclient iproute2 lnav wget iputils-ping gnupg2 \
+    git curl vim sudo cron smbclient iproute2 lnav wget iputils-ping gnupg2 jq \
         && rm -rf /var/lib/apt/lists/*
-
-# Setup blackfire probe
-RUN wget -q -O - https://packages.blackfire.io/gpg.key | sudo apt-key add - \
-    && echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list \
-    && apt-get update  \
-    && apt-get install -y --no-install-recommends blackfire-php \
-    && printf "blackfire.agent_socket=tcp://blackfire:8307\n" >> $PHP_INI_DIR/conf.d/zz-blackfire.ini \
-    && rm -rf /var/lib/apt/lists/*
 
 RUN wget https://gist.githubusercontent.com/nickvergessen/e21ee0a09ee3b3f7fd1b04c83dd3e114/raw/83142be1e50c23e8de1bd7aae88a95e5d6ae1ce2/nextcloud_log.json && lnav -i nextcloud_log.json && rm nextcloud_log.json
 
@@ -89,14 +82,20 @@ RUN { \
 
 ADD configs/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
+# Setup blackfire probe
+RUN wget -q -O - https://packages.blackfire.io/gpg.key | sudo apt-key add - \
+    && echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list \
+    && apt-get update  \
+    && apt-get install -y --no-install-recommends blackfire-php \
+    && printf "blackfire.agent_socket=tcp://blackfire:8307\n" >> $PHP_INI_DIR/conf.d/zz-blackfire.ini \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-RUN a2enmod rewrite && a2enmod headers && a2enmod env
+RUN a2enmod rewrite
 
 ENV WEBROOT /var/www/html
 WORKDIR /var/www/html
-
-VOLUME ["/var/www/html/data", "/var/www/html/config", "/var/www/html/apps-writable"]
 
 ENTRYPOINT  ["/usr/local/bin/bootstrap.sh"]
 CMD ["apache2-foreground"]
