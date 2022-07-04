@@ -117,6 +117,7 @@ get_protocol() {
 }
 
 configure_ssl_proxy() {
+	get_protocol
 	if [[ "$PROTOCOL" == "https" ]]; then
 		echo "🔑 SSL proxy available, configuring proxy settings"
 		OCC config:system:set overwriteprotocol --value https
