@@ -12,6 +12,7 @@ function occ() {
     docker compose exec "$CONTAINER" sudo -E -u www-data "./occ" "$@"
 }
 
+# shellcheck disable=SC1091
 source .env
 
 echo "Setting up Collabora with collabora$DOMAIN_SUFFIX on $CONTAINER"
