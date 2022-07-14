@@ -17,6 +17,12 @@ Features
 
 ## Getting started
 
+<details><summary>Installation requirements on macOS</summary>
+
+1. Install the Xcode command line utils: `xcode-select --install`
+2. Install Docker https://www.docker.com/products/docker-desktop/
+</details>
+
 To get the setup running:
 
 ```
