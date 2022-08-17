@@ -169,13 +169,18 @@ install() {
 	USER="admin"
 	PASSWORD="admin"
 
+	if [[ "$MYSQL_ROOT_PASSWORD" == "" ]]; then
+		MYSQL_ROOT_PASSWORD="nextcloud"
+	fi
+
+
 	echo "🔧 Starting auto installation"
 	if [ "$SQL" = "oci" ]; then
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name=xe --database-host=$SQLHOST --database-user=system --database-pass=oracle
 	elif [ "$SQL" = "pgsql" ]; then
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name="$DBNAME" --database-host=$SQLHOST --database-user=postgres --database-pass=postgres
 	elif [ "$SQL" = "mysql" ]; then
-		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name="$DBNAME" --database-host=$SQLHOST --database-user=root --database-pass=nextcloud
+		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name="$DBNAME" --database-host=$SQLHOST --database-user="$MYSQL_ROOT_PASSWORD" --database-pass=nextcloud
 	else
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL"
 	fi;
