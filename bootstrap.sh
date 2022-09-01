@@ -51,6 +51,19 @@ is_installed git
 echo
 echo "⏩ Setting up folder structure and fetching repositories"
 
+# check if already in git
+if [[ ! -f bootstrap.sh && ! -d .git ]]
+then
+	git clone https://github.com/juliushaertl/nextcloud-docker-dev.git &&
+		cd nextcloud-docker-dev
+	echo "✅ Cloned the docker environment" | indent
+fi
+
+pwd
+
+INSTALL_SHIPPED_APPS="activity viewer recommendations files_pdfviewer"
+INSTALL_
+
 mkdir -p workspace/
 ( 
 	(
@@ -58,13 +71,7 @@ mkdir -p workspace/
 			git clone https://github.com/nextcloud/server.git --depth 1 workspace/server &&
 			cd workspace/server && git submodule update --init
 	) || echo "❌ Failed to clone Nextcloud server code"
-) | indent
-
-(
-	(
-		cd workspace/server && \
-		git worktree add ../stable19 stable19 2>&1 | indent_cli
-	) || echo "❌ Failed to setup worktree for stable19"
+	echo "✅ Cloned the Nextcloud server source code"
 ) | indent
 
 mkdir -p workspace/server/apps-extra
@@ -72,6 +79,26 @@ install_app viewer
 install_app recommendations
 install_app files_pdfviewer
 install_app profiler
+
+# TODO download last 3 stable branches
+install_stable() {
+	cd workspace/server && \
+		git worktree add ../stable24 stable24 2>&1
+}
+(
+	(
+		install_stable stable24 | indent_cli
+		install_stable stable23 | indent_cli
+		install_stable stable22 | indent_cli
+	) || echo "❌ Failed to setup worktree for stable19"
+) | indent
+
+# Add /etc/hosts from container list
+echo "⏩ Adding development URLs to /etc/hosts"
+sudo sh -c "echo '127.0.0.1 nextcloud.local' >> /etc/hosts"
+
+awk -v D=.local '/- [A-z0-9]+\${DOMAIN_SUFFIX}/ {sub("\\$\{DOMAIN_SUFFIX\}", D " 127.0.0.1", $2); print $2}' docker-compose.yml
+
 
 echo
 echo
@@ -124,6 +151,9 @@ cat <<EOF
 
 
 Note that for performance reasons the server repository has been cloned with --depth=1. To get the full history it is highly recommended to run:
+=======
+Note that for performance reasons the server repository has been cloned with 
+--depth=1. To get the full history it is highly recommended to run:
 
 	cd workspace/server
 	git fetch --unshallow

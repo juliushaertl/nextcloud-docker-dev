@@ -1,8 +1,10 @@
 # nextcloud-dev-docker-compose
 
-Nextcloud development environment using docker-compose
+A docker based Nextcloud development environment that is easy to setup and use.
 
-⚠ **DO NOT USE THIS IN PRODUCTION** Various settings in this setup are considered insecure and default passwords and secrets are used all over the place
+⚠ **DO NOT USE THIS IN PRODUCTION** 
+
+Various settings in this setup are considered insecure and default passwords and secrets are used all over the place
 
 Features
 
@@ -17,38 +19,106 @@ Features
 
 ## Getting started
 
+
+<details><summary>Installation requirements on Ubuntu</summary>
+
+1. Install docker and git
+	```
+	sudo apt install docker.io git
+	```
+
+Continue with the installation instructions below.
+</details>
+
 <details><summary>Installation requirements on macOS</summary>
 
 1. Install the Xcode command line utils: `xcode-select --install`
 2. Install Docker https://www.docker.com/products/docker-desktop/
+
+
+Continue with the installation instructions below.
+</details>
+
+<details><summary>Installation requirements on Windows</summary>
+
+This development environment can be used under Windows using WSL2 and Docker. This step by step guide is using VS Code as an editor as it allows to easily work within the Linux environment on the remote WSL instance. You may follow https://code.visualstudio.com/blogs/2020/03/02/docker-in-wsl2 in order setup everything required, but in short the steps are the following:
+
+1. Install Windows 10, version 1903 or higher or Windows 11.
+2. Enable WSL 2 feature on Windows. For detailed instructions, refer to the Microsoft documentation. 
+3. Install the Ubuntu distribution for WSL https://docs.microsoft.com/en-us/windows/wsl/install
+3. Download and install the Linux kernel update package.
+4. Install Docker Desktop for Windows.
+6. Open the Ubuntu terminal and run the installation command below
+
+Continue with the installation instructions below.
 </details>
 
 To get the setup running:
 
+```bash
+curl -L https://yeeeha.org/nc-dev | bash
 ```
-git clone https://github.com/juliushaertl/nextcloud-docker-dev
-cd nextcloud-docker-dev
-./bootstrap.sh
-sudo sh -c "echo '127.0.0.1 nextcloud.local' >> /etc/hosts"
-docker-compose up nextcloud proxy
+
+This will:
+- Clone the Nextcloud server source code
+- Ask for your sudo password to add the hostnames for your local environment to /etc/hosts
+
+The command will end with some instructions on how to start your development environment:
+
+- Start the docker container
 ```
 
 ## Manual setup
 
-### Nextcloud Code
+The above script will clone this repository and afterwards perform the setup of the development manual with the following steps:
 
-The Nextcloud code base needs to be available including the `3rdparty` submodule. To clone it from github run:
+To properly verify what is happening you might want to clone manually using the following commands, if you don't trust piping random URLs to the terminal:
 
+```bash
+git clone https://github.com/juliushaertl/nextcloud-docker-dev
+cd nextcloud-docker-dev
+./bootstrap.sh
 ```
-git clone https://github.com/nextcloud/server.git
-cd server
+# Common tasks
+
+### Starting the containers
+
+- Start full setup: `docker-compose up`
+- Minimum: `docker-compose up proxy nextcloud` (nextcloud mysql redis mailhog)
+
+### Running stable versions
+
+The main nextcloud service is ment for running the master branch checkout of the server and your apps. The docker-compose file provides individual containers for stable Nextcloud releases. In order to run those you will need a checkout of the stable version server branch to your workspace directory. Using [git worktree](https://blog.juliushaertl.de/index.php/2018/01/24/how-to-checkout-multiple-git-branches-at-the-same-time/) makes it easy to have different branches checked out in parallel in separate directories.
+
+During the bootstrap script an initial set of the last 3 stable releases will be checked out already at the workspace/ directory, however you may add newer or older ones manually using the following commands:
+
+```bash
+cd workspace/server
+git worktree add ../stable23 stable23
+cd ../stable23
 git submodule update --init
-pwd
 ```
-The last command prints the path to the Nextcloud server directory.
-Use it for setting the `REPO_PATH_SERVER` in the next step.
 
+After adding the worktree you can start the stable container using `docker-compose up -d stable23`. You can then add `stable23.local 127.0.0.1` to your `/etc/hosts` file to access it.
+
+Git worktrees can also be used to have a checkout of an apps stable brach within the server stable directory.
+
+```
+cd workspace/server/apps-extra/text
+git worktree add ../../../stable23/apps-extra/text stable23
+```
+
+### Running into errors
+
+If your setup isn't working and you can not figure out the reason why, running
+`docker-compose down -v` will remove the relevant containers and volumes,
+allowing you to run `docker-compose up` again from a clean slate.
+
+
+## Configuration
 ### Environment variables
+
+This is automatically done by the bootstrap script.
 
 A `.env` file should be created in the repository root, to keep configuration default on the dev setup:
 
@@ -71,36 +141,28 @@ The variable supports the following values:
 1. PHP 7.4: `74`
 1. PHP 8.0: `80`
 
-### Starting the containers
+### dnsmasq to resolve wildcard domains
 
-- Start full setup: `docker-compose up`
-- Minimum: `docker-compose up proxy nextcloud` (nextcloud mysql redis mailhog)
+Instead of adding the individual container domains to `/etc/hosts` a local dns server like dnsmasq can be used to resolve any domain ending with the configured DOMAIN_SUFFIX in `.env` to localhost.
 
-### Running stable versions
-
-The docker-compose file provides individual containers for stable Nextcloud releases. In order to run those you will need a checkout of the stable version server branch to your workspace directory. Using [git worktree](https://blog.juliushaertl.de/index.php/2018/01/24/how-to-checkout-multiple-git-branches-at-the-same-time/) makes it easy to have different branches checked out in parallel in separate directories.
-
+For dnsmasq adding the following configuration would be sufficient for `DOMAIN_SUFFIX=.local`:
 ```
-cd workspace/server
-git worktree add ../stable23 stable23
-cd ../stable23
-git submodule update --init
+address=/.local/127.0.0.1
 ```
 
-After adding the worktree you can start the stable container using `docker-compose up -d stable23`. You can then add stable23.local to your `/etc/hosts` file to access it.
+### Use valid certificates trusted by your system
 
-Git worktrees can also be used to have a checkout of an apps stable brach within the server stable directory.
+* Install mkcert https://github.com/FiloSottile/mkcert
+* Go to `data/ssl`
+* `mkcert nextcloud.local`
 
-```
-cd workspace/server/apps-extra/text
-git worktree add ../../../stable23/apps-extra/text stable23
-```
+* `mv nextcloud.local-key.pem nextcloud.local.key`
+* `mv nextcloud.local.pem nextcloud.local.crt`
+* `docker-compose restart proxy`
 
-### Running into errors
+# Services
 
-If your setup isn't working and you can not figure out the reason why, running
-`docker-compose down -v` will remove the relevant containers and volumes,
-allowing you to run `docker-compose up` again from a clean slate.
+Each service can be started using `docker-compose up -d <service>`. Some services like LDAP come with autoconfiguration if the used Nextcloud service is installed from scratch, so you may want to destroy the existing containers before starting the service using `docker-compose down -v`, but this will also drop any data or configuration you may already have on the instances.
 
 ## 🔒 Reverse Proxy
 
@@ -127,25 +189,6 @@ You can generate selfsigned certificates using:
 cd data/ssl
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout  nextcloud.local.key -out nextcloud.local.crt
 ```
-
-### dnsmasq to resolve wildcard domains
-
-Instead of adding the individual container domains to `/etc/hosts` a local dns server like dnsmasq can be used to resolve any domain ending with the configured DOMAIN_SUFFIX in `.env` to localhost.
-
-For dnsmasq adding the following configuration would be sufficient for `DOMAIN_SUFFIX=.local`:
-```
-address=/.local/127.0.0.1
-```
-
-### Use valid certificates trusted by your system
-
-* Install mkcert https://github.com/FiloSottile/mkcert
-* Go to `data/ssl`
-* `mkcert nextcloud.local`
-
-* `mv nextcloud.local-key.pem nextcloud.local.key`
-* `mv nextcloud.local.pem nextcloud.local.crt`
-* `docker-compose restart proxy`
 
 ## ✉ Mail
 
