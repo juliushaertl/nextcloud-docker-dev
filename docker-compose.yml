@@ -66,6 +66,8 @@ services:
       VIRTUAL_HOST: "nextcloud${DOMAIN_SUFFIX}"
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
+      BLACKFIRE_CLIENT_ID:
+      BLACKFIRE_CLIENT_TOKEN:
     volumes:
       - '${REPO_PATH_SERVER:-/home/jus/repos/nextcloud/server}:/var/www/html'
       - data:/var/www/html/data
