@@ -36,7 +36,5 @@
 
 	'skeletondirectory' => '/skeleton',
 
-	'dbuser' => 'root',
-
 	//PLACEHOLDER
 ];
