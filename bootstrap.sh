@@ -55,17 +55,17 @@ mkdir -p workspace/
 ( 
 	(
 		echo "🌏 Fetching server (this might take a while to finish)" &&
-			git clone https://github.com/nextcloud/server.git workspace/server 2>&1 | indent_cli &&
+			git clone https://github.com/nextcloud/server.git --depth 1 workspace/server 2>&1 | indent_cli &&
 			cd workspace/server && git submodule update --init 2>&1 | indent_cli
 	) || echo "❌ Failed to clone Nextcloud server code"
 ) | indent
 
-(
-	(
-		cd workspace/server && \
-		git worktree add ../stable19 stable19 2>&1 | indent_cli
-	) || echo "❌ Failed to setup worktree for stable19"
-) | indent
+#(
+#	(
+#		cd workspace/server && \
+#		git worktree add ../stable19 stable19 2>&1 | indent_cli
+#	) || echo "❌ Failed to setup worktree for stable19"
+#) | indent
 
 mkdir -p workspace/server/apps-extra
 install_app viewer
@@ -118,7 +118,16 @@ cat <<EOF
 	$ docker-compose down -v
 
 
-For more details about the individual setup options see 
+	Note that for performance reasons the server repository has been cloned with
+	--depth=1. To get the full history it is highly recommended to run:
+
+	$ cd workspace/server
+	$ git fetch --unshallow
+
+	This may take some time depending on your internet connection speed.
+
+
+For more details about the individual setup options see
 the README.md file or checkout the repo at
 https://github.com/juliushaertl/nextcloud-docker-dev
 EOF
