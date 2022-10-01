@@ -118,7 +118,16 @@ cat <<EOF
 	$ docker-compose down -v
 
 
-For more details about the individual setup options see 
+	Note that for performance reasons the server repository has been cloned with
+	--depth=1. To get the full history it is highly recommended to run:
+
+	$ cd workspace/server
+	$ git fetch --unshallow
+
+	This may take some time depending on your internet connection speed.
+
+
+For more details about the individual setup options see
 the README.md file or checkout the repo at
 https://github.com/juliushaertl/nextcloud-docker-dev
 EOF
