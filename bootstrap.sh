@@ -55,17 +55,17 @@ mkdir -p workspace/
 ( 
 	(
 		echo "🌏 Fetching server (this might take a while to finish)" &&
-			git clone https://github.com/nextcloud/server.git workspace/server 2>&1 | indent_cli &&
+			git clone https://github.com/nextcloud/server.git --depth 1 workspace/server 2>&1 | indent_cli &&
 			cd workspace/server && git submodule update --init 2>&1 | indent_cli
 	) || echo "❌ Failed to clone Nextcloud server code"
 ) | indent
 
-(
-	(
-		cd workspace/server && \
-		git worktree add ../stable19 stable19 2>&1 | indent_cli
-	) || echo "❌ Failed to setup worktree for stable19"
-) | indent
+#(
+#	(
+#		cd workspace/server && \
+#		git worktree add ../stable19 stable19 2>&1 | indent_cli
+#	) || echo "❌ Failed to setup worktree for stable19"
+#) | indent
 
 mkdir -p workspace/server/apps-extra
 install_app viewer
