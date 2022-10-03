@@ -292,7 +292,7 @@ docker-compose up -d elasticsearch elasticsearch-ui
 Primary object storage can be enabled by setting the `PRIMARY=minio` environment variable either in your .env file or in docker-compose.yml for individual containers.
 
 ```bash
-docker-composer up proxy nextcloud minio
+docker-compose up proxy nextcloud minio
 ```
 
 ## Development
@@ -332,7 +332,7 @@ Users are named the same as the instance name, e.g. gs1, gs2
 Enable the imaginary server for generating previews
 
 ```bash
-docker-composer up proxy nextcloud previews_hpb
+docker-compose up proxy nextcloud previews_hpb
 ./scripts/enable-preview-imaginary.sh
 ```
 

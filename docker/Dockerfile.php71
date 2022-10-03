@@ -49,10 +49,15 @@ RUN pecl install APCu; \
 	docker-php-source delete && \
 		rm -r /tmp/* /var/cache/*
 
-# dev tools separate install so we quickly change without rebuilding all php extenions
+# dev tools separate install so we quickly change without rebuilding all php extensions
 RUN apt update && apt-get install -y --no-install-recommends \
     git curl vim sudo cron smbclient iproute2 lnav wget iputils-ping gnupg2 jq ripgrep \
         && rm -rf /var/lib/apt/lists/*
+
+# Install PHPUnit
+RUN cd /tmp && curl -L https://phar.phpunit.de/phpunit.phar > phpunit.phar && \
+    chmod +x phpunit.phar && \
+    mv /tmp/phpunit.phar /usr/local/bin/phpunit
 
 RUN wget https://gist.githubusercontent.com/nickvergessen/e21ee0a09ee3b3f7fd1b04c83dd3e114/raw/83142be1e50c23e8de1bd7aae88a95e5d6ae1ce2/nextcloud_log.json && lnav -i nextcloud_log.json && rm nextcloud_log.json
 
