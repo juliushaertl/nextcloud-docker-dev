@@ -78,7 +78,7 @@ echo
 echo "⏩ Setup your environment in an .env file"
 if [ ! -f ".env" ]; then
 cat <<EOT >.env
-COMPOSE_PROJECT_NAME=nextcloud
+COMPOSE_PROJECT_NAME=master
 DOMAIN_SUFFIX=.local
 REPO_PATH_SERVER=$PWD/workspace/server
 ADDITIONAL_APPS_PATH=$PWD/workspace/server/apps-extra
