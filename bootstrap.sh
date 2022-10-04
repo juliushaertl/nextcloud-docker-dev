@@ -36,12 +36,18 @@ function is_installed() {
 	) | indent
 }
 
+function get_subnet_docker() {
+	subnet=$(docker network inspect bridge | jq .[].IPAM.Config[].Subnet | tr -d '"')
+	echo "$subnet"
+}
+
 echo
 echo "⏩ Performing system checks"
 
 is_installed docker
 is_installed docker-compose
 is_installed git
+is_installed jq
 
 ( 
 	(docker ps 2>&1 >/dev/null && echo "✅ Docker is properly executable") ||
@@ -84,7 +90,7 @@ REPO_PATH_SERVER=$PWD/workspace/server
 ADDITIONAL_APPS_PATH=$PWD/workspace/server/apps-extra
 STABLE_ROOT_PATH=$PWD/workspace
 NEXTCLOUD_AUTOINSTALL_APPS="viewer profiler"
-DOCKER_SUBNET=192.168.21.0/24
+DOCKER_SUBNET=$(get_subnet_docker)
 PORTBASE=821
 EOT
 fi
