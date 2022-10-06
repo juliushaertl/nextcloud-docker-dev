@@ -34,6 +34,7 @@ services:
           - stable22${DOMAIN_SUFFIX}
           - stable23${DOMAIN_SUFFIX}
           - stable24${DOMAIN_SUFFIX}
+          - stable25${DOMAIN_SUFFIX}
           - collabora${DOMAIN_SUFFIX}
           - onlyoffice${DOMAIN_SUFFIX}
           - proxy${DOMAIN_SUFFIX}
@@ -70,9 +71,9 @@ services:
       BLACKFIRE_CLIENT_TOKEN:
     volumes:
       - '${REPO_PATH_SERVER}:/var/www/html'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
       - data:/var/www/html/data
       - config:/var/www/html/config
-      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
       - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
@@ -108,7 +109,7 @@ services:
   nextcloud3:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
     environment:
-      SQL: 'mysql'
+      SQL: ${SQL:-mysql}
       VIRTUAL_HOST: "nextcloud3${DOMAIN_SUFFIX}"
     volumes:
       - '${REPO_PATH_SERVER}:/var/www/html'
@@ -126,7 +127,7 @@ services:
   stable16:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-72}:latest
     environment:
-      SQL: 'sqlite'
+      SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
       NEXTCLOUD_AUTOINSTALL_APPS:
       WITH_REDIS: "YES"
@@ -141,7 +142,11 @@ services:
       - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+      - ./data/shared:/shared
+    ports:
+      - "${PORTBASE:-800}0:80"
     depends_on:
+      - ${DB_SERVICE:-database-mysql}
       - redis
       - mail
     extra_hosts:
@@ -150,7 +155,7 @@ services:
   stable17:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-72}:latest
     environment:
-      SQL: 'sqlite'
+      SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
       NEXTCLOUD_AUTOINSTALL_APPS:
       WITH_REDIS: "YES"
@@ -165,7 +170,11 @@ services:
       - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+      - ./data/shared:/shared
+    ports:
+      - "${PORTBASE:-800}0:80"
     depends_on:
+      - ${DB_SERVICE:-database-mysql}
       - redis
       - mail
     extra_hosts:
@@ -174,7 +183,7 @@ services:
   stable18:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
     environment:
-      SQL: 'sqlite'
+      SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
       NEXTCLOUD_AUTOINSTALL_APPS:
       WITH_REDIS: "YES"
@@ -189,9 +198,11 @@ services:
       - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+      - ./data/shared:/shared
     ports:
       - "${PORTBASE:-800}0:80"
     depends_on:
+      - ${DB_SERVICE:-database-mysql}
       - redis
       - mail
     extra_hosts:
@@ -200,7 +211,7 @@ services:
   stable19:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-72}:latest
     environment:
-      SQL: 'sqlite'
+      SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
       NEXTCLOUD_AUTOINSTALL_APPS:
       WITH_REDIS: "YES"
@@ -210,9 +221,16 @@ services:
     volumes:
       - '${STABLE_ROOT_PATH}/stable19:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable19/apps-extra:/var/www/html/apps-extra'
+      - /var/www/html/data
+      - /var/www/html/config
+      - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+      - ./data/shared:/shared
+    ports:
+      - "${PORTBASE:-800}0:80"
     depends_on:
+      - ${DB_SERVICE:-database-mysql}
       - redis
       - mail
     extra_hosts:
@@ -221,7 +239,7 @@ services:
   stable20:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-72}:latest
     environment:
-      SQL: 'sqlite'
+      SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
       NEXTCLOUD_AUTOINSTALL_APPS:
       WITH_REDIS: "YES"
@@ -231,9 +249,16 @@ services:
     volumes:
       - '${STABLE_ROOT_PATH}/stable20:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable20/apps-extra:/var/www/html/apps-extra'
+      - /var/www/html/data
+      - /var/www/html/config
+      - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+      - ./data/shared:/shared
+    ports:
+      - "${PORTBASE:-800}0:80"
     depends_on:
+      - ${DB_SERVICE:-database-mysql}
       - redis
       - mail
     extra_hosts:
@@ -242,7 +267,7 @@ services:
   stable21:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
     environment:
-      SQL: 'sqlite'
+      SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
       NEXTCLOUD_AUTOINSTALL_APPS:
       WITH_REDIS: "YES"
@@ -252,9 +277,16 @@ services:
     volumes:
       - '${STABLE_ROOT_PATH}/stable21:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable21/apps-extra:/var/www/html/apps-extra'
+      - /var/www/html/data
+      - /var/www/html/config
+      - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+      - ./data/shared:/shared
+    ports:
+      - "${PORTBASE:-800}0:80"
     depends_on:
+      - ${DB_SERVICE:-database-mysql}
       - redis
       - mail
     extra_hosts:
@@ -263,7 +295,7 @@ services:
   stable22:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
     environment:
-      SQL: 'sqlite'
+      SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
       NEXTCLOUD_AUTOINSTALL_APPS:
       WITH_REDIS: "YES"
@@ -278,7 +310,39 @@ services:
       - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+      - ./data/shared:/shared
+    ports:
+      - "${PORTBASE:-800}0:80"
     depends_on:
+      - ${DB_SERVICE:-database-mysql}
+      - redis
+      - mail
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+  stable23:
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
+    environment:
+      SQL: ${SQL:-mysql}
+      NEXTCLOUD_AUTOINSTALL: "YES"
+      NEXTCLOUD_AUTOINSTALL_APPS:
+      WITH_REDIS: "YES"
+      VIRTUAL_HOST: stable23${DOMAIN_SUFFIX}
+      ADDITIONAL_APPS_PATH:
+      NEXTCLOUD_TRUSTED_DOMAINS:
+    volumes:
+      - '${STABLE_ROOT_PATH}/stable23:/var/www/html'
+      - '${STABLE_ROOT_PATH}/stable23/apps-extra:/var/www/html/apps-extra'
+      - /var/www/html/data
+      - /var/www/html/config
+      - /var/www/html/apps-writable
+      - ./data/skeleton/:/skeleton
+      - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+      - ./data/shared:/shared
+    ports:
+      - "${PORTBASE:-800}0:80"
+    depends_on:
+      - ${DB_SERVICE:-database-mysql}
       - redis
       - mail
     extra_hosts:
@@ -287,7 +351,7 @@ services:
   stable24:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-74}:latest
     environment:
-      SQL: 'mysql'
+      SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
       NEXTCLOUD_AUTOINSTALL_APPS:
       WITH_REDIS: "YES"
@@ -300,28 +364,41 @@ services:
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
+      - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+      - ./data/shared:/shared
+    ports:
+      - "${PORTBASE:-800}0:80"
     depends_on:
+      - ${DB_SERVICE:-database-mysql}
       - redis
       - mail
     extra_hosts:
       - host.docker.internal:host-gateway
 
-  stable23:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
+  stable25:
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-74}:latest
     environment:
-      SQL: 'sqlite'
+      SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
       NEXTCLOUD_AUTOINSTALL_APPS:
       WITH_REDIS: "YES"
-      VIRTUAL_HOST: stable23${DOMAIN_SUFFIX}
+      VIRTUAL_HOST: stable25${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
-      - '${STABLE_ROOT_PATH}/stable23:/var/www/html'
-      - '${STABLE_ROOT_PATH}/stable23/apps-extra:/var/www/html/apps-extra'
+      - '${STABLE_ROOT_PATH}/stable25:/var/www/html'
+      - '${STABLE_ROOT_PATH}/stable25/apps-extra:/var/www/html/apps-extra'
+      - /var/www/html/data
+      - /var/www/html/config
+      - /var/www/html/apps-writable
+      - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+      - ./data/shared:/shared
+    ports:
+      - "${PORTBASE:-800}0:80"
     depends_on:
+      - ${DB_SERVICE:-database-mysql}
       - redis
       - mail
     extra_hosts:
@@ -443,6 +520,7 @@ services:
       aliasgroup6: http://stable22${DOMAIN_SUFFIX}
       aliasgroup7: http://stable23${DOMAIN_SUFFIX}
       aliasgroup8: http://stable24${DOMAIN_SUFFIX}
+      aliasgroup9: http://stable25${DOMAIN_SUFFIX}
       dictionaries: de_DE en_US en_GB
       username: admin
       password: admin
