@@ -642,7 +642,5 @@ volumes:
 
 networks:
   default:
-    ipam:
-      driver: default
-      config:
-        - subnet: ${DOCKER_SUBNET:-192.168.21.0/24}
+    name: ${DOCKER_NETWORK_NAME}
+    external: true

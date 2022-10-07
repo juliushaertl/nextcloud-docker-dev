@@ -36,9 +36,11 @@ function is_installed() {
 	) | indent
 }
 
-function get_subnet_docker() {
-	subnet=$(docker network inspect bridge | jq .[].IPAM.Config[].Subnet | tr -d '"')
-	echo "$subnet"
+function init_subnet_docker() {
+	uuidgen=$(uuidgen)
+	idNetwork=$(docker network create -d bridge nextcloud_network_${uuidgen})
+	networkName=$(docker network inspect ${idNetwork} | jq .[].Name | tr -d '"')
+	echo "$networkName"
 }
 
 echo
@@ -48,6 +50,7 @@ is_installed docker
 is_installed docker-compose
 is_installed git
 is_installed jq
+is_installed uuidgen
 
 ( 
 	(docker ps 2>&1 >/dev/null && echo "✅ Docker is properly executable") ||
@@ -90,7 +93,7 @@ REPO_PATH_SERVER=$PWD/workspace/server
 ADDITIONAL_APPS_PATH=$PWD/workspace/server/apps-extra
 STABLE_ROOT_PATH=$PWD/workspace
 NEXTCLOUD_AUTOINSTALL_APPS="viewer profiler"
-DOCKER_SUBNET=$(get_subnet_docker)
+DOCKER_NETWORK_NAME=$(init_subnet_docker)
 PORTBASE=821
 EOT
 fi
