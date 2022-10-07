@@ -37,9 +37,9 @@ function is_installed() {
 }
 
 function init_subnet_docker() {
-	uuidgen=$(uuidgen)
-	idNetwork=$(docker network create -d bridge nextcloud_network_${uuidgen})
-	networkName=$(docker network inspect ${idNetwork} | jq .[].Name | tr -d '"')
+	uuidgen="$(uuidgen)"
+	idNetwork="$(docker network create -d bridge nextcloud_network_${uuidgen})"
+	networkName="$(docker network inspect ${idNetwork} | jq .[].Name | tr -d '"')"
 	echo "$networkName"
 }
 
