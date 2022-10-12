@@ -1,0 +1,65 @@
+# SAML
+
+```bash
+docker compose up -d proxy nextcloud saml
+```
+
+- uid mapping: `urn:oid:0.9.2342.19200300.100.1.1`
+- idp entity id: `https://sso.local.dev.bitgrid.net/simplesaml/saml2/idp/metadata.php`
+- single sign on service url: `https://sso.local.dev.bitgrid.net/simplesaml/saml2/idp/SSOService.php`
+- single log out service url: `https://sso.local.dev.bitgrid.net/simplesaml/saml2/idp/SingleLogoutService.php`
+- use certificate from docker/configs/var-simplesamlphp/cert/example.org.crt
+  
+```
+-----BEGIN CERTIFICATE-----
+MIICrDCCAhWgAwIBAgIUNtfnC2jE/rLdxHCs2th3WaYLryAwDQYJKoZIhvcNAQEL
+BQAwaDELMAkGA1UEBhMCREUxCzAJBgNVBAgMAkJZMRIwEAYDVQQHDAlXdWVyemJ1
+cmcxFDASBgNVBAoMC0V4YW1wbGUgb3JnMSIwIAYDVQQDDBlzc28ubG9jYWwuZGV2
+LmJpdGdyaWQubmV0MB4XDTE5MDcwMzE0MjkzOFoXDTI5MDcwMjE0MjkzOFowaDEL
+MAkGA1UEBhMCREUxCzAJBgNVBAgMAkJZMRIwEAYDVQQHDAlXdWVyemJ1cmcxFDAS
+BgNVBAoMC0V4YW1wbGUgb3JnMSIwIAYDVQQDDBlzc28ubG9jYWwuZGV2LmJpdGdy
+aWQubmV0MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDHPZwU+dAc76yB6bOq
+0AkP1y9g7aAi1vRtJ9GD4AEAsA3zjW1P60BYs92mvZwNWK6NxlJYw51xPak9QMk5
+qRHaTdBkmq0a2mWYqh1AZNNgCII6/VnLcbEIgyoXB0CCfY+2vaavAmFsRwOMdeR9
+HmtQQPlbTA4m5Y8jWGVs1qPtDQIDAQABo1MwUTAdBgNVHQ4EFgQUeZSoGKeN5uu5
+K+n98o3wcitFYJ0wHwYDVR0jBBgwFoAUeZSoGKeN5uu5K+n98o3wcitFYJ0wDwYD
+VR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOBgQA25X/Ke+5dw7up8gcF2BNQ
+ggBcJs+SVKBmPwRcPQ8plgX4D/K8JJNT13HNlxTGDmb9elXEkzSjdJ+6Oa8n3IMe
+vUUejXDXUBvlmmm+ImJVwwCn27cSfIYb/RoZPeKtned4SCzpbEO9H/75z3XSqAZS
+Z1tiHzYOVtEs4UNGOtz1Jg==
+-----END CERTIFICATE-----
+```
+
+- cn `urn:oid:2.5.4.3`
+- email `urn:oid:0.9.2342.19200300.100.1.3`
+
+## Environment based SSO
+
+A simple approach to test environment based SSO with the user_saml app is to use apache basic auth with the following configuration:
+
+```xml
+<Location /login>
+	AuthType Basic
+	AuthName "SAML"
+	AuthUserFile /var/www/html/.htpasswd
+	Require valid-user
+</Location>
+<Location /index.php/login>
+	AuthType Basic
+	AuthName "SAML"
+	AuthUserFile /var/www/html/.htpasswd
+	Require valid-user
+</Location>
+<Location /index.php/apps/user_saml/saml/login>
+	AuthType Basic
+	AuthName "SAML"
+	AuthUserFile /var/www/html/.htpasswd
+	Require valid-user
+</Location>
+<Location /apps/user_saml/saml/login>
+	AuthType Basic
+	AuthName "SAML"
+	AuthUserFile /var/www/html/.htpasswd
+	Require valid-user
+</Location>
+```
