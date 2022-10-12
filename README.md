@@ -1,339 +1,97 @@
 # nextcloud-dev-docker-compose
 
-Nextcloud development environment using docker-compose
+Hi beginner developer ! 👋
 
-⚠ **DO NOT USE THIS IN PRODUCTION** Various settings in this setup are considered insecure and default passwords and secrets are used all over the place
+This project allows you to get started a nextcloud server and develop your first app !
 
-Features
+This project is very **modular** where you can add [features](#different-feature-you-can-use).
+So, you can use this project for your development environment only.
 
-- ☁ Nextcloud
-- 🔒 Nginx proxy with SSL termination
-- 💾 MySQL
-- 💡 Redis
-- 👥 LDAP with example user data
-- ✉ Mailhog
-- 🚀 Blackfire
-- 📄 Collabora
+## Getting started 🎮
 
-## Getting started
+First, get the setup running:
 
-To get the setup running:
-
-```
+```bash
 git clone https://github.com/juliushaertl/nextcloud-docker-dev
 cd nextcloud-docker-dev
 ./bootstrap.sh
 sudo sh -c "echo '127.0.0.1 nextcloud.local' >> /etc/hosts"
-docker-compose up nextcloud proxy
+docker compose up nextcloud proxy
 ```
 
-## Manual setup
+Ok, let's go to understand these commands line !
 
-### Nextcloud Code
+First, you download the project with the git command, then you move to the `nextcloud-docker-dev` folder.
 
-The Nextcloud code base needs to be available including the `3rdparty` submodule. To clone it from github run:
+The `bootstrap.sh` script check if all requirements are present and prepares your workspace.
+You have the `./workspace` folder where there is the `server` folder, the Nextcloud's core and [other Nextcloud versions](docs/running-stable-versions.md) if you want (the stable21, stable22, stable23, and so on).
 
-```
-git clone https://github.com/nextcloud/server.git
-cd server
-git submodule update --init
-pwd
-```
-The last command prints the path to the Nextcloud server directory.
-Use it for setting the `REPO_PATH_SERVER` in the next step.
+So, you if you want to contribute to the Nextcloud's core, you can work in this folder directly !
 
-### Environment variables
+Then, you add `nextcloud.local` to your hosts file.
 
-A `.env` file should be created in the repository root, to keep configuration default on the dev setup:
+Finally, the `docker compose up nextcloud proxy` command line. This command line runs the nextcloud, proxy, redis and mailhog containers.
 
-```
-cp example.env .env
-```
+## First connection
 
-Replace `REPO_PATH_SERVER` with the path from above.
+After running the `docker compose up nextcloud proxy` command, you have to wait a few minutes before trying to connect to your development instance.
 
-### Setting the PHP version to be used
+In fact, you will see that the `nextcloud` and `proxy` containers initialize your Nextcloud, create  user accounts, and so on. Step by step.
 
-The Nextcloud instance is setup to run with PHP 7.2 by default.
-If you wish to use a different version of PHP, set the `PHP_VERSION` `.env` variable.
+Then, once these steps are completed, you can connect to your development instance. You must enter `http://nextcloud.local` only in your search bar !
 
-The variable supports the following values:
+In fact, with the `proxy` container you don't need to specify the port number and you can't use `http://localhost` or `http://127.0.0.1`. Just, you have to use this address : `http://nextcloud.local`.
 
-1. PHP 7.1: `71`
-1. PHP 7.2: `72`
-1. PHP 7.3: `73`
-1. PHP 7.4: `74`
-1. PHP 8.0: `80`
 
-### Starting the containers
+### Which user accounts can I use ?
 
-- Start full setup: `docker-compose up`
-- Minimum: `docker-compose up proxy nextcloud` (nextcloud mysql redis mailhog)
+Here is a list of user accounts you can use :
 
-### Running stable versions
+| uid | password |
+|:---:|:---:|
+| admin | admin |
+| test1 | test1 |
+| test2 | test2 |
+| test3 | test3 |
+| test4 | test4 |
 
-The docker-compose file provides individual containers for stable Nextcloud releases. In order to run those you will need a checkout of the stable version server branch to your workspace directory. Using [git worktree](https://blog.juliushaertl.de/index.php/2018/01/24/how-to-checkout-multiple-git-branches-at-the-same-time/) makes it easy to have different branches checked out in parallel in separate directories.
 
-Note that for performance reasons the server repository might have been cloned with --depth=1 by default. To get the full history it is highly recommended to run:
+## Where can I add my app for development ?
 
-	cd workspace/server
-	git fetch --unshallow
+Once you have ran the Nextcloud's server with `docker compose`. You can clone your app in this folder : `./workspace/server/apps-extra/`.
 
- This may take some time depending on your internet connection speed.
+Of course, you should adapt to the nextcloud release you are using (server, stable23, stable24, and so on.).
 
-```
-cd workspace/server
-git worktree add ../stable23 stable23
-cd ../stable23
-git submodule update --init
-```
+If you have not yet generated an app, you can do so from this web page : [https://apps.nextcloud.com/developer/apps/generate](https://apps.nextcloud.com/developer/apps/generate).
 
-After adding the worktree you can start the stable container using `docker-compose up -d stable23`. You can then add stable23.local to your `/etc/hosts` file to access it.
 
-Git worktrees can also be used to have a checkout of an apps stable brach within the server stable directory.
+## Going further
 
-```
-cd workspace/server/apps-extra/text
-git worktree add ../../../stable23/apps-extra/text stable23
-```
+If you want to go further, you can add new features or customize your development environment by following this documentation : [Configure my environment](docs/configure-vars-env.md).
 
-### Running into errors
+If you use **XDEBUG** to debug your PHP code. Please, read the [Set Up Xdebug](docs/setup-xdebug.md) documentation.
 
-If your setup isn't working and you can not figure out the reason why, running
-`docker-compose down -v` will remove the relevant containers and volumes,
-allowing you to run `docker-compose up` again from a clean slate.
+I you want to set up the Nextcloud's core, please, read the [Manual setup](docs/manual-setup.md) documentation.
 
-## 🔒 Reverse Proxy
+If you encounter any problems, please, look at this documentation : [Troubleshooting](docs/troubleshooting.md).
 
-Used for SSL termination. To setup SSL support provide a proper DOMAIN_SUFFIX environment variable and put the certificates to ./data/ssl/ named by the domain name.
+### Different feature you can use
 
-You might need to add the domains to your `/etc/hosts` file:
+These are features where you can use :
 
-```
-127.0.0.1 nextcloud.local
-127.0.0.1 collabora.local
-```
-
-This is assuming you have set `DOMAIN_SUFFIX=.local`
-
-You can generate it through:
-
-```
-awk -v D=.local '/- [A-z0-9]+\${DOMAIN_SUFFIX}/ {sub("\\$\{DOMAIN_SUFFIX\}", D " 127.0.0.1", $2); print $2}' docker-compose.yml
-```
-
-You can generate selfsigned certificates using:
-
-```
-cd data/ssl
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout  nextcloud.local.key -out nextcloud.local.crt
-```
-
-### dnsmasq to resolve wildcard domains
-
-Instead of adding the individual container domains to `/etc/hosts` a local dns server like dnsmasq can be used to resolve any domain ending with the configured DOMAIN_SUFFIX in `.env` to localhost.
-
-For dnsmasq adding the following configuration would be sufficient for `DOMAIN_SUFFIX=.local`:
-```
-address=/.local/127.0.0.1
-```
-
-### Use valid certificates trusted by your system
-
-* Install mkcert https://github.com/FiloSottile/mkcert
-* Go to `data/ssl`
-* `mkcert nextcloud.local`
-
-* `mv nextcloud.local-key.pem nextcloud.local.key`
-* `mv nextcloud.local.pem nextcloud.local.crt`
-* `docker-compose restart proxy`
-
-## ✉ Mail
-
-Sending/receiving mails can be tested with [mailhog](https://github.com/mailhog/MailHog) which is available on ports 1025 (SMTP).
-
-To use the webui, add `127.0.0.1 mail.local` to your `/etc/hosts` and open [mail.local](http://mail.local).
-
-## 🚀 Blackfire
-
-Blackfire needs to use a hostname/ip that is resolvable from within the blackfire container. Their free version is [limited to local profiling](https://support.blackfire.io/troubleshooting/hack-edition-users-cannot-profile-non-local-http-applications) so we need to browse Nextcloud though its local docker IP or add the hostname to `/etc/hosts`.
-
-### Using with curl
-
-```
-alias blackfire='docker-compose exec -e BLACKFIRE_CLIENT_ID=$BLACKFIRE_CLIENT_ID -e BLACKFIRE_CLIENT_TOKEN=$BLACKFIRE_CLIENT_TOKEN blackfire blackfire'
-blackfire curl http://192.168.21.8/
-```
-
-## 👥 LDAP
-
-The LDAP sample data is based on https://github.com/rroemhild/docker-test-openldap and extended with randomly generated users/groups. For details see [data/ldap-generator/](https://github.com/juliushaertl/nextcloud-docker-dev/tree/master/data/ldap-generator). LDAP will be configured automatically if the ldap container is available during installation.
-
-Example users are: `leela fry bender zoidberg hermes professor`. The password is the same as the uid.
-
-Useful commands:
-
-```
-docker-compose exec ldap ldapsearch -H 'ldap://localhost' -D "cn=admin,dc=planetexpress,dc=com" -w admin -b "dc=planetexpress,dc=com" "(&(objectclass=inetOrgPerson)(description=*use*))"
-```
-
-## Collabora
-
-- Make sure to have the collabora hostname setup in your /etc/hosts file: `127.0.0.1 collabora.local`
-- Automatically enable for one of your containers (e.g. the main nextcloud one):
-	- Run `./scripts/enable-collabora nextcloud`
-- Manual setup
-	- Start the Collabora Online server in addition to your other containers `docker-compose up -d collabora`
-	- Make sure you have the richdocuments app cloned to your apps-extra directory and built the frontend code of the app with `npm ci && npm run build`
-	- Enable the app and configure `collabora.local` in the Collabora settings inside of Nextcloud
-
-
-## ONLYOFFICE
-
-- Make sure to have the collabora hostname setup in your /etc/hosts file: `127.0.0.1 onlyoffice.local`
-- Automatically enable for one of your containers (e.g. the main nextcloud one):
-	- Run `./scripts/enable-onlyoffice nextcloud`
-- Manual setup
-	- Start the ONLYOFFICE server in addition to your other containers `docker-compose up -d onlyoffice`
-	- Clone https://github.com/ONLYOFFICE/onlyoffice-nextcloud into your apps directory
-	- Enable the app and configure `onlyoffice.local` in the ONLYOFFICE settings inside of Nextcloud
-
-
-## Antivirus
-
-```bash
-docker-compose up -d proxy nextcloud av
-```
-
-The clanav antivirus will then be exposed as a deamon with host `clam` and
-port 3310.
-
-## SAML
-
-```
-docker-compose up -d proxy nextcloud saml
-```
-
-- uid mapping: `urn:oid:0.9.2342.19200300.100.1.1`
-- idp entity id: `https://sso.local.dev.bitgrid.net/simplesaml/saml2/idp/metadata.php`
-- single sign on service url: `https://sso.local.dev.bitgrid.net/simplesaml/saml2/idp/SSOService.php`
-- single log out service url: `https://sso.local.dev.bitgrid.net/simplesaml/saml2/idp/SingleLogoutService.php`
-- use certificate from docker/configs/var-simplesamlphp/cert/example.org.crt
-  ```
-  -----BEGIN CERTIFICATE-----
-  MIICrDCCAhWgAwIBAgIUNtfnC2jE/rLdxHCs2th3WaYLryAwDQYJKoZIhvcNAQEL
-  BQAwaDELMAkGA1UEBhMCREUxCzAJBgNVBAgMAkJZMRIwEAYDVQQHDAlXdWVyemJ1
-  cmcxFDASBgNVBAoMC0V4YW1wbGUgb3JnMSIwIAYDVQQDDBlzc28ubG9jYWwuZGV2
-  LmJpdGdyaWQubmV0MB4XDTE5MDcwMzE0MjkzOFoXDTI5MDcwMjE0MjkzOFowaDEL
-  MAkGA1UEBhMCREUxCzAJBgNVBAgMAkJZMRIwEAYDVQQHDAlXdWVyemJ1cmcxFDAS
-  BgNVBAoMC0V4YW1wbGUgb3JnMSIwIAYDVQQDDBlzc28ubG9jYWwuZGV2LmJpdGdy
-  aWQubmV0MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDHPZwU+dAc76yB6bOq
-  0AkP1y9g7aAi1vRtJ9GD4AEAsA3zjW1P60BYs92mvZwNWK6NxlJYw51xPak9QMk5
-  qRHaTdBkmq0a2mWYqh1AZNNgCII6/VnLcbEIgyoXB0CCfY+2vaavAmFsRwOMdeR9
-  HmtQQPlbTA4m5Y8jWGVs1qPtDQIDAQABo1MwUTAdBgNVHQ4EFgQUeZSoGKeN5uu5
-  K+n98o3wcitFYJ0wHwYDVR0jBBgwFoAUeZSoGKeN5uu5K+n98o3wcitFYJ0wDwYD
-  VR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOBgQA25X/Ke+5dw7up8gcF2BNQ
-  ggBcJs+SVKBmPwRcPQ8plgX4D/K8JJNT13HNlxTGDmb9elXEkzSjdJ+6Oa8n3IMe
-  vUUejXDXUBvlmmm+ImJVwwCn27cSfIYb/RoZPeKtned4SCzpbEO9H/75z3XSqAZS
-  Z1tiHzYOVtEs4UNGOtz1Jg==
-  -----END CERTIFICATE-----
-  ```
-- cn `urn:oid:2.5.4.3`
-- email `urn:oid:0.9.2342.19200300.100.1.3`
-
-### Environment based SSO
-
-A simple approach to test environment based SSO with the user_saml app is to use apache basic auth with the following configuration:
-
-```
-
-<Location /login>
-	AuthType Basic
-	AuthName "SAML"
-	AuthUserFile /var/www/html/.htpasswd
-	Require valid-user
-</Location>
-<Location /index.php/login>
-	AuthType Basic
-	AuthName "SAML"
-	AuthUserFile /var/www/html/.htpasswd
-	Require valid-user
-</Location>
-<Location /index.php/apps/user_saml/saml/login>
-	AuthType Basic
-	AuthName "SAML"
-	AuthUserFile /var/www/html/.htpasswd
-	Require valid-user
-</Location>
-<Location /apps/user_saml/saml/login>
-	AuthType Basic
-	AuthName "SAML"
-	AuthUserFile /var/www/html/.htpasswd
-	Require valid-user
-</Location>
-```
-
-## Fulltextsearch
-
-```
-docker-compose up -d elasticsearch elasticsearch-ui
-```
-
-- Address for configuring in Nextcloud: `http://elastic:elastic@elasticsearch:9200`
-- Adress to access elastic search from outside: `http://elastic:elastic@elasticsearch.local`
-- Address for accessing the ui: http://elasticsearch-ui.local/
-
-`sudo sysctl -w vm.max_map_count=262144`
-
-
-
-## Object storage
-
-Primary object storage can be enabled by setting the `PRIMARY=minio` environment variable either in your .env file or in docker-compose.yml for individual containers.
-
-```bash
-docker-compose up proxy nextcloud minio
-```
-
-## Development
-
-### OCC
-
-Run inside of the Nextcloud container:
-```
-set XDEBUG_CONFIG=idekey=PHPSTORM
-sudo -E -u www-data php -dxdebug.remote_host=192.168.21.1 occ
-```
-
-### Useful commands
-
-- Restart apache to reload php configuration without a full container restart: `docker-compose kill -s USR1 nextcloud`
-- Access to mysql console: `mysql -h $(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nextcloud_database-mysql_1) -P 3306 -u nextcloud -pnextcloud`
-- Run an LDAP search: `ldapsearch -x -H ldap://$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nextcloud_ldap_1) -D "cn=admin,dc=planetexpress,dc=com" -w admin -b "dc=planetexpress,dc=com" -s subtree <filter> <attrs>`
-
-## Keycloak
-
-- Keycloak is using ldap as a user backend (make sure the ldap container is also running)
-- `occ user_oidc:provider Keycloak -c nextcloud -s 09e3c268-d8bc-42f1-b7c6-74d307ef5fde -d https://keycloak.local.dev.bitgrid.net/auth/realms/Example/.well-known/openid-configuration`
-- https://keycloak.local.dev.bitgrid.net/auth/realms/Example/.well-known/openid-configuration
-- nextcloud
-- 09e3c268-d8bc-42f1-b7c6-74d307ef5fde
-
-## Global scale
-
-```
-docker-compose up -d proxy portal gs1 gs2 lookup database-mysql
-```
-
-Users are named the same as the instance name, e.g. gs1, gs2
-
-## Imaginary
-
-Enable the imaginary server for generating previews
-
-```bash
-docker-compose up proxy nextcloud previews_hpb
-./scripts/enable-preview-imaginary.sh
-```
-
-
+- ☁ Nextcloud
+- 🔒 Nginx proxy with SSL termination
+- 💾 [MySQL](docs/containers/mysql.md)
+- 💡 Redis
+- 👥 [LDAP with example user data](docs/containers/ldap.md)
+- ✉ [Mailhog](docs/containers/mail.md)
+- 🚀 [Blackfire](docs/containers/blackfire.md)
+- 📄 [Collabora](docs/containers/collabora.md)
+- 📄 [Only Office](docs/containers/onlyoffice.md)
+- 👥 [SAML](docs/containers/saml.md)
+- 🔍 [Full Text Search](docs/containers/fulltextsearch.md)
+- 🪣 [Object Storage](docs/containers/objectstorage.md)
+- 💉 [Antivirus](docs/containers/antivirus.md)
+- 🔑 [Keycloak](docs/containers/keycloak.md)
+- [Global Scale](docs/containers/globalscale.md)
+- [Imaginary](docs/containers/imaginary.md)
