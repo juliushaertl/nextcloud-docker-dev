@@ -20,13 +20,13 @@ This is assuming you have set `DOMAIN_SUFFIX=.local`
 
 You can generate it through:
 
-```
+```bash
 awk -v D=.local '/- [A-z0-9]+\${DOMAIN_SUFFIX}/ {sub("\\$\{DOMAIN_SUFFIX\}", D " 127.0.0.1", $2); print $2}' docker-compose.yml
 ```
 
 You can generate selfsigned certificates using:
 
-```
+```bash
 cd data/ssl
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout  nextcloud.local.key -out nextcloud.local.crt
 ```
@@ -36,6 +36,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout  nextcloud.local.key
 Instead of adding the individual container domains to `/etc/hosts` a local dns server like dnsmasq can be used to resolve any domain ending with the configured DOMAIN_SUFFIX in `.env` to localhost.
 
 For dnsmasq adding the following configuration would be sufficient for `DOMAIN_SUFFIX=.local`:
+
 ```
 address=/.local/127.0.0.1
 ```
