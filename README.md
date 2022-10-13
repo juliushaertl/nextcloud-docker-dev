@@ -38,7 +38,7 @@ After running the `docker compose up nextcloud proxy` command, you have to wait 
 
 In fact, you will see that the `nextcloud` and `proxy` containers initialize your Nextcloud, create  user accounts, and so on. Step by step.
 
-Then, once these steps are completed, you can connect to your development instance. You must enter `http://nextcloud.local` only in your search bar !
+Then, once these steps are completed, you can connect to your development instance. You must enter `http://nextcloud.local` in your address bar!
 
 In fact, with the `proxy` container you don't need to specify the port number and you can't use `http://localhost` or `http://127.0.0.1`. Just, you have to use this address : `http://nextcloud.local`.
 
