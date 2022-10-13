@@ -50,11 +50,17 @@ Here is a list of user accounts you can use :
 | uid | password |
 |:---:|:---:|
 | admin | admin |
-| test1 | test1 |
-| test2 | test2 |
-| test3 | test3 |
-| test4 | test4 |
-
+| user1 | user1 |
+| user2 | user2 |
+| user3 | user3 |
+| user4 | user4 |
+| user5 | user5 |
+| user6 | user6 |
+| nextcloud | nextcloud |
+| alice | alice |
+| bob | bob |
+| jane | jane |
+| john | john |
 
 ## Where can I add my app for development ?
 
@@ -65,13 +71,13 @@ Of course, you should adapt to the nextcloud release you are using (server, stab
 If you have not yet generated an app, you can do so from this web page : [https://apps.nextcloud.com/developer/apps/generate](https://apps.nextcloud.com/developer/apps/generate).
 
 
-## Going further
+## Going further
 
 If you want to go further, you can add new features or customize your development environment by following this documentation : [Configure my environment](docs/configure-vars-env.md).
 
 If you use **XDEBUG** to debug your PHP code. Please, read the [Set Up Xdebug](docs/setup-xdebug.md) documentation.
 
-I you want to set up the Nextcloud's core, please, read the [Manual setup](docs/manual-setup.md) documentation.
+If you want to set up the Nextcloud's core, please, read the [Manual setup](docs/manual-setup.md) documentation.
 
 If you encounter any problems, please, look at this documentation : [Troubleshooting](docs/troubleshooting.md).
 
