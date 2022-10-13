@@ -79,6 +79,8 @@ If you use **XDEBUG** to debug your PHP code. Please, read the [Set Up Xdebug](d
 
 If you want to set up the Nextcloud's core, please, read the [Manual setup](docs/manual-setup.md) documentation.
 
+If you aren't comfortable with Docker or other tools from the various containers (ldap, mysql, and so on.). You can read the [Useful commands](docs/useful-commands.md) file with some tips.
+
 If you encounter any problems, please, look at this documentation : [Troubleshooting](docs/troubleshooting.md).
 
 ### Different feature you can use
