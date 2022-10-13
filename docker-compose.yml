@@ -58,7 +58,7 @@ services:
       - ./docker/configs/haproxy.conf:/usr/local/etc/haproxy/haproxy.cfg:ro
 
   nextcloud:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-74}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
       SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
@@ -88,7 +88,7 @@ services:
       - host.docker.internal:host-gateway
 
   nextcloud2:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
       SQL: 'mysql'
       VIRTUAL_HOST: "nextcloud2${DOMAIN_SUFFIX}"
@@ -107,7 +107,7 @@ services:
       - host.docker.internal:host-gateway
 
   nextcloud3:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
       SQL: ${SQL:-mysql}
       VIRTUAL_HOST: "nextcloud3${DOMAIN_SUFFIX}"
@@ -125,7 +125,7 @@ services:
       - host.docker.internal:host-gateway
 
   stable16:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-72}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
       SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
@@ -153,7 +153,7 @@ services:
       - host.docker.internal:host-gateway
 
   stable17:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-72}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
       SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
@@ -181,7 +181,7 @@ services:
       - host.docker.internal:host-gateway
 
   stable18:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
       SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
@@ -209,7 +209,7 @@ services:
       - host.docker.internal:host-gateway
 
   stable19:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-72}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
       SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
@@ -237,7 +237,7 @@ services:
       - host.docker.internal:host-gateway
 
   stable20:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-72}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
       SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
@@ -265,7 +265,7 @@ services:
       - host.docker.internal:host-gateway
 
   stable21:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
       SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
@@ -293,7 +293,7 @@ services:
       - host.docker.internal:host-gateway
 
   stable22:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
       SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
@@ -321,7 +321,7 @@ services:
       - host.docker.internal:host-gateway
 
   stable23:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-73}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
       SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
@@ -349,7 +349,7 @@ services:
       - host.docker.internal:host-gateway
 
   stable24:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-74}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
       SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
@@ -377,7 +377,7 @@ services:
       - host.docker.internal:host-gateway
 
   stable25:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-74}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
       SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
@@ -619,7 +619,7 @@ services:
       - clam:/var/lib/clamav
 
   portal:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-74}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
       VIRTUAL_HOST: portal${DOMAIN_SUFFIX}
       SQL: 'mysql'
@@ -641,7 +641,7 @@ services:
       - host.docker.internal:host-gateway
 
   gs1:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-74}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
       VIRTUAL_HOST: gs1${DOMAIN_SUFFIX}
       SQL: 'mysql'
@@ -664,7 +664,7 @@ services:
       - host.docker.internal:host-gateway
 
   gs2:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-74}:latest
+    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
       VIRTUAL_HOST: gs2${DOMAIN_SUFFIX}
       SQL: 'mysql'
