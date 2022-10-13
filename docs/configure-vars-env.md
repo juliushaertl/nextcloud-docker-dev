@@ -8,7 +8,18 @@ A `.env` file should be created in the repository root, to keep configuration de
 cp example.env .env
 ```
 
-Replace `REPO_PATH_SERVER` with the path from above.
+Replace `REPO_PATH_SERVER` with your path using the `pwd` command from the project.
+
+```bash
+foo@bar:~/Documents/codes/nextcloud-docker-dev$ pwd
+/home/foo/Documents/codes/nextcloud-docker-dev
+```
+
+And the new value is :
+
+```bash
+REPO_PATH_SERVER=/home/foo/Documents/codes/nextcloud-docker-dev/workspace/server
+```
 
 ## Setting the PHP version to be used
 
