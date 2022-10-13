@@ -86,7 +86,7 @@ If you encounter any problems, please, look at this documentation : [Troubleshoo
 These are features where you can use :
 
 - ☁ Nextcloud
-- 🔒 Nginx proxy with SSL termination
+- 🔒 [Nginx proxy with SSL termination](docs/containers/ssl.md)
 - 💾 [MySQL](docs/containers/mysql.md)
 - 💡 Redis
 - 👥 [LDAP with example user data](docs/containers/ldap.md)
