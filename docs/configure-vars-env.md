@@ -12,7 +12,8 @@ Replace `REPO_PATH_SERVER` with the path from above.
 
 ## Setting the PHP version to be used
 
-The Nextcloud instance is setup to run with PHP 7.2 by default.
+The Nextcloud instance is setup to run with PHP 8.1 by default.
+
 If you wish to use a different version of PHP, set the `PHP_VERSION` `.env` variable.
 
 The variable supports the following values:
