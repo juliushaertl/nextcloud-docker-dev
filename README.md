@@ -37,6 +37,68 @@ Then, you add `nextcloud.local` to your hosts file.
 
 Finally, the `docker compose up nextcloud proxy` command line. This command line runs the nextcloud, proxy, redis and mailhog containers.
 
+Once here, you can read the [First connection](#first-connection) section after seeing this result in your terminal :
+
+```bash
+nextcloud-nextcloud-1  |    The user "alice" was created successfully
+nextcloud-nextcloud-1  |    The user "user6" was created successfully
+nextcloud-nextcloud-1  |    The user "user1" was created successfully
+nextcloud-nextcloud-1  |    The user "nextcloud" was created successfully
+nextcloud-nextcloud-1  |    The user "user3" was created successfully
+nextcloud-nextcloud-1  |    The user "user5" was created successfully
+nextcloud-nextcloud-1  |    The user "jane" was created successfully
+nextcloud-nextcloud-1  |    The user "john" was created successfully
+nextcloud-nextcloud-1  |    The user "bob" was created successfully
+nextcloud-nextcloud-1  |    The user "user4" was created successfully
+nextcloud-nextcloud-1  |    The user "user2" was created successfully
+```
+
+This result means that all users are created and you can try to log in with the admin account or [other users](#which-user-accounts-can-i-use).
+
+If you want to stop the services, you should use `Ctrl+C`. But, the containers are always running or presents.
+
+Look at the status of your containers with `docker compose ps` :
+
+```bahs
+$ docker compose ps
+NAME                         COMMAND                  SERVICE             STATUS              PORTS
+nextcloud-database-mysql-1   "docker-entrypoint.s…"   database-mysql      running             0.0.0.0:8212->3306/tcp, :::8212->3306/tcp
+nextcloud-mail-1             "MailHog"                mail                running             1025/tcp, 8025/tcp
+nextcloud-nextcloud-1        "/usr/local/bin/boot…"   nextcloud           exited (0)          
+nextcloud-proxy-1            "/app/docker-entrypo…"   proxy               exited (2)          
+nextcloud-redis-1            "docker-entrypoint.s…"   redis               running             6379/tcp
+```
+
+To down your containers, use the `docker compose down -v` command :
+
+```bash
+foo@bar:~/Documents/codes/nextcloud-docker-dev$ docker compose down -v
+[+] Running 16/5
+ ⠿ Container nextcloud-nextcloud-1       Removed                                                                                                                                                                                                                             0.0s
+ ⠿ Container nextcloud-proxy-1           Removed                                                                                                                                                                                                                             0.0s
+ ⠿ Container nextcloud-mail-1            Removed                                                                                                                                                                                                                             0.6s
+#...
+foo@bar:~/Documents/codes/nextcloud-docker-dev$
+ ```
+
+
+Once you understand the mechanisms, you could run your containers in the background with the `-d` flag.
+
+```bash
+foo@bar:~/Documents/codes/nextcloud-docker-dev$  docker compose up -d proxy nextcloud
+[+] Running 12/1
+ ⠿ Network nextcloud_default               Created                                                                                                                                                                                                                           0.2s
+ ⠿ Volume "nextcloud_postgres"             Created                                                                                                                                                                                                                           0.0s
+ ⠿ Volume "nextcloud_mysql"                Created                                                                                                                                                                                                                           0.0s
+ ⠿ Volume "nextcloud_smb"                  Created                                                                                                                                                                                                                           0.0s
+ ⠿ Volume "nextcloud_clam"                 Created                                                                                                                                                                                                                           0.0s
+ ⠿ Volume "nextcloud_document_data"        Created                                                                                                                                                                                                                           0.0s
+#...
+foo@bar:~/Documents/codes/nextcloud-docker-dev$
+```
+
+The difference with the `-d` flag is you can use your currently prompt after run the `docker compose` command.
+
 ## First connection
 
 After running the `docker compose up nextcloud proxy` command, you have to wait a few minutes before trying to connect to your development instance.
