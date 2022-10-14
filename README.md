@@ -12,6 +12,29 @@ So, you can use this project for your development environment only.
 If you don't know how to install Docker, please, read this tutorial by Daphne Muller: https://cloud.nextcloud.com/s/iyNGp8ryWxc7Efa
 Be careful : Read the "README.md" of the tutorial written by Daphne Muller first.
 
+## Table of Contents
+
+1. [Getting started 🎮](#getting-started-🎮)
+2. [First connection](#first-connection)
+    * [Which user accounts can I use ?](#which-user-accounts-can-i-use)
+3. [Where can I add my app for development ?](#where-can-i-add-my-app-for-development)
+4. [Going further](#going-further)
+    * [Different feature you can use](#different-feature-you-can-use)
+        * [Nginx proxy with SSL termination](docs/containers/ssl.md)
+        * [MySql](docs/containers/mysql.md)
+        * [LDAP with example user data](docs/containers/ldap.md)
+        * [Mailhog](docs/containers/mail.md)
+        * [Blackfire](docs/containers/blackfire.md)
+        * [Collabora](docs/containers/collabora.md)
+        * [Only Office](docs/containers/onlyoffice.md)
+        * [SAML](docs/containers/saml.md)
+        * [Full Text Search](docs/containers/fulltextsearch.md)
+        * [Object Storage](docs/containers/objectstorage.md)
+        * [Antivirus](docs/containers/antivirus.md)
+        * [Keycloak](docs/containers/keycloak.md)
+        * [Global Scale](docs/containers/globalscale.md)
+        * [Imaginary](docs/containers/imaginary.md)
+
 ## Getting started 🎮
 
 First, get the setup running:
