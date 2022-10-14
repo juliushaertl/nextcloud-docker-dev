@@ -7,6 +7,8 @@ This project allows you to get started a nextcloud server and develop your first
 This project is very **modular** where you can add [features](#different-feature-you-can-use).
 So, you can use this project for your development environment only.
 
+⚠ **DO NOT USE THIS IN PRODUCTION** Various settings in this setup are considered insecure and default passwords and secrets are used all over the place.
+
 If you don't know how to install Docker, please, read this tutorial by Daphne Muller: https://cloud.nextcloud.com/s/iyNGp8ryWxc7Efa
 Be careful : Read the "README.md" of the tutorial written by Daphne Muller first.
 
