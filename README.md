@@ -2,7 +2,7 @@
 
 Hi beginner developer ! 👋
 
-This project allows you to get started a nextcloud server and develop your first app !
+This project allows you to start developing a Nextcloud app or contribute to Nextcloud server.
 
 This project is very **modular** where you can add [features](#different-feature-you-can-use).
 So, you can use this project for your development environment only.
