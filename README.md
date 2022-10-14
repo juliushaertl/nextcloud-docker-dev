@@ -76,7 +76,7 @@ If you have not yet generated an app, you can do so from this web page : [https:
 
 ## Going further
 
-If you want to go further, you can add new features or customize your development environment by following this documentation : [Configure my environment](docs/configure-vars-env.md).
+If you want to go further, you can add new features or customize your development environment by following this documentation : [Configure my environment](docs/manual-setup.md#copy-environment-variables).
 
 If you use **XDEBUG** to debug your PHP code. Please, read the [Set Up Xdebug](docs/setup-xdebug.md) documentation.
 
