@@ -121,7 +121,8 @@ cat <<EOF
 	--depth=1. To get the full history it is highly recommended to run:
 
 	$ cd workspace/server
-	$ git fetch --unshallow
+	$ git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+	$ git fetch origin
 
 	This may take some time depending on your internet connection speed.
 
