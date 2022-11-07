@@ -15,10 +15,9 @@ Features
 - 🚀 Blackfire
 - 📄 Collabora
 
-## Getting started
+## Simple master setup
 
-To get the setup running:
-
+The easiest way to get the setup running the ```master``` branch is by running the ```bootstrap.sh``` script:
 ```
 git clone https://github.com/juliushaertl/nextcloud-docker-dev
 cd nextcloud-docker-dev
@@ -26,23 +25,35 @@ cd nextcloud-docker-dev
 sudo sh -c "echo '127.0.0.1 nextcloud.local' >> /etc/hosts"
 docker-compose up nextcloud proxy
 ```
+Note that for performance reasons the server repository might have been cloned with --depth=1 by default. To get the full history it is highly recommended to run:
 
-## Manual setup
+	cd workspace/server
+	git fetch --unshallow
 
-### Nextcloud Code
+This may take some time depending on your internet connection speed.
 
-The Nextcloud code base needs to be available including the `3rdparty` submodule. To clone it from github run:
+## Complex setup
+
+In order to achieve a more complex dev environment with different branches of the server, follow the manual steps:
+
+##### 1. Clone the repository
 
 ```
 git clone https://github.com/nextcloud/server.git
+```
+
+##### 2. The Nextcloud code base needs to be available including the `3rdparty` submodule:
+
+```
 cd server
 git submodule update --init
 pwd
 ```
+
 The last command prints the path to the Nextcloud server directory.
 Use it for setting the `REPO_PATH_SERVER` in the next step.
 
-### Environment variables
+##### 3. Environment variables
 
 A `.env` file should be created in the repository root, to keep configuration default on the dev setup:
 
@@ -52,43 +63,22 @@ cp example.env .env
 
 Replace `REPO_PATH_SERVER` with the path from above.
 
-### Setting the PHP version to be used
-
-The Nextcloud instance is setup to run with PHP 7.2 by default.
-If you wish to use a different version of PHP, set the `PHP_VERSION` `.env` variable.
-
-The variable supports the following values:
-
-1. PHP 7.1: `71`
-1. PHP 7.2: `72`
-1. PHP 7.3: `73`
-1. PHP 7.4: `74`
-1. PHP 8.0: `80`
-
-### Starting the containers
-
-- Start full setup: `docker-compose up`
-- Minimum: `docker-compose up proxy nextcloud` (nextcloud mysql redis mailhog)
-
-### Running stable versions
+##### 4. Running different stable versions
 
 The docker-compose file provides individual containers for stable Nextcloud releases. In order to run those you will need a checkout of the stable version server branch to your workspace directory. Using [git worktree](https://blog.juliushaertl.de/index.php/2018/01/24/how-to-checkout-multiple-git-branches-at-the-same-time/) makes it easy to have different branches checked out in parallel in separate directories.
-
-Note that for performance reasons the server repository might have been cloned with --depth=1 by default. To get the full history it is highly recommended to run:
-
-	cd workspace/server
-	git fetch --unshallow
-
- This may take some time depending on your internet connection speed.
 
 ```
 cd workspace/server
 git worktree add ../stable23 stable23
+```
+As in the in the `server` folder, the `3rdparty` submodule is needed:
+```
 cd ../stable23
 git submodule update --init
 ```
 
-After adding the worktree you can start the stable container using `docker-compose up -d stable23`. You can then add stable23.local to your `/etc/hosts` file to access it.
+The same can be done for stable24, stable25... and so on.
+
 
 Git worktrees can also be used to have a checkout of an apps stable brach within the server stable directory.
 
@@ -97,11 +87,49 @@ cd workspace/server/apps-extra/text
 git worktree add ../../../stable23/apps-extra/text stable23
 ```
 
-### Running into errors
+##### 5. Editing `/etc/hosts`
 
-If your setup isn't working and you can not figure out the reason why, running
+You can then add stable23.local, stable24.local and so on to your `/etc/hosts` file to access it.
+```
+sudo sh -c "echo '127.0.0.1 nextcloud.local' >> /etc/hosts"
+```
+
+##### 6. Setting the PHP version to be used
+
+The Nextcloud instance is setup to run with PHP 7.2 by default.
+If you wish to use a different version of PHP, set the `PHP_VERSION` `.env` variable.
+
+The variable supports the following values:
+
+- PHP 7.1: `71`
+- PHP 7.2: `72`
+- PHP 7.3: `73`
+- PHP 7.4: `74`
+- PHP 8.0: `80`
+
+##### 7. Starting the containers
+
+- Minimum to run `master`: `docker-compose up proxy nextcloud` (nextcloud mysql redis mailhog)
+- Start stable branches: `docker-compose up stable23 proxy`
+- Start full setup: `docker-compose up`
+
+##### 8. Switching between stable versions and master
+
+Remove all relevant containers and volumes:
+`docker-compose down -v`
+
+Start master or the branch you want to run:
+`docker-compose up stable23 proxy`
+
+## Running into errors
+
+- If your setup isn't working and you can not figure out the reason why, running
 `docker-compose down -v` will remove the relevant containers and volumes,
 allowing you to run `docker-compose up` again from a clean slate.
+
+- Sometimes it might help: `docker pull ghcr.io/juliushaertl/nextcloud-dev-php74:latest`
+
+- In extreme cases, clean everything: `docker system prune --all`
 
 ## 🔒 Reverse Proxy
 
