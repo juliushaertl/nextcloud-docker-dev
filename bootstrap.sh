@@ -19,7 +19,7 @@ indent_cli() {
 function install_app() {
 	(
 		echo "🌏 Fetching $1"
-		(git clone "$SERVER_GIT_WITH_ORGANIZATION/$1".git $PWD/my-apps/"$1" 2>&1 | indent_cli &&
+		(git clone "$SERVER_GIT_WITH_ORGANIZATION/$1".git "$PWD/my-apps/$1" 2>&1 | indent_cli &&
 			echo "✅ $1 installed") ||
 			echo "❌ Failed to install $1"
 	) | indent
@@ -33,7 +33,7 @@ function install_apps() {
 		fi
 		echo "⏩ Clonning of applications in progress"
 		for app in "${APPS[@]}"; do
-			install_app $app
+			install_app "$app"
 		done
 	else
 		echo "⚠️ You don't have apps to clone."
@@ -100,7 +100,7 @@ PORTBASE=821
 EOT
 fi
 
-source ./.env
+source .env
 
 install_apps
 
