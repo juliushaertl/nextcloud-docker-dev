@@ -71,7 +71,7 @@ services:
       BLACKFIRE_CLIENT_TOKEN:
     volumes:
       - '${REPO_PATH_SERVER}:/var/www/html'
-      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./my-apps}:/var/www/html/apps-extra'
       - data:/var/www/html/data
       - config:/var/www/html/config
       - /var/www/html/apps-writable
@@ -94,7 +94,7 @@ services:
       VIRTUAL_HOST: "nextcloud2${DOMAIN_SUFFIX}"
     volumes:
       - '${REPO_PATH_SERVER}:/var/www/html'
-      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./my-apps}:/var/www/html/apps-extra'
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
     ports:
@@ -113,7 +113,7 @@ services:
       VIRTUAL_HOST: "nextcloud3${DOMAIN_SUFFIX}"
     volumes:
       - '${REPO_PATH_SERVER}:/var/www/html'
-      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./my-apps}:/var/www/html/apps-extra'
       - ./data/skeleton/:/skeleton
       - ./docker/configs/config.php:/var/www/html/config/writable.config.php:ro
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
@@ -136,7 +136,7 @@ services:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
       - '${STABLE_ROOT_PATH}/stable16:/var/www/html'
-      - '${STABLE_ROOT_PATH}/stable16/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./my-apps}:/var/www/html/apps-extra'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -164,7 +164,7 @@ services:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
       - '${STABLE_ROOT_PATH}/stable17:/var/www/html'
-      - '${STABLE_ROOT_PATH}/stable17/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./my-apps}:/var/www/html/apps-extra'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -192,7 +192,7 @@ services:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
       - '${STABLE_ROOT_PATH}/stable18:/var/www/html'
-      - '${STABLE_ROOT_PATH}/stable18/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./my-apps}:/var/www/html/apps-extra'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -220,7 +220,7 @@ services:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
       - '${STABLE_ROOT_PATH}/stable19:/var/www/html'
-      - '${STABLE_ROOT_PATH}/stable19/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./my-apps}:/var/www/html/apps-extra'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -248,7 +248,7 @@ services:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
       - '${STABLE_ROOT_PATH}/stable20:/var/www/html'
-      - '${STABLE_ROOT_PATH}/stable20/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./my-apps}:/var/www/html/apps-extra'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -276,7 +276,7 @@ services:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
       - '${STABLE_ROOT_PATH}/stable21:/var/www/html'
-      - '${STABLE_ROOT_PATH}/stable21/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./my-apps}:/var/www/html/apps-extra'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -304,7 +304,7 @@ services:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
       - '${STABLE_ROOT_PATH}/stable22:/var/www/html'
-      - '${STABLE_ROOT_PATH}/stable22/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./my-apps}:/var/www/html/apps-extra'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -332,7 +332,7 @@ services:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
       - '${STABLE_ROOT_PATH}/stable23:/var/www/html'
-      - '${STABLE_ROOT_PATH}/stable23/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./my-apps}:/var/www/html/apps-extra'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -360,7 +360,7 @@ services:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
       - '${STABLE_ROOT_PATH}/stable24:/var/www/html'
-      - '${STABLE_ROOT_PATH}/stable24/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./my-apps}:/var/www/html/apps-extra'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -388,7 +388,7 @@ services:
       NEXTCLOUD_TRUSTED_DOMAINS:
     volumes:
       - '${STABLE_ROOT_PATH}/stable25:/var/www/html'
-      - '${STABLE_ROOT_PATH}/stable25/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./my-apps}:/var/www/html/apps-extra'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -626,7 +626,7 @@ services:
       GS_MODE: master
     volumes:
       - '${STABLE_ROOT_PATH}/server:/var/www/html'
-      - '${STABLE_ROOT_PATH}/server/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./my-apps}:/var/www/html/apps-extra'
       - /var/www/html/data
       - /var/www/html/config
       - ./data/skeleton/:/skeleton
@@ -648,7 +648,7 @@ services:
       GS_MODE: slave
     volumes:
       - '${STABLE_ROOT_PATH}/server:/var/www/html'
-      - '${STABLE_ROOT_PATH}/server/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./my-apps}:/var/www/html/apps-extra'
       - /var/www/html/data
       - /var/www/html/config
       - ./data/skeleton/:/skeleton
@@ -671,7 +671,7 @@ services:
       GS_MODE: slave
     volumes:
       - '${STABLE_ROOT_PATH}/server:/var/www/html'
-      - '${STABLE_ROOT_PATH}/server/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./my-apps}:/var/www/html/apps-extra'
       - /var/www/html/data
       - /var/www/html/config
       - ./data/skeleton/:/skeleton

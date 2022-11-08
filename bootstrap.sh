@@ -19,10 +19,25 @@ indent_cli() {
 function install_app() {
 	(
 		echo "🌏 Fetching $1"
-		(git clone https://github.com/nextcloud/"$1".git workspace/server/apps-extra/"$1" 2>&1 | indent_cli &&
+		(git clone "$SERVER_GIT_WITH_ORGANIZATION/$1".git $PWD/my-apps/"$1" 2>&1 | indent_cli &&
 			echo "✅ $1 installed") ||
 			echo "❌ Failed to install $1"
 	) | indent
+}
+
+function install_apps() {
+	if (( ${#APPS[@]} != 0 )); then
+		if test -z "$SERVER_GIT_WITH_ORGANIZATION"; then
+			echo "❌ You didn't define the $SERVER_GIT_WITH_ORGANIZATION variable."
+			exit 10
+		fi
+		echo "⏩ Clonning of applications in progress"
+		for app in "${APPS[@]}"; do
+			install_app $app
+		done
+	else
+		echo "⚠️ You don't have apps to clone."
+	fi
 }
 
 function is_installed() {
@@ -67,11 +82,7 @@ mkdir -p workspace/
 #	) || echo "❌ Failed to setup worktree for stable19"
 #) | indent
 
-mkdir -p workspace/server/apps-extra
-install_app viewer
-install_app recommendations
-install_app files_pdfviewer
-install_app profiler
+mkdir -p ./my-apps
 
 echo
 echo
@@ -81,13 +92,17 @@ cat <<EOT >.env
 COMPOSE_PROJECT_NAME=master
 DOMAIN_SUFFIX=.local
 REPO_PATH_SERVER=$PWD/workspace/server
-ADDITIONAL_APPS_PATH=$PWD/workspace/server/apps-extra
+ADDITIONAL_APPS_PATH=$PWD/my-apps
 STABLE_ROOT_PATH=$PWD/workspace
 NEXTCLOUD_AUTOINSTALL_APPS="viewer profiler"
 DOCKER_SUBNET=192.168.21.0/24
 PORTBASE=821
 EOT
 fi
+
+source ./.env
+
+install_apps
 
 if [[ $(uname -m) == 'arm64' ]]; then
 	echo "Setting custom containers for arm platform"
