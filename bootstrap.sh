@@ -100,6 +100,7 @@ PORTBASE=821
 EOT
 fi
 
+# shellcheck source=.env
 source .env
 
 install_apps
