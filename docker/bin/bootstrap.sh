@@ -5,6 +5,14 @@ DOMAIN_SUFFIX=".$(echo "$VIRTUAL_HOST" | cut -d '.' -f2-)"
 
 indent() { sed 's/^/   /'; }
 
+# Prepare waiting page during auto installation
+cp /root/installing.html /var/www/html/installing.html
+
+output() {
+	echo "$@"
+	echo "$@" >> /var/www/html/installing.html
+}
+
 OCC() {
 	# shellcheck disable=SC2068
 	sudo -E -u www-data php "$WEBROOT/occ" $@ | indent
@@ -18,20 +26,21 @@ update_permission() {
 }
 
 wait_for_other_containers() {
-	echo "⌛ Waiting for other containers"
+	output "⌛ Waiting for other containers"
 	if [ "$SQL" = "mysql" ]
 	then
-		echo " - MySQL"
+		output " - MySQL"
 		while ! timeout 1 bash -c "(echo > /dev/tcp/database-mysql/3306) 2>/dev/null"; do sleep 2; done
 		[ $? -ne 0 ] && echo "⚠ Unable to connect to the MySQL server"
+		sleep 2
 	fi
 	if [ "$SQL" = "pgsql" ]
 	then
 		while ! timeout 1 bash -c "(echo > /dev/tcp/database-postgres/5432) 2>/dev/null"; do sleep 2; done
 		[ $? -ne 0 ] && echo "⚠ Unable to connect to the PostgreSQL server"
+		sleep 2
 	fi
-	sleep 2
-	[ $? -eq 0 ] && echo "✅ Database server ready"
+	[ $? -eq 0 ] && output "✅ Database server ready"
 }
 
 configure_gs() {
@@ -67,7 +76,7 @@ configure_gs() {
 configure_ldap() {
 	timeout 5 bash -c 'until echo > /dev/tcp/ldap/389; do sleep 0.5; done' 2>/dev/null
 	if [ $? -eq 0 ]; then
-		echo "LDAP server available"
+		output "LDAP server available"
 		export LDAP_USER_FILTER="(|(objectclass=inetOrgPerson))"
 
 		OCC app:enable user_ldap
@@ -104,13 +113,13 @@ configure_oidc() {
 PROTOCOL=""
 get_protocol() {
 	if [[ "$PROTOCOL" == "" ]]; then
-		echo " Detecting SSL..."
-		timeout 5 bash -c 'until echo > /dev/tcp/proxy/443; do sleep 0.5; done' 2>/dev/null
+		output " Detecting SSL..."
+		timeout 1 bash -c 'until echo > /dev/tcp/proxy/443; do sleep 0.5; done' 2>/dev/null
 		if [ $? -eq 0 ]; then
-			echo "🔑 SSL proxy available, configuring proxy settings"
+			output "🔑 SSL proxy available, configuring proxy settings"
 			PROTOCOL=https
 		else
-			echo "🗝 No SSL proxy, removing overwriteprotocol"
+			output "🗝 No SSL proxy, removing overwriteprotocol"
 			PROTOCOL=http
 		fi
     fi
@@ -120,12 +129,12 @@ configure_ssl_proxy() {
 	get_protocol
 	if [[ "$PROTOCOL" == "https" ]]; then
 		echo "🔑 SSL proxy available, configuring proxy settings"
-		OCC config:system:set overwriteprotocol --value https
-		OCC config:system:set overwrite.cli.url --value "https://$VIRTUAL_HOST"
+		OCC config:system:set overwriteprotocol --value https &
+		OCC config:system:set overwrite.cli.url --value "https://$VIRTUAL_HOST" &
 	else
 		echo "🗝 No SSL proxy, removing overwriteprotocol"
-		OCC config:system:delete overwriteprotocol
-		OCC config:system:set overwrite.cli.url --value "http://$VIRTUAL_HOST"
+		OCC config:system:delete overwriteprotocol &
+		OCC config:system:set overwrite.cli.url --value "http://$VIRTUAL_HOST" &
 	fi
 	update-ca-certificates
 }
@@ -164,12 +173,14 @@ install() {
 	cp /root/config.php "$WEBROOT"/config/config.php
 	chown -R www-data:www-data "$WEBROOT"/config/config.php
 
+	mkdir -p "$WEBROOT/apps-extra"
+
 	update_permission
 
 	USER="admin"
 	PASSWORD="admin"
 
-	echo "🔧 Starting auto installation"
+	output "🔧 Starting auto installation"
 	if [ "$SQL" = "oci" ]; then
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name=xe --database-host=$SQLHOST --database-user=system --database-pass=oracle
 	elif [ "$SQL" = "pgsql" ]; then
@@ -180,6 +191,9 @@ install() {
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL"
 	fi;
 
+	output "🔧 Server installed"
+
+	output "🔧 Provisioning apps"
 	OCC app:disable password_policy
 
 	for app in $NEXTCLOUD_AUTOINSTALL_APPS; do
@@ -189,10 +203,12 @@ install() {
 	configure_ldap
 	configure_oidc
 
+	output "🔧 Finetuning the configuration"
 	if [ "$WITH_REDIS" != "NO" ]; then
 		cp /root/redis.config.php "$WEBROOT"/config/
+	else
+		cp /root/apcu.config.php "$WEBROOT"/config/
 	fi
-	OCC user:setting admin settings email admin@example.net
 
 	# Setup domains
 	# localhost is at index 0 due to the installation
@@ -209,6 +225,8 @@ install() {
 	fi
 	configure_ssl_proxy
 
+	output "🔧 Preparing cron job"
+
 	# Setup initial configuration
 	OCC background:cron
 
@@ -218,9 +236,10 @@ install() {
 	# run custom shell script from nc root
 	# [ -e /var/www/html/nc-dev-autosetup.sh ] && bash /var/www/html/nc-dev-autosetup.sh
 
-	echo "🔧 Setting up users and LDAP in the background"
+	output "🔧 Setting up users and LDAP in the background"
+	OCC user:setting admin settings email admin@example.net &
 	INSTANCENAME=$(echo "$VIRTUAL_HOST" | cut -d '.' -f1)
-	configure_add_user "$INSTANCENAME" &
+	configure_add_user "${INSTANCENAME:-nextcloud}" &
 	configure_add_user user1 &
 	configure_add_user user2 &
 	configure_add_user user3 &
@@ -231,9 +250,8 @@ install() {
 	configure_add_user john &
 	configure_add_user alice &
 	configure_add_user bob &
-	configure_ldap &
 
-	echo "🚀 Finished setup using $SQL database…"
+	output "🚀 Finished setup using $SQL database…"
 }
 
 add_hosts() {
@@ -246,7 +264,7 @@ setup() {
 	STATUS=$(OCC status)
 	if [[ "$STATUS" = *"installed: true"* ]] || [[ ! -f $WEBROOT/config/config.php ]]
 	then
-		echo "🚀 Nextcloud already installed ... skipping setup"
+		output "🚀 Nextcloud already installed ... skipping setup"
 
 		# configuration that should be applied on each start
 		configure_ssl_proxy
@@ -259,9 +277,43 @@ setup() {
 	fi
 
 }
+check_source() {
+	FILE=/var/www/html/status.php
+	if [ -f "$FILE" ]; then
+		output "Server source is mounted, continuing"
+	else
+		output "Server source is not present, fetching ${SERVER_BRANCH:-master}"
+		git clone --depth 1 --branch "${SERVER_BRANCH:-master}" https://github.com/nextcloud/server.git /tmp/server
+		(cd /tmp/server && git submodule update --init)
+		output "Cloning additional apps"
+		git clone --depth 1 --branch "${SERVER_BRANCH:-master}" https://github.com/nextcloud/viewer.git /tmp/server/apps/viewer
 
-wait_for_other_containers
-setup
+		# shallow clone of submodules https://stackoverflow.com/questions/2144406/how-to-make-shallow-git-submodules
+		git config -f .gitmodules submodule.3rdparty.shallow true
+		(cd /tmp/server && git submodule update --init)
+		rsync -a /tmp/server/ /var/www/html
+	fi
+	output "Nextcloud server source is ready"
+}
+
+tee /etc/apache2/conf-enabled/install.conf << EOF
+<Directory "/var/www/html">
+AllowOverride None
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_URI} !/installing.html$
+RewriteRule .* /installing.html [L]
+</Directory>
+EOF
+
+pkill -USR1 apache2
+(
+	check_source
+	wait_for_other_containers
+	setup
+	rm /etc/apache2/conf-enabled/install.conf
+	pkill -USR1 apache2
+) &
 
 touch /var/log/cron/nextcloud.log "$WEBROOT"/data/nextcloud.log
 

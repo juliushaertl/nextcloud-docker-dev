@@ -52,14 +52,22 @@ RUN pecl install APCu; \
 
 # dev tools separate install so we quickly change without rebuilding all php extensions
 RUN apt update && apt-get install -y --no-install-recommends \
-    git curl vim sudo cron smbclient iproute2 lnav wget iputils-ping gnupg2 jq ripgrep \
+    git curl vim sudo cron smbclient iproute2 lnav wget iputils-ping gnupg2 jq ripgrep rsync \
         && rm -rf /var/lib/apt/lists/*
 
 # Install PHPUnit
-RUN cd /tmp && curl -L https://phar.phpunit.de/phpunit.phar > phpunit.phar && \
-    chmod +x phpunit.phar && \
-    mv /tmp/phpunit.phar /usr/local/bin/phpunit
+RUN wget -O /usr/local/bin/phpunit8 https://phar.phpunit.de/phpunit-8.phar && \
+    chmod +x /usr/local/bin/phpunit8 && \
+    wget -O /usr/local/bin/phpunit9 https://phar.phpunit.de/phpunit-9.phar && \
+    chmod +x /usr/local/bin/phpunit9
 
+# Install NVM (Fermium = v14, Gallium = v16)
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash \
+    && export NVM_DIR="/root/.nvm" \
+    && . "$NVM_DIR/nvm.sh" \
+    && nvm install lts/gallium \
+    && nvm install lts/fermium \
+    && npm install -g npm@7
 RUN wget https://gist.githubusercontent.com/nickvergessen/e21ee0a09ee3b3f7fd1b04c83dd3e114/raw/83142be1e50c23e8de1bd7aae88a95e5d6ae1ce2/nextcloud_log.json && lnav -i nextcloud_log.json && rm nextcloud_log.json
 
 RUN { \
@@ -89,11 +97,23 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 RUN a2enmod rewrite
 
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+VOLUME /var/www/html
+VOLUME /var/www/html/apps-writable
+VOLUME /var/www/html/config
+VOLUME /var/www/html/data
+
+ENV SQL sqlite
+ENV NEXTCLOUD_AUTOINSTALL YES
+ENV WITH_REDIS NO
+
 ENV WEBROOT /var/www/html
 WORKDIR /var/www/html
 
 ENTRYPOINT  ["/usr/local/bin/bootstrap.sh"]
 CMD ["apache2-foreground"]
 
-ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php configs/s3.php configs/config.php configs/redis.config.php /root/
+ADD data/installing.html /root/installing.html
+ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php configs/s3.php configs/config.php configs/redis.config.php configs/apcu.config.php /root/
 ADD bin/bootstrap.sh bin/occ /usr/local/bin/
