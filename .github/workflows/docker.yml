@@ -78,7 +78,7 @@ jobs:
           push: true
           context: docker/
           platforms: linux/amd64,linux/arm64
-          file: docker/Dockerfile.${{ matrix.container }}
+          file: ${{ steps.dockerfile.outputs.DOCKERFILE }}
           tags: |
             ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}
           cache-from: type=local,src=/tmp/.buildx-cache
