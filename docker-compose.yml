@@ -421,7 +421,7 @@ services:
       - postgres:/var/lib/postgresql
 
   redis:
-    image: redis:6
+    image: redis:7
 
   ldap:
     image: osixia/openldap
