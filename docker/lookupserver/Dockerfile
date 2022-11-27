@@ -5,7 +5,7 @@ ENV DBPASSWD=abrakadabra
 
 ADD https://github.com/nextcloud/lookup-server/archive/master.zip /root/lookup-server.zip
 
-COPY configs/lookupserver/entrypoint.sh /usr/sbin/
+COPY lookupserver/entrypoint.sh /usr/sbin/
 
 RUN echo 'mariadb-server mysql-server/root_password password $DBPASSWD' | debconf-set-selections && \
     echo 'mariadb-server mysql-server/root_password_again password $DBPASSWD' | debconf-set-selections && \
@@ -30,8 +30,8 @@ RUN cd /root/ && \
     rm lookup-server.zip && \
     rm -Rf lookup-server-master
 
-COPY configs/lookupserver/config.php /var/www/html/config
-COPY configs/lookupserver/lookup.conf /etc/apache2/conf-available/
+COPY lookupserver/config.php /var/www/html/config
+COPY lookupserver/lookup.conf /etc/apache2/conf-available/
 
 RUN a2enmod rewrite && \
     a2enconf lookup && \
