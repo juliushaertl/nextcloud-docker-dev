@@ -29,7 +29,8 @@ RUN debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
         pcntl \
         pdo_mysql \
         pdo_pgsql \
-        zip
+        zip \
+        sysvsem
 
 RUN pecl install APCu; \
     pecl install memcached; \
