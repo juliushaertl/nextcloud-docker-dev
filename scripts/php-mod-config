@@ -1,0 +1,57 @@
+#!/bin/bash
+
+if [ -z "$1" ]
+  then
+    echo "Usage $0 CONTAINER blackfire on|off"
+    echo "      $0 CONTAINER xdebug.mode off|debug|trace|profile"
+	exit 1
+fi
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+restart() {
+    (cd $SCRIPT_DIR/.. && docker compose exec $1 pkill -USR1 apache2)
+}
+
+docker_exec() {
+    (cd $SCRIPT_DIR/.. && docker compose exec $@)
+}
+
+docker_compose() {
+    (cd $SCRIPT_DIR/.. && docker compose $@)
+}
+
+if [[ "$2" == "blackfire" ]]
+then
+    if [[ "$3" == "on" ]]
+    then
+        echo 'Enabling blackfire'
+        docker_compose up -d blackfire
+        docker_exec $1 "mv /usr/local/etc/php/conf.d/zz-blackfire.ini.disabled /usr/local/etc/php/conf.d/zz-blackfire.ini"
+    else
+        echo 'Disabling blackfire'
+        docker_compose stop blackfire
+        docker_exec $1 "mv /usr/local/etc/php/conf.d/zz-blackfire.ini /usr/local/etc/php/conf.d/zz-blackfire.ini.disabled"
+    fi
+    restart $1
+    exit 0
+fi
+
+if [[ "$2" =~ "xdebug" ]]
+then
+    if [[ ! -z "$3" ]]
+    then
+        echo "Setting $2 to $3"
+        docker_exec $1 sed -i 's/^'"$2"'\s*=\s*.*/'"$2"'='"$3"'/g' /usr/local/etc/php/conf.d/xdebug.ini
+    else
+        echo "No value provided"
+        exit 1
+    fi
+    restart $1
+    docker_exec $1 cat /usr/local/etc/php/conf.d/xdebug.ini
+    exit 0
+fi
+
+echo 'Invalid option'
+exit 1
+
