@@ -22,6 +22,7 @@ jobs:
           - php74
           - php73
           - php72
+          - push
           - saml
           - nginx
           - elasticsearch
@@ -53,13 +54,19 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Available platforms
         run: echo ${{ steps.buildx.outputs.platforms }}
+      - name: Set dockerfile path
+        id: dockerfile
+        run: |
+          NAME="${{ matrix.container }}"
+          DOCKERFILE=$([[ -f "docker/$NAME/Dockerfile" ]] && echo "docker/$NAME/Dockerfile" || echo "docker/Dockerfile.$NAME")
+          echo "DOCKERFILE=$DOCKERFILE" >> $GITHUB_OUTPUT
       - name: Build container image
         uses: docker/build-push-action@v3
         with:
           push: false
           context: docker/
           platforms: linux/amd64,linux/arm64
-          file: docker/Dockerfile.${{ matrix.container }}
+          file: ${{ steps.dockerfile.outputs.DOCKERFILE }}
           tags: |
             ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}
           cache-from: type=local,src=/tmp/.buildx-cache
