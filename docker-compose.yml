@@ -586,16 +586,14 @@ services:
 
 
   push:
-    image: icewind1991/notify_push
-    ports:
-      - '8191:80'
+    image: ghcr.io/juliushaertl/nextcloud-dev-push:latest
     environment:
       RUST_LOG: debug
       VIRTUAL_HOST: push${DOMAIN_SUFFIX}
-      VIRTUAL_PORT: 8191
-      DATABASE_URL: mysql://nextcloud:nextcloud@master_database-mysql_1/nextcloud
+      VIRTUAL_PORT: 7867
+      DATABASE_URL: mysql://root:nextcloud@database-mysql/nextcloud
       REDIS_URL: redis://redis
-      NEXTCLOUD_URL: https://nextcloud.local.dev.bitgrid.net
+      NEXTCLOUD_URL: http://nextcloud
 
   keycloak:
     image: ${CONTAINER_KEYCLOAK:-quay.io/keycloak/keycloak:15.0.1}
