@@ -69,6 +69,7 @@ services:
       NEXTCLOUD_TRUSTED_DOMAINS:
       BLACKFIRE_CLIENT_ID:
       BLACKFIRE_CLIENT_TOKEN:
+      PRIMARY: ${PRIMARY}
     volumes:
       - '${REPO_PATH_SERVER}:/var/www/html'
       - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
@@ -143,8 +144,6 @@ services:
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
-    ports:
-      - "${PORTBASE:-800}0:80"
     depends_on:
       - ${DB_SERVICE:-database-mysql}
       - redis
@@ -274,6 +273,7 @@ services:
       VIRTUAL_HOST: stable21${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
+      PRIMARY: ${PRIMARY}
     volumes:
       - '${STABLE_ROOT_PATH}/stable21:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable21/apps-extra:/var/www/html/apps-extra'
@@ -311,8 +311,6 @@ services:
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
-    ports:
-      - "${PORTBASE:-800}0:80"
     depends_on:
       - ${DB_SERVICE:-database-mysql}
       - redis
@@ -358,6 +356,7 @@ services:
       VIRTUAL_HOST: stable24${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
+      PRIMARY: ${PRIMARY}
     volumes:
       - '${STABLE_ROOT_PATH}/stable24:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable24/apps-extra:/var/www/html/apps-extra'
@@ -367,8 +366,6 @@ services:
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
-    ports:
-      - "${PORTBASE:-800}0:80"
     depends_on:
       - ${DB_SERVICE:-database-mysql}
       - redis
@@ -395,8 +392,6 @@ services:
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
-    ports:
-      - "${PORTBASE:-800}0:80"
     depends_on:
       - ${DB_SERVICE:-database-mysql}
       - redis
