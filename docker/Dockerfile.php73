@@ -29,7 +29,8 @@ RUN debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
         pcntl \
         pdo_mysql \
         pdo_pgsql \
-        zip
+        zip \
+        sysvsem
 
 RUN pecl install APCu; \
     pecl install memcached; \
@@ -80,7 +81,7 @@ RUN wget -q -O - https://packages.blackfire.io/gpg.key | sudo apt-key add - \
     && echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list \
     && apt-get update  \
     && apt-get install -y --no-install-recommends blackfire-php blackfire \
-    && printf "blackfire.agent_socket=tcp://blackfire:8307\n" >> $PHP_INI_DIR/conf.d/zz-blackfire.ini \
+    && printf "blackfire.agent_socket=tcp://blackfire:8307\n" >> $PHP_INI_DIR/conf.d/zz-blackfire.ini.disabled \
     && rm -rf /var/lib/apt/lists/*
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
