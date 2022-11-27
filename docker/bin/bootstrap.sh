@@ -126,8 +126,8 @@ configure_ssl_proxy() {
 		echo "🗝 No SSL proxy, removing overwriteprotocol"
 		OCC config:system:delete overwriteprotocol
 		OCC config:system:set overwrite.cli.url --value "http://$VIRTUAL_HOST"
-
 	fi
+	update-ca-certificates
 }
 
 
