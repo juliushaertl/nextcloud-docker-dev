@@ -1,12 +1,12 @@
 SHELL := /bin/bash
 
-.PHONY: images docker-build pull
+.PHONY: images docker-build pull-all
 
 .ONESHELL:
 images: docker/*/Dockerfile docker/Dockerfile.*
 
 .ONESHELL:
-pull:
+pull-all:
 	for file in $$(find docker/ -maxdepth 1 -type f -iname 'Dockerfile.*'); do \
 		NAME=$$(echo $$file | sed 's/^.*\.//'); \
 		echo "=> Pulling image $$NAME"; docker pull "ghcr.io/juliushaertl/nextcloud-dev-$${NAME}"; \
@@ -15,6 +15,10 @@ pull:
 		NAME=$$(basename $$(dirname $$file)); \
 		echo "=> Pulling image $$NAME"; docker pull "ghcr.io/juliushaertl/nextcloud-dev-$${NAME}"; \
 	done
+
+pull-installed:
+	docker image ls | grep juliushaertl/nextcloud-dev | cut -f 1 -d " "
+	docker image ls | grep juliushaertl/nextcloud-dev | cut -f 1 -d " " | xargs -L 1 docker pull
 
 # Empty target to always build
 docker-build:
