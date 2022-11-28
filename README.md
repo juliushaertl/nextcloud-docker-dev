@@ -29,6 +29,8 @@ Note that for performance reasons the server repository might have been cloned w
 
 	cd workspace/server
 	git fetch --unshallow
+	git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+	git fetch origin
 
 This may take some time depending on your internet connection speed.
 
