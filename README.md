@@ -77,14 +77,20 @@ cd ../stable23
 git submodule update --init
 ```
 
-The same can be done for stable24, stable25... and so on.
-
+The same can be done for stable24, stable25... and so on. 
 
 Git worktrees can also be used to have a checkout of an apps stable brach within the server stable directory.
 
 ```
 cd workspace/server/apps-extra/text
 git worktree add ../../../stable23/apps-extra/text stable23
+```
+
+Since the viewer app is kind of required for Nextcloud server, you should also add that to the stable worktrees:
+
+```
+cd workspace/server/apps/viewer
+git worktree add ../../../stable25/apps/viewer stable25
 ```
 
 ##### 5. Editing `/etc/hosts`
