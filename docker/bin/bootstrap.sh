@@ -7,7 +7,7 @@ indent() { sed 's/^/   /'; }
 
 OCC() {
 	# shellcheck disable=SC2068
-	sudo -E -u www-data "$WEBROOT/occ" $@ | indent
+	sudo -E -u www-data php "$WEBROOT/occ" $@ | indent
 }
 
 update_permission() {
