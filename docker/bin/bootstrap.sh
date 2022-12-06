@@ -15,6 +15,7 @@ output() {
 }
 
 OCC() {
+	output "occ $@"
 	# shellcheck disable=SC2068
 	sudo -E -u www-data php "$WEBROOT/occ" $@ | indent
 }
