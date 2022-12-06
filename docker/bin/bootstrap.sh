@@ -2,6 +2,7 @@
 # shellcheck disable=SC2181
 
 DOMAIN_SUFFIX=".$(echo "$VIRTUAL_HOST" | cut -d '.' -f2-)"
+IS_STANDALONE=$([ -z $VIRTUAL_HOST ] && echo "true" )
 
 indent() { sed 's/^/   /'; }
 
@@ -74,6 +75,10 @@ configure_gs() {
 }
 
 configure_ldap() {
+	if [[ "$IS_STANDALONE" = "true" ]]; then
+		return 0
+	fi
+
 	timeout 5 bash -c 'until echo > /dev/tcp/ldap/389; do sleep 0.5; done' 2>/dev/null
 	if [ $? -eq 0 ]; then
 		output "LDAP server available"
@@ -105,6 +110,9 @@ configure_ldap() {
 }
 
 configure_oidc() {
+	if [[ "$IS_STANDALONE" = "true" ]]; then
+		return 0
+	fi
 	OCC app:enable user_oidc
 	get_protocol
 	OCC user_oidc:provider Keycloak -c nextcloud -s 09e3c268-d8bc-42f1-b7c6-74d307ef5fde -d "$PROTOCOL://keycloak.local.dev.bitgrid.net/auth/realms/Example/.well-known/openid-configuration"
@@ -112,6 +120,11 @@ configure_oidc() {
 
 PROTOCOL=""
 get_protocol() {
+	if [[ "$IS_STANDALONE" = "true" ]]; then
+		PROTOCOL=http
+		return 0
+	fi
+
 	if [[ "$PROTOCOL" == "" ]]; then
 		output " Detecting SSL..."
 		timeout 1 bash -c 'until echo > /dev/tcp/proxy/443; do sleep 0.5; done' 2>/dev/null
@@ -126,6 +139,10 @@ get_protocol() {
 }
 
 configure_ssl_proxy() {
+	if [[ "$IS_STANDALONE" = "true" ]]; then
+		return 0
+	fi
+
 	get_protocol
 	if [[ "$PROTOCOL" == "https" ]]; then
 		echo "🔑 SSL proxy available, configuring proxy settings"
