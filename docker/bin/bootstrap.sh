@@ -46,7 +46,11 @@ wait_for_other_containers() {
 }
 
 configure_gs() {
-	OCC config:system:set lookup_server --value ""
+	OCC config:system:set lookup_server --value=""
+
+	if [[ "$IS_STANDALONE" = "true" ]]; then
+		return 0
+	fi
 
 	get_protocol
 	LOOKUP_SERVER="${PROTOCOL}://lookup${DOMAIN_SUFFIX}/index.php"
