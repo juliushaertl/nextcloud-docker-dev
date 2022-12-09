@@ -2,7 +2,7 @@
 # shellcheck disable=SC2181
 
 DOMAIN_SUFFIX=".$(echo "$VIRTUAL_HOST" | cut -d '.' -f2-)"
-IS_STANDALONE=$([ -z $VIRTUAL_HOST ] && echo "true" )
+IS_STANDALONE=$([ -z "$VIRTUAL_HOST" ] && echo "true" )
 
 indent() { sed 's/^/   /'; }
 
@@ -15,6 +15,7 @@ output() {
 }
 
 OCC() {
+	# shellcheck disable=SC2068
 	output "occ $@"
 	# shellcheck disable=SC2068
 	sudo -E -u www-data php "$WEBROOT/occ" $@ | indent
