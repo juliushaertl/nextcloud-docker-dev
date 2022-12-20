@@ -467,6 +467,8 @@ services:
 
   mail:
     image: ghcr.io/juliushaertl/nextcloud-dev-mailhog:latest
+    ports:
+      - 8025:8025
     environment:
       VIRTUAL_HOST: "mail${DOMAIN_SUFFIX}"
       VIRTUAL_PORT: 8025
