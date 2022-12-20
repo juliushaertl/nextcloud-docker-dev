@@ -541,7 +541,7 @@ services:
       VIRTUAL_PORT: 9001
       MINIO_ROOT_USER: nextcloud
       MINIO_ROOT_PASSWORD: nextcloud
-      MINIO_BROWSER_REDIRECT_URL: http://minio{DOMAIN_SUFFIX}
+      MINIO_BROWSER_REDIRECT_URL: http://minio${DOMAIN_SUFFIX}
     volumes:
       - objectstorage_minio:/data
     command: server /data --console-address :9001
