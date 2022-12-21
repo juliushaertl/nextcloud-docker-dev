@@ -525,7 +525,7 @@ services:
       extra_params: "--o:ssl.enable=false --o:net.frame_ancestors=*${DOMAIN_SUFFIX}"
 
   onlyoffice:
-    image: ${CONTAINER_ONLYOFFICE:-onlyoffice/documentserver:latest}
+    image: onlyoffice/documentserver:latest
     environment:
       VIRTUAL_HOST: onlyoffice${DOMAIN_SUFFIX}
     expose:
@@ -593,18 +593,18 @@ services:
       NEXTCLOUD_URL: http://nextcloud
 
   keycloak:
-    image: ${CONTAINER_KEYCLOAK:-quay.io/keycloak/keycloak:20.0.2}
+    image: quay.io/keycloak/keycloak:20.0
     expose:
       - 8080
     volumes:
-      - ./docker/configs/keycloak:/tmp/keycloak
+      - ./docker/configs/keycloak:/opt/keycloak/data/import
+    command: start-dev --import-realm
     environment:
       VIRTUAL_HOST: "keycloak${DOMAIN_SUFFIX}"
       VIRTUAL_PORT: 8080
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
       PROXY_ADDRESS_FORWARDING: "true"
-      KEYCLOAK_IMPORT: /tmp/keycloak/realm-export.json
 
   av:
     image: mkodockx/docker-clamav:alpine
