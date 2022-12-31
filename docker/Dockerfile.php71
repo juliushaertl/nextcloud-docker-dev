@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libmagickwand-dev \
         libmagickcore-6.q16-3-extra \
         libsmbclient-dev \
+        libgmp-dev \
         && rm -rf /var/lib/apt/lists/*
 
 RUN debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
@@ -30,7 +31,8 @@ RUN debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
         pdo_mysql \
         pdo_pgsql \
         zip \
-        sysvsem
+        sysvsem \
+        gmp
 
 RUN pecl install APCu; \
     pecl install memcached; \
