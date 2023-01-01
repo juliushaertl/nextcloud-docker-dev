@@ -73,6 +73,9 @@ install_app recommendations
 install_app files_pdfviewer
 install_app profiler
 install_app hmr_enabler
+for app in $@; do
+	install_app $app
+done
 
 echo
 echo
@@ -84,7 +87,7 @@ DOMAIN_SUFFIX=.local
 REPO_PATH_SERVER=$PWD/workspace/server
 ADDITIONAL_APPS_PATH=$PWD/workspace/server/apps-extra
 STABLE_ROOT_PATH=$PWD/workspace
-NEXTCLOUD_AUTOINSTALL_APPS="viewer profiler hmr_enabler"
+NEXTCLOUD_AUTOINSTALL_APPS="viewer profiler hmr_enabler $@"
 DOCKER_SUBNET=192.168.21.0/24
 PORTBASE=821
 EOT
