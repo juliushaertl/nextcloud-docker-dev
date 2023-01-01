@@ -70,6 +70,19 @@ Note that for performance reasons the server repository might have been cloned w
 
 This may take some time depending on your internet connection speed.
 
+## Additional apps
+
+To install additional apps add them to the bootstrap command:
+
+```bash
+./bootstrap.sh circles contacts
+```
+
+You can also do this after the initial bootstrap.
+In this case it will clone the apps but not update the `.env` file.
+If you want your apps to be installed in the nextcloud instance by default
+add them to the NEXTCLOUD_AUTOINSTALL_APPS variable in `.env`.
+
 ## Complex setup
 
 In order to achieve a more complex dev environment with different branches of the server, follow the manual steps:
