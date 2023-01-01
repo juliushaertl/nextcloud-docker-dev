@@ -4,6 +4,13 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+APPS_TO_INSTALL=(viewer recommendations files_pdfviewer profiler hmr_enabler)
+NEXTCLOUD_AUTOINSTALL_APPS=(viewer profiler hmr_enabler)
+
+# You can specify additional apps to install on the command line.
+APPS_TO_INSTALL+=( "$@" )
+NEXTCLOUD_AUTOINSTALL_APPS+=( "$@" )
+
 indent() {
 	sed 's/^/    /'
 }
@@ -33,13 +40,13 @@ function install_server() {
 
 function install_app() {
 	TARGET=workspace/server/apps-extra/"$1"
-	if [ -d $TARGET/.git ]; then
+	if [ -d "$TARGET"/.git ]; then
 		echo "🆗 App $1 is already installed." | indent
 		return
 	fi
 	(
 		echo "🌏 Fetching $1"
-		(git clone https://github.com/nextcloud/"$1".git $TARGET 2>&1 | indent_cli &&
+		(git clone https://github.com/nextcloud/"$1".git "$TARGET" 2>&1 | indent_cli &&
 			echo "✅ $1 installed") ||
 			echo "❌ Failed to install $1"
 	) | indent
@@ -72,14 +79,11 @@ echo
 echo "⏩ Setting up folder structure and fetching repositories"
 install_server
 mkdir -p workspace/server/apps-extra
-install_app viewer
-install_app recommendations
-install_app files_pdfviewer
-install_app profiler
-install_app hmr_enabler
-for app in $@; do
-	install_app $app
+for app in "${APPS_TO_INSTALL[@]}"
+do
+	install_app "$app"
 done
+
 
 echo
 echo
@@ -91,7 +95,7 @@ DOMAIN_SUFFIX=.local
 REPO_PATH_SERVER=$PWD/workspace/server
 ADDITIONAL_APPS_PATH=$PWD/workspace/server/apps-extra
 STABLE_ROOT_PATH=$PWD/workspace
-NEXTCLOUD_AUTOINSTALL_APPS="viewer profiler hmr_enabler $@"
+NEXTCLOUD_AUTOINSTALL_APPS="${NEXTCLOUD_AUTOINSTALL_APPS[@]}"
 DOCKER_SUBNET=192.168.21.0/24
 PORTBASE=821
 EOT
