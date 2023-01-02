@@ -4,6 +4,13 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+APPS_TO_INSTALL=(viewer recommendations files_pdfviewer profiler hmr_enabler)
+NEXTCLOUD_AUTOINSTALL_APPS=(viewer profiler hmr_enabler)
+
+# You can specify additional apps to install on the command line.
+APPS_TO_INSTALL+=( "$@" )
+NEXTCLOUD_AUTOINSTALL_APPS+=( "$@" )
+
 indent() {
 	sed 's/^/    /'
 }
@@ -16,10 +23,30 @@ indent_cli() {
 	fi
 }
 
+function install_server() {
+	if [ -d workspace/server/.git ]; then
+		echo "🆗 Server is already installed." | indent
+		return
+	fi
+	mkdir -p workspace/
+	(
+		(
+			echo "🌏 Fetching server (this might take a while to finish)" &&
+				git clone https://github.com/nextcloud/server.git --depth 1 workspace/server 2>&1 | indent_cli &&
+				cd workspace/server && git submodule update --init 2>&1 | indent_cli
+		) || echo "❌ Failed to clone Nextcloud server code"
+	) | indent
+}
+
 function install_app() {
+	TARGET=workspace/server/apps-extra/"$1"
+	if [ -d "$TARGET"/.git ]; then
+		echo "🆗 App $1 is already installed." | indent
+		return
+	fi
 	(
 		echo "🌏 Fetching $1"
-		(git clone https://github.com/nextcloud/"$1".git workspace/server/apps-extra/"$1" 2>&1 | indent_cli &&
+		(git clone https://github.com/nextcloud/"$1".git "$TARGET" 2>&1 | indent_cli &&
 			echo "✅ $1 installed") ||
 			echo "❌ Failed to install $1"
 	) | indent
@@ -43,36 +70,20 @@ is_installed docker
 is_installed docker-compose
 is_installed git
 
-( 
+(
 	(docker ps 2>&1 >/dev/null && echo "✅ Docker is properly executable") ||
 		(echo "❌ Cannot run docker ps, you might need to check that your user is able to use docker properly" && exit 1)
 ) | indent
 
 echo
 echo "⏩ Setting up folder structure and fetching repositories"
-
-mkdir -p workspace/
-( 
-	(
-		echo "🌏 Fetching server (this might take a while to finish)" &&
-			git clone https://github.com/nextcloud/server.git --depth 1 workspace/server 2>&1 | indent_cli &&
-			cd workspace/server && git submodule update --init 2>&1 | indent_cli
-	) || echo "❌ Failed to clone Nextcloud server code"
-) | indent
-
-#(
-#	(
-#		cd workspace/server && \
-#		git worktree add ../stable19 stable19 2>&1 | indent_cli
-#	) || echo "❌ Failed to setup worktree for stable19"
-#) | indent
-
+install_server
 mkdir -p workspace/server/apps-extra
-install_app viewer
-install_app recommendations
-install_app files_pdfviewer
-install_app profiler
-install_app hmr_enabler
+for app in "${APPS_TO_INSTALL[@]}"
+do
+	install_app "$app"
+done
+
 
 echo
 echo
@@ -84,7 +95,7 @@ DOMAIN_SUFFIX=.local
 REPO_PATH_SERVER=$PWD/workspace/server
 ADDITIONAL_APPS_PATH=$PWD/workspace/server/apps-extra
 STABLE_ROOT_PATH=$PWD/workspace
-NEXTCLOUD_AUTOINSTALL_APPS="viewer profiler hmr_enabler"
+NEXTCLOUD_AUTOINSTALL_APPS="${NEXTCLOUD_AUTOINSTALL_APPS[@]}"
 DOCKER_SUBNET=192.168.21.0/24
 PORTBASE=821
 EOT
