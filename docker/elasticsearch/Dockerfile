@@ -1,3 +1,3 @@
-FROM elasticsearch:7.17.8
+FROM elasticsearch:8.5.3
 
 RUN bin/elasticsearch-plugin install --batch ingest-attachment
