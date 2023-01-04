@@ -196,6 +196,7 @@ install() {
 	chown -R www-data:www-data "$WEBROOT"/config/config.php
 
 	mkdir -p "$WEBROOT/apps-extra"
+	mkdir -p "$WEBROOT/apps-shared"
 
 	update_permission
 

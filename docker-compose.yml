@@ -72,7 +72,8 @@ services:
       PRIMARY: ${PRIMARY}
     volumes:
       - '${REPO_PATH_SERVER}:/var/www/html'
-      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
+      - '${REPO_PATH_SERVER}/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
       - data:/var/www/html/data
       - config:/var/www/html/config
       - /var/www/html/apps-writable
@@ -138,6 +139,7 @@ services:
     volumes:
       - '${STABLE_ROOT_PATH}/stable16:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable16/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -164,6 +166,7 @@ services:
     volumes:
       - '${STABLE_ROOT_PATH}/stable17:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable17/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -192,6 +195,7 @@ services:
     volumes:
       - '${STABLE_ROOT_PATH}/stable18:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable18/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -220,6 +224,7 @@ services:
     volumes:
       - '${STABLE_ROOT_PATH}/stable19:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable19/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -248,6 +253,7 @@ services:
     volumes:
       - '${STABLE_ROOT_PATH}/stable20:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable20/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -277,6 +283,7 @@ services:
     volumes:
       - '${STABLE_ROOT_PATH}/stable21:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable21/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -305,6 +312,7 @@ services:
     volumes:
       - '${STABLE_ROOT_PATH}/stable22:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable22/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -331,6 +339,7 @@ services:
     volumes:
       - '${STABLE_ROOT_PATH}/stable23:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable23/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -360,6 +369,7 @@ services:
     volumes:
       - '${STABLE_ROOT_PATH}/stable24:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable24/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
@@ -386,6 +396,7 @@ services:
     volumes:
       - '${STABLE_ROOT_PATH}/stable25:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable25/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
       - /var/www/html/data
       - /var/www/html/config
       - /var/www/html/apps-writable
