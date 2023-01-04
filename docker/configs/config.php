@@ -17,6 +17,12 @@
 		),
 		2 => 
 		array (
+			'path' => '/var/www/html/apps-shared',
+			'url' => '/apps-shared',
+			'writable' => false,
+		),
+		3 =>
+		array (
 			'path' => '/var/www/html/apps-writable',
 			'url' => '/apps-writable',
 			'writable' => true,
