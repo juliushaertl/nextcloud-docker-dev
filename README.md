@@ -85,24 +85,29 @@ add them to the NEXTCLOUD_AUTOINSTALL_APPS variable in `.env`.
 
 ## Complex setup
 
-In order to achieve a more complex dev environment with different branches of the server, follow the manual steps:
+In order to achieve a more complex dev environment with different branches of the server, follow the following manual steps:
 
-##### 1. Clone the repository
+##### 1. Clone and prepare the repository
+
+1. Run the setup from the "Simple master setup" from above.
+2. For this setup it is nessesary to do the steps that are descripte in the note from the "Simple master setup".
 
 ```
-git clone https://github.com/nextcloud/server.git
+cd workspace/server
+git fetch --unshallow
+git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+git fetch origin
+pwd
+cd ../..
 ```
+Please note the printing of the pwd command for step 3 as `REPO_PATH_SERVER`.
 
 ##### 2. The Nextcloud code base needs to be available including the `3rdparty` submodule:
 
 ```
-cd server
+cd workspace/server
 git submodule update --init
-pwd
 ```
-
-The last command prints the path to the Nextcloud server directory.
-Use it for setting the `REPO_PATH_SERVER` in the next step.
 
 ##### 3. Environment variables
 
@@ -112,29 +117,51 @@ A `.env` file should be created in the repository root, to keep configuration de
 cp example.env .env
 ```
 
-Replace `REPO_PATH_SERVER` with the path from above.
+```
+cd workspace
+pwd
+cd ..
+```
+Please note the printing of the pwd command as `STABLE_ROOT_PATH`.
+
+Please adjust in the `.env` file at least the `REPO_PATH_SERVER` with the value from #1 and the `STABLE_ROOT_PATH` from the last command above.
+If you have apps you like to mount to all running nextcloud versions in this setup, just set the `ADDITIONAL_APPS_PATH`. 
+Note, this is not recommended for apps that have individual versions for different server versions. But that could be a good place to mount your apps you are working on to test them accross different server versions.
+
 
 ##### 4. Running different stable versions
 
 The docker-compose file provides individual containers for stable Nextcloud releases. In order to run those you will need a checkout of the stable version server branch to your workspace directory. Using [git worktree](https://blog.juliushaertl.de/index.php/2018/01/24/how-to-checkout-multiple-git-branches-at-the-same-time/) makes it easy to have different branches checked out in parallel in separate directories.
 
+**Server part**
+
+*Example for Nextcloud Server version 25*
+
 ```
 cd workspace/server
-git worktree add ../stable23 stable23
-```
-As in the in the `server` folder, the `3rdparty` submodule is needed:
-```
-cd ../stable23
-git submodule update --init
+git worktree add ../stable25 stable25
+cd ../..
 ```
 
-The same can be done for stable24, stable25... and so on. 
+As in the `server` folder, the `3rdparty` submodule is needed:
+```
+cd workspace/stable25
+git submodule update --init
+cd ../..
+```
+
+The same can be done for stable24, stable25... and so on.
+Minimum version is stable16.
+
+
+**Apps part**
 
 Git worktrees can also be used to have a checkout of an apps stable brach within the server stable directory.
 
 ```
 cd workspace/server/apps-extra/text
-git worktree add ../../../stable23/apps-extra/text stable23
+git worktree add ../../../stable25/apps-extra/text stable25
+cd ../../../..
 ```
 
 Since the viewer app is kind of required for Nextcloud server, you should also add that to the stable worktrees:
@@ -142,40 +169,60 @@ Since the viewer app is kind of required for Nextcloud server, you should also a
 ```
 cd workspace/server/apps/viewer
 git worktree add ../../../stable25/apps/viewer stable25
+cd ../../../..
 ```
+
+It is recommanded to use the `apps-extra` folder for apps that have individual branches for different server versions. For apps that are mutiple server versions supporting you you can use the `apps-shared` folder. It will be mountet to all stable versions. Just set it in the `.env` file from #3.
+
 
 ##### 5. Editing `/etc/hosts`
 
-You can then add stable23.local, stable24.local and so on to your `/etc/hosts` file to access it.
+We need to add the domains for all the stable versions into your `/etc/hosts` file. 
+But they will only work, if you setup und started the related container, look at #7.
+
 ```
-sudo sh -c "echo '127.0.0.1 nextcloud.local' >> /etc/hosts"
+sudo sh -c "echo '127.0.0.1 stable16.local' >> /etc/hosts"
+sudo sh -c "echo '127.0.0.1 stable17.local' >> /etc/hosts"
+sudo sh -c "echo '127.0.0.1 stable18.local' >> /etc/hosts"
+sudo sh -c "echo '127.0.0.1 stable19.local' >> /etc/hosts"
+sudo sh -c "echo '127.0.0.1 stable20.local' >> /etc/hosts"
+sudo sh -c "echo '127.0.0.1 stable21.local' >> /etc/hosts"
+sudo sh -c "echo '127.0.0.1 stable22.local' >> /etc/hosts"
+sudo sh -c "echo '127.0.0.1 stable23.local' >> /etc/hosts"
+sudo sh -c "echo '127.0.0.1 stable24.local' >> /etc/hosts"
+sudo sh -c "echo '127.0.0.1 stable25.local' >> /etc/hosts"
 ```
 
 ##### 6. Setting the PHP version to be used
 
-The Nextcloud instance is setup to run with PHP 7.2 by default.
+The Nextcloud instance is setup to run with PHP 8.1 by default.
 If you wish to use a different version of PHP, set the `PHP_VERSION` `.env` variable.
 
 The variable supports the following values:
 
-- PHP 7.1: `71`
+- PHP 7.1: `71` (maybe broken actually)
 - PHP 7.2: `72`
 - PHP 7.3: `73`
 - PHP 7.4: `74`
 - PHP 8.0: `80`
+- PHP 8.1: `81`
+- PHP 8.2: `82`
 
 ##### 7. Starting the containers
 
 - Minimum to run `master`: `docker-compose up proxy nextcloud` (nextcloud mysql redis mailhog)
-- Start stable branches: `docker-compose up stable23 proxy`
+- Start specific stable branches: `docker-compose up stable25 proxy`
+- Start multiple specific branches: `docker-compose up stable25 nextcloud proxy` (will start stable25 and master)
 - Start full setup: `docker-compose up`
+
+You should now be able to open the corresponding domains. For the third example this would be `nextcloud.local` and `stable25.local`.
 
 ##### 8. Switching between stable versions and master
 
 Remove all relevant containers and volumes:
 `docker-compose down -v`
 
-Start master or the branch you want to run:
+Start master or the branch you want to run (Step #7):
 `docker-compose up stable23 proxy`
 
 ## Running into errors
