@@ -406,6 +406,11 @@ set XDEBUG_CONFIG=idekey=PHPSTORM
 sudo -E -u www-data php -dxdebug.remote_host=192.168.21.1 occ
 ```
 
+### Logging
+
+The log level is set inside `data/additional.config.php` which is mounted as a read only volume in the container.
+To adjust the loglevel change it in the file and restart the container.
+
 ### Useful commands
 
 - Restart apache to reload php configuration without a full container restart: `docker-compose kill -s USR1 nextcloud`
