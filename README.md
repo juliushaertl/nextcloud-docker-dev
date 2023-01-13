@@ -439,4 +439,13 @@ docker-compose up proxy nextcloud previews_hpb
 ./scripts/enable-preview-imaginary.sh
 ```
 
+## PhpMyAdmin
+If you need to access the database, you can startup the phpmyadmin container that is already prepared.
+```
+docker-compose up -d phpmyadmin
+```
+Just add the domain to your hosts file and give it a try.
 
+```
+sudo sh -c "echo '127.0.0.1 phpmyadmin.local' >> /etc/hosts"
+```
