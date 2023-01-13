@@ -188,6 +188,8 @@ allowing you to run `docker-compose up` again from a clean slate.
 
 - In extreme cases, clean everything: `docker system prune --all`
 
+- If you start your stable containers (not the master) and it wants to install nextcloud even if it is not the first start, you may have removed the configuration with the last `docker-compose down` command. Try to use `docker-compose stop` instead or give the stable setup named valumens yourself.
+
 ## 🔒 Reverse Proxy
 
 Used for SSL termination. To setup SSL support provide a proper DOMAIN_SUFFIX environment variable and put the certificates to ./data/ssl/ named by the domain name.
@@ -437,4 +439,13 @@ docker-compose up proxy nextcloud previews_hpb
 ./scripts/enable-preview-imaginary.sh
 ```
 
+## PhpMyAdmin
+If you need to access the database, you can startup the phpmyadmin container that is already prepared.
+```
+docker-compose up -d phpmyadmin
+```
+Just add the domain to your hosts file and give it a try.
 
+```
+sudo sh -c "echo '127.0.0.1 phpmyadmin.local' >> /etc/hosts"
+```
