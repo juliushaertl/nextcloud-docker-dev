@@ -560,7 +560,7 @@ services:
   elasticsearch:
     build:
       context: ./docker
-      dockerfile: Dockerfile.elasticsearch
+      dockerfile: elasticsearch/Dockerfile
     environment:
       - ELASTIC_PASSWORD=elastic
       - discovery.type=single-node
