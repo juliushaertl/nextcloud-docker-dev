@@ -37,7 +37,7 @@ RUN debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
 RUN pecl install APCu; \
     pecl install memcached; \
     pecl install redis; \
-    pecl install xdebug; \
+    pecl install xdebug-2.9.8; \
     pecl install imagick; \
     pecl install smbclient; \
     pecl install mcrypt; \

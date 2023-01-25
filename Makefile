@@ -47,10 +47,10 @@ shellcheck:
 
 .ONESHELL:
 template-apply:
-	cat docker/Dockerfile.php.template | sed 's/php:8.1/php:7.1/' > docker/Dockerfile.php71
-	cat docker/Dockerfile.php.template | sed 's/php:8.1/php:7.2/' > docker/Dockerfile.php72
-	cat docker/Dockerfile.php.template | sed 's/php:8.1/php:7.3/' > docker/Dockerfile.php73
-	cat docker/Dockerfile.php.template | sed 's/php:8.1/php:7.4/' > docker/Dockerfile.php74
+	cat docker/Dockerfile.php.template | sed 's/php:8.1/php:7.1/' | sed 's/pecl install xdebug/pecl install xdebug-3.1.6/' > docker/Dockerfile.php71
+	cat docker/Dockerfile.php.template | sed 's/php:8.1/php:7.2/' | sed 's/pecl install xdebug/pecl install xdebug-3.1.6/' > docker/Dockerfile.php72
+	cat docker/Dockerfile.php.template | sed 's/php:8.1/php:7.3/' | sed 's/pecl install xdebug/pecl install xdebug-3.1.6/' > docker/Dockerfile.php73
+	cat docker/Dockerfile.php.template | sed 's/php:8.1/php:7.4/' | sed 's/pecl install xdebug/pecl install xdebug-3.1.6/' > docker/Dockerfile.php74
 	cat docker/Dockerfile.php.template | sed 's/php:8.1/php:8.0/' > docker/Dockerfile.php80
 	cat docker/Dockerfile.php.template | sed 's/php:8.1/php:8.1/' > docker/Dockerfile.php81
 	cat docker/Dockerfile.php.template | sed 's/php:8.1/php:8.2/' > docker/php82/Dockerfile
