@@ -62,7 +62,7 @@ jobs:
           DOCKERFILE=$([[ -f "docker/$NAME/Dockerfile" ]] && echo "docker/$NAME/Dockerfile" || echo "docker/Dockerfile.$NAME")
           echo "DOCKERFILE=$DOCKERFILE" >> $GITHUB_OUTPUT
       - name: Build container image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           push: false
           context: docker/
@@ -73,7 +73,7 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       - name: Push container image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         if: github.ref == 'refs/heads/master'
         with:
           push: true
