@@ -220,7 +220,15 @@ install() {
 	OCC app:disable password_policy
 
 	for app in $NEXTCLOUD_AUTOINSTALL_APPS; do
-		OCC app:enable "$app"
+		APP_ENABLED=$(OCC app:enable "$app")
+		if [[ "$APP_ENABLED" =~ ^${app}.*enabled$ ]]; then
+			echo "APP enabled"
+		else
+			# if app is not installed pause for some seconds to let it 
+			sleep 10
+			echo "Retry enabling app"
+			OCC app:enable "$app"
+		fi
 	done
 	configure_gs
 	configure_ldap
