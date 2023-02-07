@@ -221,14 +221,12 @@ install() {
 
 	for app in $NEXTCLOUD_AUTOINSTALL_APPS; do
 		APP_ENABLED=$(OCC app:enable "$app")
-		if [[ "$APP_ENABLED" =~ ^${app}.*enabled$ ]]; then
-			echo "APP enabled"
-		else
-			# if app is not installed pause for some seconds to let it 
-			sleep 10
-			echo "Retry enabling app"
-			OCC app:enable "$app"
-		fi
+		until [[ $APP_ENABLED =~ ^${app}.*enabled$ ]]
+		do
+			# if app is not installed pause for 1 seconds and enable again
+			sleep 1
+			APP_ENABLED=$(OCC app:enable "$app")
+		done
 	done
 	configure_gs
 	configure_ldap
