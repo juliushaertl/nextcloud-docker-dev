@@ -220,7 +220,15 @@ install() {
 	OCC app:disable password_policy
 
 	for app in $NEXTCLOUD_AUTOINSTALL_APPS; do
-		OCC app:enable "$app"
+		APP_ENABLED=$(OCC app:enable "$app")
+		WAIT_TIME=0
+		until [ $WAIT_TIME -eq 120 ]  || [[ $APP_ENABLED =~ ^${app}.*enabled$ ]]
+		do
+			# if app is not installed pause for 1 seconds and enable again
+			sleep 1
+			APP_ENABLED=$(OCC app:enable "$app")
+			((WAIT_TIME++))
+		done
 	done
 	configure_gs
 	configure_ldap
