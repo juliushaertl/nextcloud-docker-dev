@@ -1,0 +1,34 @@
+#!/bin/bash
+
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+
+# shellcheck disable=SC1091
+source "${SCRIPT_DIR}/../.env"
+
+function addhost() {
+	ETC_HOSTS=/etc/hosts
+    HOSTNAME=$1
+	IP=$2
+    HOSTS_LINE="$IP\t${HOSTNAME}"
+    if grep -q "${HOSTNAME}" /etc/hosts
+        then
+            echo " ✅ ${HOSTNAME} already exists"
+        else
+            echo " 🛠️ Adding ${HOSTNAME} to your $ETC_HOSTS";
+            sudo -- sh -c -e "echo '$HOSTS_LINE' >> /etc/hosts";
+
+            if grep -q "${HOSTNAME}" /etc/hosts
+                then
+                    echo " ✅ ${HOSTNAME} was added succesfully";
+                else
+                    echo " 🛑 Failed to Add ${HOSTNAME}, Try again!";
+            fi
+    fi
+}
+
+awk '$1 == "-"{ if (key == "aliases:") print $NF; next } {key=$1}' docker-compose.yml | \
+	sed "s/\${DOMAIN_SUFFIX}/${DOMAIN_SUFFIX}/" | \
+	while read -r line;
+	do
+		addhost "${line}" 127.0.0.1;
+	done

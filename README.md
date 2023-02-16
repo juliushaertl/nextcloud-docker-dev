@@ -203,10 +203,10 @@ You might need to add the domains to your `/etc/hosts` file:
 
 This is assuming you have set `DOMAIN_SUFFIX=.local`
 
-You can generate it through:
+To update the hosts file automatically you can use the `update-hosts` script:
 
 ```
-awk -v D=.local '/- [A-z0-9]+\${DOMAIN_SUFFIX}/ {sub("\\$\{DOMAIN_SUFFIX\}", D " 127.0.0.1", $2); print $2}' docker-compose.yml
+./scripts/update-hosts
 ```
 
 You can generate selfsigned certificates using:
