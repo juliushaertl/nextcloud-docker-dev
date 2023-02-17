@@ -23,6 +23,7 @@ jobs:
           - php74
           - php73
           - php72
+          - php71
           - push
           - saml
           - nginx
@@ -30,6 +31,7 @@ jobs:
           - mailhog
           - ldap
           - lookupserver
+          - smb
     permissions:
       packages: write
       contents: read
