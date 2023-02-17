@@ -221,12 +221,15 @@ install() {
 
 	for app in $NEXTCLOUD_AUTOINSTALL_APPS; do
 		APP_ENABLED=$(OCC app:enable "$app")
+		output "$APP_ENABLED"
 		WAIT_TIME=0
-		until [ $WAIT_TIME -eq 120 ]  || [[ $APP_ENABLED =~ ^${app}.*enabled$ ]]
+		until [ $WAIT_TIME -eq 120 ]  || [[ $APP_ENABLED =~ ${app}.*enabled$ ]]
 		do
 			# if app is not installed pause for 1 seconds and enable again
+			output "🔄 retrying"
 			sleep 1
 			APP_ENABLED=$(OCC app:enable "$app")
+			output "$APP_ENABLED"
 			((WAIT_TIME++))
 		done
 	done
