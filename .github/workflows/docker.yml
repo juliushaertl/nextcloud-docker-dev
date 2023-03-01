@@ -32,6 +32,7 @@ jobs:
           - ldap
           - lookupserver
           - smb
+          - codedev
     permissions:
       packages: write
       contents: read

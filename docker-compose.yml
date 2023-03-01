@@ -36,6 +36,7 @@ services:
           - stable24${DOMAIN_SUFFIX}
           - stable25${DOMAIN_SUFFIX}
           - collabora${DOMAIN_SUFFIX}
+          - codedev${DOMAIN_SUFFIX}
           - onlyoffice${DOMAIN_SUFFIX}
           - proxy${DOMAIN_SUFFIX}
           - hpb${DOMAIN_SUFFIX}
@@ -533,7 +534,19 @@ services:
       VIRTUAL_HOST: collabora${DOMAIN_SUFFIX}
       VIRTUAL_PORT: 9980
       VIRTUAL_PROTO: http
-      extra_params: "--o:ssl.enable=false --o:net.frame_ancestors=*${DOMAIN_SUFFIX}"
+      extra_params: "--o:ssl.enable=false --o:net.frame_ancestors=*${DOMAIN_SUFFIX} --o:home_mode.enable=true"
+
+  codedev:
+    privileged: true
+    build:
+      context: ./docker/codedev
+    environment:
+      VIRTUAL_HOST: "codedev${DOMAIN_SUFFIX}"
+      VIRTUAL_PORT: 9980
+    volumes:
+      - /Users/julius/repos/collaboraonline:/collabora
+    command: >
+      tail -f /dev/null
 
   onlyoffice:
     image: onlyoffice/documentserver:latest
