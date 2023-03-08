@@ -35,6 +35,7 @@ services:
           - stable23${DOMAIN_SUFFIX}
           - stable24${DOMAIN_SUFFIX}
           - stable25${DOMAIN_SUFFIX}
+          - mail${DOMAIN_SUFFIX}
           - collabora${DOMAIN_SUFFIX}
           - codedev${DOMAIN_SUFFIX}
           - onlyoffice${DOMAIN_SUFFIX}
