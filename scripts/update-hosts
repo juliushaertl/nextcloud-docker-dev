@@ -9,7 +9,7 @@ function addhost() {
 	ETC_HOSTS=/etc/hosts
     HOSTNAME=$1
 	IP=$2
-    HOSTS_LINE="$IP\t${HOSTNAME}"
+    HOSTS_LINE="$( echo -e "$IP\t${HOSTNAME}" )"
     if grep -q "${HOSTNAME}" /etc/hosts
         then
             echo " ✅ ${HOSTNAME} already exists"
