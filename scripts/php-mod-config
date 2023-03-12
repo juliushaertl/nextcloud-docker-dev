@@ -44,7 +44,8 @@ then
     if [[ -n "$3" ]]
     then
         echo "Setting $2 to $3"
-        docker_exec "$1" sed -i 's/^'"$2"'\s*=\s*.*/'"$2"'='"$3"'/g' /usr/local/etc/php/conf.d/xdebug.ini
+        value="$(echo "$3" | sed 's@/@\\/@g')"
+        docker_exec "$1" sed -i 's/^'"$2"'\s*=\s*.*/'"$2"'='"$value"'/g' /usr/local/etc/php/conf.d/xdebug.ini
     else
         echo "No value provided"
         exit 1
