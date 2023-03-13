@@ -349,10 +349,11 @@ pkill -USR1 apache2
 	pkill -USR1 apache2
 ) &
 
-touch /var/log/cron/nextcloud.log "$WEBROOT"/data/nextcloud.log
+touch /var/log/cron/nextcloud.log "$WEBROOT"/data/nextcloud.log /var/log/xdebug.log
+chown www-data /var/log/xdebug.log
 
 echo "📰 Watching log file"
-tail --follow "$WEBROOT"/data/nextcloud.log /var/log/cron/nextcloud.log &
+tail --follow "$WEBROOT"/data/nextcloud.log /var/log/cron/nextcloud.log /var/log/xdebug.log &
 
 echo "⌚ Starting cron"
 /usr/sbin/cron -f &
