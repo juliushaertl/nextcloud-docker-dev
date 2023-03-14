@@ -216,6 +216,13 @@ cd data/ssl
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout  nextcloud.local.key -out nextcloud.local.crt
 ```
 
+You can also override the default port used for HTTP and HTTPS bound on the host for the proxy by setting these environment variables in the `.env` file (don't forget to recreate the containers):
+
+```
+PROXY_PORT_HTTP=8080
+PROXY_PORT_HTTPS=4443
+```
+
 ### dnsmasq to resolve wildcard domains
 
 Instead of adding the individual container domains to `/etc/hosts` a local dns server like dnsmasq can be used to resolve any domain ending with the configured DOMAIN_SUFFIX in `.env` to localhost.
