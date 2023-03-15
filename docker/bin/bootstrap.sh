@@ -27,6 +27,15 @@ update_permission() {
 	chown www-data:www-data "$WEBROOT"/config/config.php 2>/dev/null
 }
 
+configure_xdebug_mode() {
+	if [ -n "$XDEBUG_MODE" ]
+	then
+		sed -i "s/^xdebug.mode\s*=.*/xdebug.mode = ${XDEBUG_MODE//\//_}/" /usr/local/etc/php/conf.d/xdebug.ini
+	else
+		echo "⚠ No value for XDEBUG_MODE was found. Not updating the setting."
+	fi
+}
+
 wait_for_other_containers() {
 	output "⌛ Waiting for other containers"
 	if [ "$SQL" = "mysql" ]
@@ -295,6 +304,7 @@ add_hosts() {
 
 setup() {
 	update_permission
+	configure_xdebug_mode
 	STATUS=$(OCC status)
 	if [[ "$STATUS" = *"installed: true"* ]] || [[ ! -f $WEBROOT/config/config.php ]]
 	then
