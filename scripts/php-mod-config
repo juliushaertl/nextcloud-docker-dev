@@ -3,7 +3,7 @@
 if [ -z "$1" ]
   then
     echo "Usage $0 CONTAINER blackfire on|off"
-    echo "      $0 CONTAINER xdebug.mode off|debug|trace|profile"
+    echo "      $0 CONTAINER xdebug.log_level <NUMERIC>"
 	exit 1
 fi
 
