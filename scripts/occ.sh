@@ -2,12 +2,15 @@
 
 # Default container name to operate on
 container=${CONTAINER:-nextcloud}
+container_set=
 
 show_help() {
     cat << EOF
 $0: Run OCC commands in containers
 Usage:
-    $0 [PARAMS] [--] {OCC_PARAMS}
+    $0 [CONTAINER] [PARAMS] [--] {OCC_PARAMS}
+
+In CONTAINER you can specify the name of the container to work on. It must be the very first parameter.
 
 With PARAMS you can provide additional information to the script. The possible options are documented below.
 The params in OCC_PARAMS are forwarded to the OCC script literally.
@@ -16,14 +19,16 @@ With double dash -- you can separate the params from the OCC params. This might 
 
 Possible options for PARAMS:
   --help/-h      Print this help and exit
-  --container C  Use the container named C to run the OCC command in
 
-If the --container option is not given, the env variable CONTAINER will be checked. If this is not given, the default value is nextcloud.
+If the container is not given explicitly, the env variable CONTAINER will be checked. If this is not given, the default value is nextcloud.
 Examples:
 
-    $0 --container stable25 -- status
+    $0 stable25 -- status
         Run the occ command "status" in the stable25 container
     
+    $0 stable25 status
+        The same as above with guessing that status is the occ command in question
+
     $0 app:list
         List the apps in the default container (nextcloud)
 EOF
@@ -34,14 +39,28 @@ run_occ() {
     exit $?
 }
 
+is_valid_container_name() {
+    if [[ ( $1 =~ ^nextcloud[2,3]?$ ) || ( $1 =~ ^stable[0-9]*$ ) ]]
+    then
+        # The param $1 is a valid container name
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Guess if the first entry is a container name
+if is_valid_container_name "$1"
+then
+    echo "Using $1 as the container to work on."
+    container=$1
+    container_set=1
+    shift
+fi
+
 while [ $# -gt 0 ]
 do
     case "$1" in
-        --container)
-            container="$2"
-            # Additional shift
-            shift
-            ;;
         --help|-h)
             show_help
             exit
@@ -60,5 +79,4 @@ do
     shift
 done
 
-echo "No command was given on the command line."
-exit 1
+run_occ

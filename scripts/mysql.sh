@@ -51,4 +51,3 @@ done
 
 # No parameters were given.
 run_mysql
-exit $?
