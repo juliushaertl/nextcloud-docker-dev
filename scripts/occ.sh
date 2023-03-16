@@ -2,7 +2,7 @@
 
 # Default container name to operate on
 container=${CONTAINER:-nextcloud}
-container_set=
+# container_set=
 
 show_help() {
     cat << EOF
@@ -54,7 +54,7 @@ if is_valid_container_name "$1"
 then
     echo "Using $1 as the container to work on."
     container=$1
-    container_set=1
+    # container_set=1
     shift
 fi
 
@@ -76,6 +76,7 @@ do
     esac
 
     # Shift to the next parameter
+    # shellcheck disable=SC2317
     shift
 done
 
