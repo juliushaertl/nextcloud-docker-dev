@@ -468,6 +468,7 @@ services:
   database-postgres:
     image: postgres:latest
     environment:
+      POSTGRES_DB: nextcloud
       POSTGRES_PASSWORD: postgres
     expose:
       - 5432
