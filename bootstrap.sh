@@ -98,6 +98,8 @@ NEXTCLOUD_AUTOINSTALL_APPS="${NEXTCLOUD_AUTOINSTALL_APPS[@]}"
 DOCKER_SUBNET=192.168.21.0/24
 PORTBASE=821
 XDEBUG_MODE=develop
+SQL=mysql # other values: "pgsql", "oci"
+DB_SERVICE=database-mysql # other values: "database-postgres"
 EOT
 fi
 
