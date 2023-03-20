@@ -504,6 +504,8 @@ services:
        - pgadmin:/var/lib/pgadmin
     ports:
       - "${PGADMIN_PORT:-5050}:5050"
+    depends_on:
+      - proxy
 
   redis:
     image: redis:7
