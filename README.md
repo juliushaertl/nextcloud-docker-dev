@@ -456,3 +456,21 @@ Just add the domain to your hosts file and give it a try.
 ```
 sudo sh -c "echo '127.0.0.1 phpmyadmin.local' >> /etc/hosts"
 ```
+
+## pgAdmin
+If you need to access the database and you are running postgres, you can use this additional container.
+
+```
+docker-compose up -d pgadmin
+```
+
+Add the domain to your hosts file:
+
+```
+sudo sh -c "echo '127.0.0.1 pgadmin.local' >> /etc/hosts"
+```
+
+
+After you have started the container open in a webbrowser `pgadmin.local`. You have to set a Master password for pgAdmin, maybe 'nextcloud' is good for this environment.
+Now we have to add the database server. Click on `Add New Server` and give it a name, maybe 'nextcloud.local'. Please open the second tab `Connection` and insert 'database-postgres' as the Host name and 'postgres' as the password. Click on `Save`.
+That's it, open the following path to see the nextcloud tables: `Servers -> nextcloud.local -> Databases -> nextcloud -> Schemas -> public -> Tables`
