@@ -500,10 +500,10 @@ services:
       PGADMIN_DEFAULT_EMAIL: pgadmin4@nextcloud.local
       PGADMIN_DEFAULT_PASSWORD: postgres
       PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_SERVER_JSON_FILE: /pgadmin4/config/servers.json
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
     volumes:
-       - pgadmin:/var/lib/pgadmin
-    ports:
-      - "${PGADMIN_PORT:-5050}:5050"
+      - "./data/pgadmin/config:/pgadmin4/config"
     depends_on:
       - proxy
 
@@ -802,7 +802,6 @@ volumes:
   config:
   mysql:
   postgres:
-  pgadmin:
   data2:
   config2:
   document_data:
