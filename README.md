@@ -471,6 +471,5 @@ sudo sh -c "echo '127.0.0.1 pgadmin.local' >> /etc/hosts"
 ```
 
 
-After you have started the container open in a webbrowser `pgadmin.local`. You have to set a Master password for pgAdmin, maybe 'nextcloud' is good for this environment.
-Now we have to add the database server. Click on `Add New Server` and give it a name, maybe 'nextcloud.local'. Please open the second tab `Connection` and insert 'database-postgres' as the Host name and 'postgres' as the password. Click on `Save`.
-That's it, open the following path to see the nextcloud tables: `Servers -> nextcloud.local -> Databases -> nextcloud -> Schemas -> public -> Tables`
+After you have started the container open in a webbrowser `pgadmin.local`. The password for the 'nextcloud.local' is 'postgres'.
+That's it, open the following path to see the nextcloud tables: `Server group 1 -> nextcloud.local -> Databases -> nextcloud -> Schemas -> public -> Tables`
