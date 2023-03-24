@@ -143,10 +143,10 @@ get_protocol() {
 		output " Detecting SSL..."
 		timeout 1 bash -c 'until echo > /dev/tcp/proxy/443; do sleep 0.5; done' 2>/dev/null
 		if [ $? -eq 0 ]; then
-			output "🔑 SSL proxy available, configuring proxy settings"
+			output "🔑 SSL proxy available"
 			PROTOCOL=https
 		else
-			output "🗝 No SSL proxy, removing overwriteprotocol"
+			output "🗝 No SSL proxy detected"
 			PROTOCOL=http
 		fi
     fi
@@ -159,12 +159,10 @@ configure_ssl_proxy() {
 
 	get_protocol
 	if [[ "$PROTOCOL" == "https" ]]; then
-		echo "🔑 SSL proxy available, configuring proxy settings"
-		OCC config:system:set overwriteprotocol --value https &
+		echo "🔑 SSL proxy available, configuring overwrite.cli.url accordingly"
 		OCC config:system:set overwrite.cli.url --value "https://$VIRTUAL_HOST" &
 	else
-		echo "🗝 No SSL proxy, removing overwriteprotocol"
-		OCC config:system:delete overwriteprotocol &
+		echo "🗝 No SSL proxy, configuring overwrite.cli.url accordingly"
 		OCC config:system:set overwrite.cli.url --value "http://$VIRTUAL_HOST" &
 	fi
 	update-ca-certificates
@@ -266,6 +264,10 @@ install() {
 			NC_TRUSTED_DOMAIN_IDX=$((NC_TRUSTED_DOMAIN_IDX + 1))
 		done
 	fi
+
+	TRUSTED_PROXY=$(ip a show type veth | awk '/scope global/ {print $2}')
+	OCC config:system:set trusted_proxies 0 --value="$TRUSTED_PROXY"
+
 	configure_ssl_proxy
 
 	output "🔧 Preparing cron job"
