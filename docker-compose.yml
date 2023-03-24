@@ -50,6 +50,7 @@ services:
           - lookup${DOMAIN_SUFFIX}
           - elasticsearch${DOMAIN_SUFFIX}
           - elasticsearch-ui${DOMAIN_SUFFIX}
+          - pgadmin${DOMAIN_SUFFIX}
 
   haproxy:
     image: haproxy
@@ -484,10 +485,27 @@ services:
     environment:
       POSTGRES_DB: nextcloud
       POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
     expose:
       - 5432
     volumes:
       - postgres:/var/lib/postgresql
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    environment:
+      VIRTUAL_HOST: "pgadmin${DOMAIN_SUFFIX}"
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@nextcloud.local
+      PGADMIN_DEFAULT_PASSWORD: postgres
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_SERVER_JSON_FILE: /pgadmin4/config/servers.json
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+    volumes:
+      - "./data/pgadmin/config:/pgadmin4/config"
+    depends_on:
+      - proxy
 
   redis:
     image: redis:7

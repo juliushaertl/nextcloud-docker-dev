@@ -1,0 +1,14 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "nextcloud.local",
+            "Group": "Server Group 1",
+            "Port": 5432,
+            "Username": "postgres",
+            "Host": "database-postgres",
+            "SSLMode": "prefer",
+            "MaintenanceDB": "postgres",
+            "PassFile": "/pgadmin4/config/pgpassfile"
+        }
+    }
+}
