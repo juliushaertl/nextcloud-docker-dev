@@ -93,7 +93,7 @@ In order to achieve a more complex dev environment with different branches of th
 git clone https://github.com/nextcloud/server.git
 ```
 
-##### 2. The Nextcloud code base needs to be available including the `3rdparty` submodule:
+##### 2. The Nextcloud code base needs to be available including the [`3rdparty`](https://github.com/nextcloud/3rdparty) submodule:
 
 ```
 cd server
