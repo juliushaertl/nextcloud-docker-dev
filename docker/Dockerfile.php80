@@ -17,15 +17,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libsmbclient-dev \
         libgmp-dev \
         libwebp-dev \
-        libavif-dev \
         && rm -rf /var/lib/apt/lists/*
 
 RUN debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
     docker-php-ext-configure gd \
         --with-freetype \
         --with-jpeg \
-        --with-webp \
-        --with-avif && \
+        --with-webp && \
     docker-php-ext-configure ldap --with-libdir="lib/$debMultiarch" && \
     docker-php-ext-install \
         exif \
