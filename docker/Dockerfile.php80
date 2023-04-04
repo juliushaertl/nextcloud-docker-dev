@@ -44,7 +44,6 @@ RUN pecl install APCu && \
     pecl install xdebug && \
     pecl install imagick && \
     pecl install smbclient && \
-    pecl install mcrypt && \
     \
     docker-php-ext-enable \
         apcu \
