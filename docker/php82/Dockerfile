@@ -16,11 +16,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libmagickcore-6.q16-3-extra \
         libsmbclient-dev \
         libgmp-dev \
+        libwebp-dev \
+        libavif-dev \
         && rm -rf /var/lib/apt/lists/*
 
 RUN debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
-    docker-php-ext-configure gd --with-freetype --with-jpeg; \
-    docker-php-ext-configure ldap --with-libdir="lib/$debMultiarch"; \
+    docker-php-ext-configure gd \
+        --with-freetype \
+        --with-jpeg \
+        --with-webp \
+        --with-avif && \
+    docker-php-ext-configure ldap --with-libdir="lib/$debMultiarch" && \
     docker-php-ext-install \
         exif \
         gd \
@@ -34,13 +40,13 @@ RUN debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
         sysvsem \
         gmp
 
-RUN pecl install APCu; \
-    pecl install memcached; \
-    pecl install redis; \
-    pecl install xdebug; \
-    pecl install imagick; \
-    pecl install smbclient; \
-    pecl install mcrypt; \
+RUN pecl install APCu && \
+    pecl install memcached && \
+    pecl install redis && \
+    pecl install xdebug && \
+    pecl install imagick && \
+    pecl install smbclient && \
+    pecl install mcrypt && \
     \
     docker-php-ext-enable \
         apcu \
@@ -48,7 +54,7 @@ RUN pecl install APCu; \
         redis \
         xdebug \
         imagick \
-        smbclient; \
+        smbclient && \
 	docker-php-source delete && \
 		rm -r /tmp/* /var/cache/*
 
