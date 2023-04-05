@@ -358,6 +358,7 @@ pkill -USR1 apache2
 	wait_for_other_containers
 	setup
 	rm /etc/apache2/conf-enabled/install.conf
+	rm -f /var/www/html/installing.html
 	pkill -USR1 apache2
 ) &
 
