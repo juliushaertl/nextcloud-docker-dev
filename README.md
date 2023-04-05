@@ -424,8 +424,8 @@ sudo -E -u www-data php -dxdebug.remote_host=192.168.21.1 occ
 ## [Keycloak}(https://www.keycloak.org/)
 
 - Keycloak is using LDAP as a user backend (make sure the LDAP container is also running)
-- `occ user_oidc:provider Keycloak -c nextcloud -s 09e3c268-d8bc-42f1-b7c6-74d307ef5fde -d https://keycloak.local.dev.bitgrid.net/auth/realms/Example/.well-known/openid-configuration`
-- https://keycloak.local.dev.bitgrid.net/auth/realms/Example/.well-known/openid-configuration
+- `occ user_oidc:provider Keycloak -c nextcloud -s 09e3c268-d8bc-42f1-b7c6-74d307ef5fde -d http://keycloak.dev.local/auth/realms/Example/.well-known/openid-configuration`
+- http://keycloak.dev.local/auth/realms/Example/.well-known/openid-configuration
 - nextcloud
 - 09e3c268-d8bc-42f1-b7c6-74d307ef5fde
 
@@ -469,7 +469,6 @@ Add the domain to your `/etc/hosts` file:
 ```
 sudo sh -c "echo '127.0.0.1 pgadmin.local' >> /etc/hosts"
 ```
-
 
 After you have started the container open `pgadmin.local` in a web browser. The password for the `nextcloud.local` is `postgres`.
 That's it, open the following path to see the Nextcloud tables: `Server group 1 -> nextcloud.local -> Databases -> nextcloud -> Schemas -> public -> Tables`
