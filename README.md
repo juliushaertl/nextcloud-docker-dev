@@ -421,7 +421,7 @@ sudo -E -u www-data php -dxdebug.remote_host=192.168.21.1 occ
 - Access to MySQL console: `mysql -h $(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nextcloud_database-mysql_1) -P 3306 -u nextcloud -pnextcloud`
 - Run an LDAP search: `ldapsearch -x -H ldap://$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nextcloud_ldap_1) -D "cn=admin,dc=planetexpress,dc=com" -w admin -b "dc=planetexpress,dc=com" -s subtree <filter> <attrs>`
 
-## [Keycloak}(https://www.keycloak.org/)
+## [Keycloak](https://www.keycloak.org/)
 
 - Keycloak is using LDAP as a user backend (make sure the LDAP container is also running)
 - `occ user_oidc:provider Keycloak -c nextcloud -s 09e3c268-d8bc-42f1-b7c6-74d307ef5fde -d http://keycloak.dev.local/auth/realms/Example/.well-known/openid-configuration`
