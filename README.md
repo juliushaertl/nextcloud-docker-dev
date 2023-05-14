@@ -1,4 +1,4 @@
-# nextcloud-dev-docker-compose
+# Nextcloud development environment on Docker Compose
 
 Nextcloud development environment using docker-compose
 
