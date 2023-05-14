@@ -337,7 +337,7 @@ check_source() {
 		# shallow clone of submodules https://stackoverflow.com/questions/2144406/how-to-make-shallow-git-submodules
 		git config -f .gitmodules submodule.3rdparty.shallow true
 		(cd /tmp/server && git submodule update --init)
-		rsync -a /tmp/server/ /var/www/html
+		rsync -a --chmod=755 /tmp/server/ /var/www/html
 	fi
 	output "Nextcloud server source is ready"
 }
