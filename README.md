@@ -275,6 +275,13 @@ Xdebug is shipped but disabled by default. It can be turned on by running:
 ./scripts/php-mod-config nextcloud xdebug.mode debug
 ```
 
+### Debugging cron, occ or other command line scripts
+
+```
+docker compose exec nextcloud bash
+sudo -E -u www-data php -dxdebug.start_with_request=yes -dxdebug.client_host=host.docker.internal cron.php
+```
+
 ## 👥 LDAP
 
 The LDAP sample data is based on https://github.com/rroemhild/docker-test-openldap and extended with randomly generated users/groups. For details see [data/ldap-generator/](https://github.com/juliushaertl/nextcloud-docker-dev/tree/master/data/ldap-generator). LDAP will be configured automatically if the ldap container is available during installation.
