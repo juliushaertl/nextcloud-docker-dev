@@ -721,7 +721,7 @@ services:
       NEXTCLOUD_URL: http://nextcloud
 
   keycloak:
-    image: quay.io/keycloak/keycloak:20.0
+    image: quay.io/keycloak/keycloak:21.1
     expose:
       - 8080
     volumes:
