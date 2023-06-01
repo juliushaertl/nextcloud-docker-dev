@@ -33,6 +33,7 @@ jobs:
           - lookupserver
           - smb
           - codedev
+          - code
     permissions:
       packages: write
       contents: read
