@@ -52,6 +52,7 @@ services:
           - elasticsearch${DOMAIN_SUFFIX}
           - elasticsearch-ui${DOMAIN_SUFFIX}
           - pgadmin${DOMAIN_SUFFIX}
+          - phpmyadmin${DOMAIN_SUFFIX}
 
   haproxy:
     image: haproxy
