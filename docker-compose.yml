@@ -499,7 +499,7 @@ services:
       - host.docker.internal:host-gateway
 
   database-mysql:
-    image: mariadb:10.5
+    image: mariadb:10.6
     environment:
       MYSQL_ROOT_PASSWORD: 'nextcloud'
       MYSQL_PASSWORD: 'nextcloud'
