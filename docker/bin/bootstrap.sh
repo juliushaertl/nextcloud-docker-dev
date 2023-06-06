@@ -31,6 +31,7 @@ configure_xdebug_mode() {
 	if [ -n "$XDEBUG_MODE" ]
 	then
 		sed -i "s/^xdebug.mode\s*=.*/xdebug.mode = ${XDEBUG_MODE//\//_}/" /usr/local/etc/php/conf.d/xdebug.ini
+		unset XDEBUG_MODE
 	else
 		echo "⚠ No value for XDEBUG_MODE was found. Not updating the setting."
 	fi
