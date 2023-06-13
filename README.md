@@ -87,9 +87,10 @@ add them to the `NEXTCLOUD_AUTOINSTALL_APPS` variable in `.env`.
 
 In order to achieve a more complex dev environment with different branches of the server, follow the manual steps:
 
-##### 1. Clone the repository
+##### 1. Create a workspace folder and clone the server repository
 
 ```
+mkdir workspace && cd workspace
 git clone https://github.com/nextcloud/server.git
 ```
 
@@ -103,6 +104,13 @@ pwd
 
 The last command prints the path to the Nextcloud server directory.
 Use it for setting the `REPO_PATH_SERVER` in the next step.
+
+Since the viewer app is kind of required for Nextcloud server, you should also clone the viewer app:
+
+```
+cd apps
+git clone https://github.com/nextcloud/viewer.git
+```
 
 ##### 3. Environment variables
 
@@ -137,12 +145,16 @@ cd workspace/server/apps-extra/text
 git worktree add ../../../stable23/apps-extra/text stable23
 ```
 
-Since the viewer app is kind of required for Nextcloud server, you should also add that to the stable worktrees:
+The viewer app should also be added to the stable worktrees:
 
 ```
 cd workspace/server/apps/viewer
 git worktree add ../../../stable25/apps/viewer stable25
 ```
+
+- Use `apps/` for required apps (like `viewer`)
+- Use `apps-extra/` for apps that support only one specific nextcloud version (like `talk`)
+- Use `apps-shared/` for apps that support multiple nextcloud versions as this directory is shared between all containers
 
 ##### 5. Editing `/etc/hosts`
 
@@ -163,6 +175,7 @@ The variable supports the following values:
 - PHP 7.3: `73`
 - PHP 7.4: `74`
 - PHP 8.0: `80`
+- PHP 8.1: `81`
 
 ##### 7. Starting the containers
 
