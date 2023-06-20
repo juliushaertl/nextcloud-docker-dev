@@ -76,7 +76,7 @@ services:
       BLACKFIRE_CLIENT_ID:
       BLACKFIRE_CLIENT_TOKEN:
       PRIMARY: ${PRIMARY}
-      XDEBUG_MODE: ${XDEBUG_MODE:-develop}
+      PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${REPO_PATH_SERVER}:/var/www/html'
       - '${REPO_PATH_SERVER}/apps-extra:/var/www/html/apps-extra'
@@ -102,7 +102,7 @@ services:
     environment:
       SQL: 'mysql'
       VIRTUAL_HOST: "nextcloud2${DOMAIN_SUFFIX}"
-      XDEBUG_MODE: ${XDEBUG_MODE:-develop}
+      PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${REPO_PATH_SERVER}:/var/www/html'
       - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
@@ -123,7 +123,7 @@ services:
     environment:
       SQL: ${SQL:-mysql}
       VIRTUAL_HOST: "nextcloud3${DOMAIN_SUFFIX}"
-      XDEBUG_MODE: ${XDEBUG_MODE:-develop}
+      PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${REPO_PATH_SERVER}:/var/www/html'
       - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
@@ -148,7 +148,7 @@ services:
       VIRTUAL_HOST: stable16${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
-      XDEBUG_MODE: ${XDEBUG_MODE:-develop}
+      PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable16:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable16/apps-extra:/var/www/html/apps-extra'
@@ -177,7 +177,7 @@ services:
       VIRTUAL_HOST: stable17${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
-      XDEBUG_MODE: ${XDEBUG_MODE:-develop}
+      PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable17:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable17/apps-extra:/var/www/html/apps-extra'
@@ -208,7 +208,7 @@ services:
       VIRTUAL_HOST: stable18${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
-      XDEBUG_MODE: ${XDEBUG_MODE:-develop}
+      PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable18:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable18/apps-extra:/var/www/html/apps-extra'
@@ -239,7 +239,7 @@ services:
       VIRTUAL_HOST: stable19${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
-      XDEBUG_MODE: ${XDEBUG_MODE:-develop}
+      PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable19:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable19/apps-extra:/var/www/html/apps-extra'
@@ -270,7 +270,7 @@ services:
       VIRTUAL_HOST: stable20${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
-      XDEBUG_MODE: ${XDEBUG_MODE:-develop}
+      PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable20:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable20/apps-extra:/var/www/html/apps-extra'
@@ -302,7 +302,7 @@ services:
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
       PRIMARY: ${PRIMARY}
-      XDEBUG_MODE: ${XDEBUG_MODE:-develop}
+      PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable21:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable21/apps-extra:/var/www/html/apps-extra'
@@ -333,7 +333,8 @@ services:
       VIRTUAL_HOST: stable22${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
-      XDEBUG_MODE: ${XDEBUG_MODE:-develop}
+      PRIMARY: ${PRIMARY}
+      PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable22:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable22/apps-extra:/var/www/html/apps-extra'
@@ -362,7 +363,8 @@ services:
       VIRTUAL_HOST: stable23${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
-      XDEBUG_MODE: ${XDEBUG_MODE:-develop}
+      PRIMARY: ${PRIMARY}
+      PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable23:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable23/apps-extra:/var/www/html/apps-extra'
@@ -394,7 +396,7 @@ services:
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
       PRIMARY: ${PRIMARY}
-      XDEBUG_MODE: ${XDEBUG_MODE:-develop}
+      PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable24:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable24/apps-extra:/var/www/html/apps-extra'
@@ -423,7 +425,8 @@ services:
       VIRTUAL_HOST: stable25${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
-      XDEBUG_MODE: ${XDEBUG_MODE:-develop}
+      PRIMARY: ${PRIMARY}
+      PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable25:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable25/apps-extra:/var/www/html/apps-extra'
@@ -452,6 +455,8 @@ services:
       VIRTUAL_HOST: stable26${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
+      PRIMARY: ${PRIMARY}
+      PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable26:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable26/apps-extra:/var/www/html/apps-extra'
@@ -480,6 +485,8 @@ services:
       VIRTUAL_HOST: stable27${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
+      PRIMARY: ${PRIMARY}
+      PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable27:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable27/apps-extra:/var/www/html/apps-extra'

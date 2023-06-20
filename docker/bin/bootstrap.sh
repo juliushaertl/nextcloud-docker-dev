@@ -28,12 +28,12 @@ update_permission() {
 }
 
 configure_xdebug_mode() {
-	if [ -n "$XDEBUG_MODE" ]
+	if [ -n "$PHP_XDEBUG_MODE" ]
 	then
-		sed -i "s/^xdebug.mode\s*=.*/xdebug.mode = ${XDEBUG_MODE//\//_}/" /usr/local/etc/php/conf.d/xdebug.ini
-		unset XDEBUG_MODE
+		sed -i "s/^xdebug.mode\s*=.*/xdebug.mode = ${PHP_XDEBUG_MODE//\//_}/" /usr/local/etc/php/conf.d/xdebug.ini
+		unset PHP_XDEBUG_MODE
 	else
-		echo "⚠ No value for XDEBUG_MODE was found. Not updating the setting."
+		echo "⚠ No value for PHP_XDEBUG_MODE was found. Not updating the setting."
 	fi
 }
 

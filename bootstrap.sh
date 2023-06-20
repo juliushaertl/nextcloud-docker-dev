@@ -97,7 +97,7 @@ STABLE_ROOT_PATH=$PWD/workspace
 NEXTCLOUD_AUTOINSTALL_APPS="${NEXTCLOUD_AUTOINSTALL_APPS[@]}"
 DOCKER_SUBNET=192.168.21.0/24
 PORTBASE=821
-XDEBUG_MODE=develop
+PHP_XDEBUG_MODE=develop
 # SQL variant to use, possible values: sqlite, mysql, pgsql
 SQL=mysql
 DB_SERVICE=database-mysql
