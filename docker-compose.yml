@@ -827,7 +827,7 @@ services:
       - host.docker.internal:host-gateway
 
   previews_hpb:
-    image: h2non/imaginary
+    image: nextcloud/aio-imaginary:latest
     ports:
       - "8088:8088"
     environment:
