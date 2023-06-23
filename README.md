@@ -320,7 +320,7 @@ docker-compose exec ldap ldapsearch -H 'ldap://localhost' -D "cn=admin,dc=planet
 
 ## ONLYOFFICE
 
-- Make sure to have the Collabora hostname setup in your `/etc/hosts` file: `127.0.0.1 onlyoffice.local`
+- Make sure to have the ONLYOFFICE hostname setup in your `/etc/hosts` file: `127.0.0.1 onlyoffice.local`
 - Automatically enable for one of your containers (e.g. the main `nextcloud` one):
 	- Run `./scripts/enable-onlyoffice nextcloud`
 - Manual setup
