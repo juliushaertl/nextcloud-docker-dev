@@ -1,0 +1,14 @@
+#!/bin/bash
+
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+CERT_DIR="${SCRIPT_DIR}/../data/ssl/"
+
+# shellcheck disable=SC1091
+source "${SCRIPT_DIR}/../.env"
+
+awk '$1 == "-"{ if (key == "aliases:") print $NF; next } {key=$1}' docker-compose.yml | \
+	sed "s/\${DOMAIN_SUFFIX}/${DOMAIN_SUFFIX}/" | \
+	while read -r line;
+	do
+        mkcert -cert-file "${CERT_DIR}${line}.crt" -key-file "${CERT_DIR}${line}.key" "${line}.crt"
+	done
