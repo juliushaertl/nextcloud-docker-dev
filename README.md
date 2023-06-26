@@ -259,10 +259,7 @@ Be aware that since this is advertised in the local network, it is not recommend
 
 * Install [mkcert](https://github.com/FiloSottile/mkcert)
 * Go to `data/ssl`
-* `mkcert nextcloud.local`
-
-* `mv nextcloud.local-key.pem nextcloud.local.key`
-* `mv nextcloud.local.pem nextcloud.local.crt`
+* `mkcert -cert-file nextcloud.local.crt -key-file nextcloud.local.key nextcloud.local`
 * `docker-compose restart proxy`
 
 ## ✉ Mail
