@@ -245,6 +245,16 @@ For dnsmasq adding the following configuration would be sufficient for `DOMAIN_S
 address=/.local/127.0.0.1
 ```
 
+### Use DNS Service Discovery on MacOS
+
+You can also use the `dns-sd` tool on MacOS to advertise the container domains on the network. This is especially useful if you try to connect from an iPhone or iPad, since those devices do not allow to edit the `/etc/hosts` file. Use the tool like this:
+
+```
+dns-sd -P nextcloud _http._tcp local 80 nextcloud.local 192.168.0.10
+```
+
+Be aware that since this is advertised in the local network, it is not recommended to use it in a network where multiple instances could be running. In this case you might want to change the `DOMAIN_SUFFIX` in `.env` to prevent any collision.
+
 ### Use valid certificates trusted by your system
 
 * Install [mkcert](https://github.com/FiloSottile/mkcert)
