@@ -1,70 +1,41 @@
 FROM php:8.2-apache
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        libcurl4-openssl-dev \
-        libfreetype6-dev \
-        libicu-dev \
-        libjpeg-dev \
-        libldap2-dev \
-        libmcrypt-dev \
-        libmemcached-dev \
-        libpng-dev \
-        libpq-dev \
-        libxml2-dev \
-        libzip-dev \
-        libmagickwand-dev \
-        libmagickcore-6.q16-3-extra \
-        libsmbclient-dev \
-        libgmp-dev \
-        libwebp-dev \
-        && rm -rf /var/lib/apt/lists/*
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
-RUN debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
-    docker-php-ext-configure gd \
-        --with-freetype \
-        --with-jpeg \
-        --with-webp && \
-    docker-php-ext-configure ldap --with-libdir="lib/$debMultiarch" && \
-    docker-php-ext-install \
-        exif \
-        gd \
-        intl \
-        ldap \
-        opcache \
-        pcntl \
-        pdo_mysql \
-        pdo_pgsql \
-        zip \
-        sysvsem \
-        gmp
+RUN chmod +x /usr/local/bin/install-php-extensions
 
-RUN pecl install APCu && \
-    pecl install memcached && \
-    pecl install redis && \
-    pecl install xdebug && \
-    pecl install imagick && \
-    pecl install smbclient && \
-    \
-    docker-php-ext-enable \
-        apcu \
-        memcached \
-        redis \
-        xdebug \
-        imagick \
-        smbclient && \
-	docker-php-source delete && \
-		rm -r /tmp/* /var/cache/*
+RUN install-php-extensions \
+    apcu \
+    bcmath \
+    blackfire \
+    exif \
+    gd \
+    gmp \
+    imagick \
+    intl \
+    ldap \
+    oci8 \
+    opcache \
+    pcntl \
+    pdo_mysql \
+    pdo_pgsql \
+    redis \
+    smbclient \
+    sysvsem \
+    xdebug \
+    zip \
+    @composer
 
 # dev tools separate install so we quickly change without rebuilding all php extensions
 RUN apt update && apt-get install -y --no-install-recommends \
     git curl vim sudo cron smbclient iproute2 lnav wget iputils-ping gnupg2 jq ripgrep rsync \
-        && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
 # Install PHPUnit
-RUN wget -O /usr/local/bin/phpunit8 https://phar.phpunit.de/phpunit-8.phar && \
-    chmod +x /usr/local/bin/phpunit8 && \
-    wget -O /usr/local/bin/phpunit9 https://phar.phpunit.de/phpunit-9.phar && \
-    chmod +x /usr/local/bin/phpunit9
+RUN wget -O /usr/local/bin/phpunit8 https://phar.phpunit.de/phpunit-8.phar \
+    && chmod +x /usr/local/bin/phpunit8 \
+    && wget -O /usr/local/bin/phpunit9 https://phar.phpunit.de/phpunit-9.phar \
+    && chmod +x /usr/local/bin/phpunit9
 
 # Install NVM (Fermium = v14, Gallium = v16)
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash \
@@ -93,7 +64,7 @@ ADD configs/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 RUN wget -q -O - https://packages.blackfire.io/gpg.key | sudo apt-key add - \
     && echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list \
     && apt-get update  \
-    && (apt-get install -y --no-install-recommends blackfire-php blackfire \
+    && (apt-get install -y --no-install-recommends blackfire \
 		&& printf "\n\nblackfire.agent_socket=tcp://blackfire:8307\n" >> $PHP_INI_DIR/conf.d/zz-blackfire.ini && \
         mv $PHP_INI_DIR/conf.d/zz-blackfire.ini $PHP_INI_DIR/conf.d/zz-blackfire.ini.disabled) \
 		|| echo "Skipped blackfire as the installation failed" \
@@ -101,9 +72,11 @@ RUN wget -q -O - https://packages.blackfire.io/gpg.key | sudo apt-key add - \
 
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-RUN a2enmod rewrite
+# mod_rewrite
+RUN a2enmod rewrite headers
 
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+# increase limit request body
+RUN echo "LimitRequestBody 0" > /etc/apache2/conf-available/limit-request-body.conf && a2enconf limit-request-body
 
 VOLUME /var/www/html
 VOLUME /var/www/html/apps-writable
