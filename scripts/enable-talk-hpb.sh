@@ -16,7 +16,7 @@ function occ() {
 source .env
 
 echo "Setting up talk signaling with http://talk-signaling$DOMAIN_SUFFIX on $CONTAINER"
-docker-compose up -d talk-signaling
+docker-compose up -d talk-signaling talk-janus
 
 if ! occ talk:signaling:list --output="plain" | grep -q "http://talk-signaling$DOMAIN_SUFFIX"; then
   occ talk:signaling:add "http://talk-signaling$DOMAIN_SUFFIX" "1234"

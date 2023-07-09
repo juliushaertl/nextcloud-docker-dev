@@ -841,11 +841,18 @@ services:
       HTTP_LISTEN: "0.0.0.0:80"
       HASH_KEY: "11111111111111111111111111111111"
       BLOCK_KEY: "22222222222222222222222222222222"
-      USE_JANUS: 0
+      USE_JANUS: 1
+      JANUS_URL: "ws://talk-janus:8188"
       SKIP_VERIFY: 1
       BACKENDS_ALLOWALL: 1
       BACKENDS_ALLOWALL_SECRET: "1234"
       INTERNAL_SHARED_SECRET_KEY: "4567"
+
+  talk-janus:
+    build:
+      context: ./docker
+      dockerfile: talk-janus/Dockerfile
+    command: ["janus", "--full-trickle"]      
 
 volumes:
   data:
