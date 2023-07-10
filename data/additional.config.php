@@ -39,7 +39,6 @@ if ($primary === 'minio-multibucket') {
 				// optional, defaults to 64
 				'num_buckets' => 64,
 				// n integer in the range from 0 to (num_buckets-1) will be appended
-				'bucket' => 'nextcloud_',
 				'bucket' => 'nc-' . $hostname,
 				'key' => 'nextcloud',
 				'secret' => 'nextcloud',
