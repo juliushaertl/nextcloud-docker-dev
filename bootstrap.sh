@@ -67,7 +67,7 @@ echo
 echo "⏩ Performing system checks"
 
 is_installed docker
-is_installed docker-compose
+is_installed docker compose
 is_installed git
 
 (
@@ -121,17 +121,17 @@ cat <<EOF
 
  🚀  Start the Nextcloud server by running
 
-	$ docker-compose up -d nextcloud
+	$ docker compose up -d nextcloud
 
 
  💤  Stop it with
 
-	$ docker-compose stop nextcloud
+	$ docker compose stop nextcloud
 
 
  🗑  Fresh install and wipe all data
 
-	$ docker-compose down -v
+	$ docker compose down -v
 
 
 	Note that for performance reasons the server repository has been cloned with
