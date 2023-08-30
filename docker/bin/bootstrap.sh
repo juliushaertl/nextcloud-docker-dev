@@ -130,7 +130,7 @@ configure_oidc() {
 	fi
 	OCC app:enable user_oidc
 	get_protocol
-	OCC user_oidc:provider Keycloak -c nextcloud -s 09e3c268-d8bc-42f1-b7c6-74d307ef5fde -d "$PROTOCOL://keycloak.local.dev.bitgrid.net/auth/realms/Example/.well-known/openid-configuration"
+	OCC user_oidc:provider Keycloak -c nextcloud -s 09e3c268-d8bc-42f1-b7c6-74d307ef5fde -d "$PROTOCOL://keycloak${DOMAIN_SUFFIX}/realms/Example/.well-known/openid-configuration"
 }
 
 PROTOCOL="${PROTOCOL:-http}"
