@@ -133,24 +133,12 @@ configure_oidc() {
 	OCC user_oidc:provider Keycloak -c nextcloud -s 09e3c268-d8bc-42f1-b7c6-74d307ef5fde -d "$PROTOCOL://keycloak.local.dev.bitgrid.net/auth/realms/Example/.well-known/openid-configuration"
 }
 
-PROTOCOL=""
+PROTOCOL="${PROTOCOL:-http}"
 get_protocol() {
 	if [[ "$IS_STANDALONE" = "true" ]]; then
 		PROTOCOL=http
 		return 0
 	fi
-
-	if [[ "$PROTOCOL" == "" ]]; then
-		output " Detecting SSL..."
-		timeout 1 bash -c 'until echo > /dev/tcp/proxy/443; do sleep 0.5; done' 2>/dev/null
-		if [ $? -eq 0 ]; then
-			output "🔑 SSL proxy available"
-			PROTOCOL=https
-		else
-			output "🗝 No SSL proxy detected"
-			PROTOCOL=http
-		fi
-    fi
 }
 
 configure_ssl_proxy() {

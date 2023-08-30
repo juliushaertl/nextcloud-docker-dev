@@ -1,6 +1,6 @@
 # Keycloak SAML test setup
 
-Currently the Keycloak realm only supports the main instance (nextcloud.dev.local). For other instances this would need a separate realm and adjusting the imported realm in `docker/configs/keycloak`.
+Currently the Keycloak realm only supports the main instance (nextcloud.local). For other instances this would need a separate realm and adjusting the imported realm in `docker/configs/keycloak`.
 
 Setup can be done automatically through:
 
@@ -9,9 +9,9 @@ occ saml:config:create
 occ saml:config:set \
         --general-idp0_display_name "Keycloak SAML" \
         --general-uid_mapping "username" \
-        --idp-entityId "http://keycloak.dev.local/realms/Example" \
-        --idp-singleLogoutService.url "http://keycloak.dev.local/realms/Example/protocol/saml" \
-        --idp-singleSignOnService.url "http://keycloak.dev.local/realms/Example/protocol/saml" \
+        --idp-entityId "http://keycloak.local/realms/Example" \
+        --idp-singleLogoutService.url "http://keycloak.local/realms/Example/protocol/saml" \
+        --idp-singleSignOnService.url "http://keycloak.local/realms/Example/protocol/saml" \
         --idp-x509cert="$(cat keycloak.crt)" \
         --security-authnRequestsSigned 1 \
         --security-logoutRequestSigned 1 \

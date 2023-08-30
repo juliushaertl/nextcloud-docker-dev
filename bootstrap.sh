@@ -91,6 +91,7 @@ echo "⏩ Setup your environment in an .env file"
 if [ ! -f ".env" ]; then
 cat <<EOT >.env
 COMPOSE_PROJECT_NAME=master
+PROTOCOL=http
 DOMAIN_SUFFIX=.local
 REPO_PATH_SERVER=$PWD/workspace/server
 STABLE_ROOT_PATH=$PWD/workspace
