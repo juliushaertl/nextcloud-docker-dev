@@ -34,6 +34,7 @@ jobs:
           - smb
           - codedev
           - code
+          - talk-janus
     permissions:
       packages: write
       contents: read

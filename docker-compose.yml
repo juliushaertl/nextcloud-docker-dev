@@ -849,10 +849,7 @@ services:
       INTERNAL_SHARED_SECRET_KEY: "4567"
 
   talk-janus:
-    build:
-      context: ./docker
-      dockerfile: talk-janus/Dockerfile
-    command: ["janus", "--full-trickle"]      
+    image: ghcr.io/juliushaertl/nextcloud-dev-talk-janus:latest
 
 volumes:
   data:

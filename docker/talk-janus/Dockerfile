@@ -46,4 +46,4 @@ RUN mkdir -p /usr/src/janus && \
 
 WORKDIR /usr/src/janus/janus-gateway-$JANUS_VERSION
 
-CMD [ "janus" ]
+CMD [ "janus", "--full-trickle" ]
