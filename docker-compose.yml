@@ -53,6 +53,7 @@ services:
           - elasticsearch-ui${DOMAIN_SUFFIX}
           - pgadmin${DOMAIN_SUFFIX}
           - phpmyadmin${DOMAIN_SUFFIX}
+          - talk-signaling${DOMAIN_SUFFIX}
 
   haproxy:
     image: haproxy
@@ -833,6 +834,22 @@ services:
     environment:
       - PORT=8088
 
+  talk-signaling:
+    image: strukturag/nextcloud-spreed-signaling:latest
+    environment:
+      VIRTUAL_HOST: "talk-signaling${DOMAIN_SUFFIX}"
+      HTTP_LISTEN: "0.0.0.0:80"
+      HASH_KEY: "11111111111111111111111111111111"
+      BLOCK_KEY: "22222222222222222222222222222222"
+      USE_JANUS: 1
+      JANUS_URL: "ws://talk-janus:8188"
+      SKIP_VERIFY: 1
+      BACKENDS_ALLOWALL: 1
+      BACKENDS_ALLOWALL_SECRET: "1234"
+      INTERNAL_SHARED_SECRET_KEY: "4567"
+
+  talk-janus:
+    image: ghcr.io/juliushaertl/nextcloud-dev-talk-janus:latest
 
 volumes:
   data:
