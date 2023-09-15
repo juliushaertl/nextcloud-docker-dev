@@ -317,6 +317,7 @@ docker-compose exec ldap ldapsearch -H 'ldap://localhost' -D "cn=admin,dc=planet
 ## Collabora
 
 - Make sure to have the Collabora hostname setup in your `/etc/hosts` file: `127.0.0.1 collabora.local`
+- Clone, build and enable the [richdocuments](https://github.com/nextcloud/richdocuments) app
 - Automatically enable for one of your containers (e.g. the main `nextcloud` one):
 	- Run `./scripts/enable-collabora nextcloud`
 - Manual setup
