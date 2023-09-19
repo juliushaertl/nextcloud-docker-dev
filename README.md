@@ -1,6 +1,6 @@
 # Nextcloud development environment on Docker Compose
 
-Nextcloud development environment using docker-compose
+Nextcloud development environment using docker compose
 
 ⚠ **DO NOT USE THIS IN PRODUCTION** Various settings in this setup are considered insecure and default passwords and secrets are used all over the place
 
@@ -14,7 +14,6 @@ Features
 - ✉ Mailhog
 - 🚀 Blackfire
 - 📄 Collabora
-
 
 ## Standalone containers
 
@@ -51,22 +50,25 @@ You can also mount your local server source code into the container to run a loc
 ```bash
 docker run --rm -p 8080:80 -e SERVER_BRANCH=v24.0.1 -v /tmp/server:/var/www/html ghcr.io/juliushaertl/nextcloud-dev-php80:latest
 ```
+
 ## Simple master setup
 
-The easiest way to get the setup running the ```master``` branch is by running the ```bootstrap.sh``` script:
+The easiest way to get the setup running the `master` branch is by running the `bootstrap.sh` script:
+
 ```
 git clone https://github.com/juliushaertl/nextcloud-docker-dev
 cd nextcloud-docker-dev
 ./bootstrap.sh
 sudo sh -c "echo '127.0.0.1 nextcloud.local' >> /etc/hosts"
-docker-compose up nextcloud proxy
+docker compose up nextcloud proxy
 ```
+
 Note that for performance reasons the server repository might have been cloned with --depth=1 by default. To get the full history it is highly recommended to run:
 
-	cd workspace/server
-	git fetch --unshallow
-	git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
-	git fetch origin
+    cd workspace/server
+    git fetch --unshallow
+    git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+    git fetch origin
 
 This may take some time depending on your internet connection speed.
 
@@ -124,19 +126,21 @@ Replace `REPO_PATH_SERVER` with the path from above.
 
 ##### 4. Running different stable versions
 
-The docker-compose file provides individual containers for stable Nextcloud releases. In order to run those you will need a checkout of the stable version server branch to your workspace directory. Using [git worktree](https://blog.juliushaertl.de/index.php/2018/01/24/how-to-checkout-multiple-git-branches-at-the-same-time/) makes it easy to have different branches checked out in parallel in separate directories.
+The docker compose file provides individual containers for stable Nextcloud releases. In order to run those you will need a checkout of the stable version server branch to your workspace directory. Using [git worktree](https://blog.juliushaertl.de/index.php/2018/01/24/how-to-checkout-multiple-git-branches-at-the-same-time/) makes it easy to have different branches checked out in parallel in separate directories.
 
 ```
 cd workspace/server
 git worktree add ../stable23 stable23
 ```
+
 As in the `server` folder, the `3rdparty` submodule is needed:
+
 ```
 cd ../stable23
 git submodule update --init
 ```
 
-The same can be done for `stable24`, `stable25`... and so on. 
+The same can be done for `stable24`, `stable25`... and so on.
 
 Git worktrees can also be used to have a checkout of an apps stable branch within the server stable directory.
 
@@ -159,6 +163,7 @@ git worktree add ../../../stable25/apps/viewer stable25
 ##### 5. Editing `/etc/hosts`
 
 You can then add `stable23.local`, `stable24.local` and so on to your `/etc/hosts` file to access it.
+
 ```
 sudo sh -c "echo '127.0.0.1 nextcloud.local' >> /etc/hosts"
 ```
@@ -179,29 +184,29 @@ The variable supports the following values:
 
 ##### 7. Starting the containers
 
-- Minimum to run `master`: `docker-compose up proxy nextcloud` (nextcloud mysql redis mailhog)
-- Start stable branches: `docker-compose up stable23 proxy`
-- Start full setup: `docker-compose up`
+- Minimum to run `master`: `docker compose up proxy nextcloud` (nextcloud mysql redis mailhog)
+- Start stable branches: `docker compose up stable23 proxy`
+- Start full setup: `docker compose up`
 
 ##### 8. Switching between stable versions and master
 
 Remove all relevant containers and volumes:
-`docker-compose down -v`
+`docker compose down -v`
 
 Start master or the branch you want to run:
-`docker-compose up stable23 proxy`
+`docker compose up stable23 proxy`
 
 ## Running into errors
 
 - If your setup isn't working and you can not figure out the reason why, running
-`docker-compose down -v` will remove the relevant containers and volumes,
-allowing you to run `docker-compose up` again from a clean slate.
+  `docker compose down -v` will remove the relevant containers and volumes,
+  allowing you to run `docker compose up` again from a clean slate.
 
 - Sometimes it might help: `docker pull ghcr.io/juliushaertl/nextcloud-dev-php74:latest`
 
 - In extreme cases, clean everything: `docker system prune --all`
 
-- If you start your stable containers (not the master) and it wants to install Nextcloud even if it is not the first start, you may have removed the configuration with the last `docker-compose down` command. Try to use `docker-compose stop` instead or give the stable setup named values yourself.
+- If you start your stable containers (not the master) and it wants to install Nextcloud even if it is not the first start, you may have removed the configuration with the last `docker compose down` command. Try to use `docker compose stop` instead or give the stable setup named values yourself.
 
 ## 🔒 Reverse Proxy
 
@@ -241,6 +246,7 @@ PROXY_PORT_HTTPS=4443
 Instead of adding the individual container domains to `/etc/hosts` a local dns server like dnsmasq can be used to resolve any domain ending with the configured `DOMAIN_SUFFIX` in `.env` to localhost.
 
 For dnsmasq adding the following configuration would be sufficient for `DOMAIN_SUFFIX=.local`:
+
 ```
 address=/.local/127.0.0.1
 ```
@@ -257,10 +263,10 @@ Be aware that since this is advertised in the local network, it is not recommend
 
 ### Use valid certificates trusted by your system
 
-* Install [mkcert](https://github.com/FiloSottile/mkcert)
-* Go to `data/ssl`
-* `mkcert -cert-file nextcloud.local.crt -key-file nextcloud.local.key nextcloud.local`
-* `docker-compose restart proxy`
+- Install [mkcert](https://github.com/FiloSottile/mkcert)
+- Go to `data/ssl`
+- `mkcert -cert-file nextcloud.local.crt -key-file nextcloud.local.key nextcloud.local`
+- `docker compose restart proxy`
 
 ## ✉ Mail
 
@@ -283,7 +289,7 @@ After that you can use Blackfire through the browser plugin or curl as described
 ### Using with curl
 
 ```
-alias blackfire='docker-compose exec -e BLACKFIRE_CLIENT_ID=$BLACKFIRE_CLIENT_ID -e BLACKFIRE_CLIENT_TOKEN=$BLACKFIRE_CLIENT_TOKEN blackfire blackfire'
+alias blackfire='docker compose exec -e BLACKFIRE_CLIENT_ID=$BLACKFIRE_CLIENT_ID -e BLACKFIRE_CLIENT_TOKEN=$BLACKFIRE_CLIENT_TOKEN blackfire blackfire'
 blackfire curl http://192.168.21.8/
 ```
 
@@ -311,7 +317,7 @@ Example users are: `leela fry bender zoidberg hermes professor`. The password is
 Useful commands:
 
 ```
-docker-compose exec ldap ldapsearch -H 'ldap://localhost' -D "cn=admin,dc=planetexpress,dc=com" -w admin -b "dc=planetexpress,dc=com" "(&(objectclass=inetOrgPerson)(description=*use*))"
+docker compose exec ldap ldapsearch -H 'ldap://localhost' -D "cn=admin,dc=planetexpress,dc=com" -w admin -b "dc=planetexpress,dc=com" "(&(objectclass=inetOrgPerson)(description=*use*))"
 ```
 
 ## Collabora
@@ -319,38 +325,35 @@ docker-compose exec ldap ldapsearch -H 'ldap://localhost' -D "cn=admin,dc=planet
 - Make sure to have the Collabora hostname setup in your `/etc/hosts` file: `127.0.0.1 collabora.local`
 - Clone, build and enable the [richdocuments](https://github.com/nextcloud/richdocuments) app
 - Automatically enable for one of your containers (e.g. the main `nextcloud` one):
-	- Run `./scripts/enable-collabora nextcloud`
+  - Run `./scripts/enable-collabora nextcloud`
 - Manual setup
-	- Start the Collabora Online server in addition to your other containers `docker-compose up -d collabora`
-	- Make sure you have the [richdocuments app](https://github.com/nextcloud/richdocuments) cloned to your `apps-extra` directory and built the frontend code of the app with `npm ci && npm run build`
-	- Enable the app and configure `collabora.local` in the Collabora settings inside of Nextcloud
-
+  - Start the Collabora Online server in addition to your other containers `docker compose up -d collabora`
+  - Make sure you have the [richdocuments app](https://github.com/nextcloud/richdocuments) cloned to your `apps-extra` directory and built the frontend code of the app with `npm ci && npm run build`
+  - Enable the app and configure `collabora.local` in the Collabora settings inside of Nextcloud
 
 ## ONLYOFFICE
 
 - Make sure to have the ONLYOFFICE hostname setup in your `/etc/hosts` file: `127.0.0.1 onlyoffice.local`
 - Automatically enable for one of your containers (e.g. the main `nextcloud` one):
-	- Run `./scripts/enable-onlyoffice nextcloud`
+  - Run `./scripts/enable-onlyoffice nextcloud`
 - Manual setup
-	- Start the ONLYOFFICE server in addition to your other containers `docker-compose up -d onlyoffice`
-	- Clone https://github.com/ONLYOFFICE/onlyoffice-nextcloud into your apps directory
-	- Enable the app and configure `onlyoffice.local` in the ONLYOFFICE settings inside of Nextcloud
-
+  - Start the ONLYOFFICE server in addition to your other containers `docker compose up -d onlyoffice`
+  - Clone https://github.com/ONLYOFFICE/onlyoffice-nextcloud into your apps directory
+  - Enable the app and configure `onlyoffice.local` in the ONLYOFFICE settings inside of Nextcloud
 
 ## Talk HPB
 
 - Make sure to have the signaling hostname setup in your `/etc/hosts` file: `127.0.0.1 talk-signaling.local`
 - Automatically enable for one of your containers (e.g. the main `nextcloud` one):
-	- Run `./scripts/enable-talk-hpb.sh nextcloud`
+  - Run `./scripts/enable-talk-hpb.sh nextcloud`
 - Manual setup
-	- Start the talk signaling server and janus in addition to your other containers `docker-compose up -d talk-signaling talk-janus`
-	- Go to the admin settings of talk and add the signaling server (`http://talk-signaling.local` with shared secret `1234`)
-
+  - Start the talk signaling server and janus in addition to your other containers `docker compose up -d talk-signaling talk-janus`
+  - Go to the admin settings of talk and add the signaling server (`http://talk-signaling.local` with shared secret `1234`)
 
 ## Antivirus
 
 ```bash
-docker-compose up -d proxy nextcloud av
+docker compose up -d proxy nextcloud av
 ```
 
 The [ClamAV](https://www.clamav.net/) antivirus will then be exposed as a daemon with host `nextav` and
@@ -359,7 +362,7 @@ port `3310`.
 ## SAML
 
 ```
-docker-compose up -d proxy nextcloud saml
+docker compose up -d proxy nextcloud saml
 ```
 
 - uid mapping: `urn:oid:0.9.2342.19200300.100.1.1`
@@ -424,7 +427,7 @@ A simple approach to test environment-based SSO with the `user_saml` app is to u
 ## [Fulltextsearch](https://github.com/nextcloud/fulltextsearch)
 
 ```
-docker-compose up -d elasticsearch elasticsearch-ui
+docker compose up -d elasticsearch elasticsearch-ui
 ```
 
 - Address for configuring in Nextcloud: `http://elastic:elastic@elasticsearch:9200`
@@ -433,14 +436,12 @@ docker-compose up -d elasticsearch elasticsearch-ui
 
 `sudo sysctl -w vm.max_map_count=262144`
 
-
-
 ## Object storage
 
 Primary object storage can be enabled by setting the `PRIMARY=minio` environment variable either in your `.env` file or in `docker-compose.yml` for individual containers.
 
 ```bash
-docker-compose up proxy nextcloud minio
+docker compose up proxy nextcloud minio
 ```
 
 ## Development
@@ -448,6 +449,7 @@ docker-compose up proxy nextcloud minio
 ### OCC
 
 Run inside of the Nextcloud container:
+
 ```
 set XDEBUG_CONFIG=idekey=PHPSTORM
 sudo -E -u www-data php -dxdebug.remote_host=192.168.21.1 occ
@@ -455,7 +457,7 @@ sudo -E -u www-data php -dxdebug.remote_host=192.168.21.1 occ
 
 ### Useful commands
 
-- Restart Apache to reload php configuration without a full container restart: `docker-compose kill -s USR1 nextcloud`
+- Restart Apache to reload php configuration without a full container restart: `docker compose kill -s USR1 nextcloud`
 - Access to MySQL console: `mysql -h $(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nextcloud_database-mysql_1) -P 3306 -u nextcloud -pnextcloud`
 - Run an LDAP search: `ldapsearch -x -H ldap://$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nextcloud_ldap_1) -D "cn=admin,dc=planetexpress,dc=com" -w admin -b "dc=planetexpress,dc=com" -s subtree <filter> <attrs>`
 
@@ -470,7 +472,7 @@ sudo -E -u www-data php -dxdebug.remote_host=192.168.21.1 occ
 ## Global scale
 
 ```
-docker-compose up -d proxy portal gs1 gs2 lookup database-mysql
+docker compose up -d proxy portal gs1 gs2 lookup database-mysql
 ```
 
 Users are named the same as the instance name, e.g. `gs1`, `gs2`
@@ -480,15 +482,18 @@ Users are named the same as the instance name, e.g. `gs1`, `gs2`
 Enable the imaginary server for generating previews
 
 ```bash
-docker-compose up proxy nextcloud previews_hpb
+docker compose up proxy nextcloud previews_hpb
 ./scripts/enable-preview-imaginary.sh
 ```
 
 ## PhpMyAdmin
+
 If you need to access the database, you can startup the `phpmyadmin` container that is already prepared.
+
 ```
-docker-compose up -d phpmyadmin
+docker compose up -d phpmyadmin
 ```
+
 Just add the domain to your `/etc/hosts` file and give it a try.
 
 ```
@@ -496,10 +501,11 @@ sudo sh -c "echo '127.0.0.1 phpmyadmin.local' >> /etc/hosts"
 ```
 
 ## pgAdmin
+
 If you need to access the database and you are running PostgreSQL, you can use this additional container.
 
 ```
-docker-compose up -d pgadmin
+docker compose up -d pgadmin
 ```
 
 Add the domain to your `/etc/hosts` file:
