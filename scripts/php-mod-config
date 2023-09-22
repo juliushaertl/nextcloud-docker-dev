@@ -29,11 +29,11 @@ then
     then
         echo 'Enabling blackfire'
         docker_compose up -d blackfire
-        docker_exec "$1" "mv /usr/local/etc/php/conf.d/zz-blackfire.ini.disabled /usr/local/etc/php/conf.d/zz-blackfire.ini"
+        docker_exec "$1" "mv /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini.disabled /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini"
     else
         echo 'Disabling blackfire'
         docker_compose stop blackfire
-        docker_exec "$1" "mv /usr/local/etc/php/conf.d/zz-blackfire.ini /usr/local/etc/php/conf.d/zz-blackfire.ini.disabled"
+        docker_exec "$1" "mv /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini.disabled"
     fi
     restart "$1"
     exit 0
