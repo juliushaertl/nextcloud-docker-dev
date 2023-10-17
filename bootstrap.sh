@@ -258,6 +258,8 @@ case $SERVER_CLONE in
 	$ git fetch origin
 
 	This may take some time depending on your internet connection speed.
+
+	You might as well use the script in scripts/download-full-history.sh.
 EOF
 		;;
 	clone-no-blobs)
@@ -270,6 +272,8 @@ EOF
 
 	You should be prepared to have a live internet connection when browsing the
 	history of the server repository.
+
+	You might as well use the script in scripts/download-full-history.sh.
 EOF
 		;;
 	full)
