@@ -67,7 +67,10 @@ echo
 echo "⏩ Performing system checks"
 
 is_installed docker
-is_installed docker compose
+(
+  (docker compose version >/dev/null 2>&1 && echo "✅ Docker Compose plugin is properly installed" | indent) ||
+	  (is_installed docker-compose)
+)
 is_installed git
 
 (
