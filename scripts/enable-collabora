@@ -16,7 +16,11 @@ function occ() {
 source .env
 
 echo "Setting up Collabora with collabora$DOMAIN_SUFFIX on $CONTAINER"
-docker-compose up -d collabora
+if docker compose up -d collabora 2>/dev/null; then
+    :
+else
+    docker-compose up -d collabora
+fi
 occ app:enable richdocuments
 occ config:app:set richdocuments wopi_url --value="http://collabora${DOMAIN_SUFFIX}"
 occ config:app:set richdocuments public_wopi_url --value="http://collabora${DOMAIN_SUFFIX}"

@@ -16,6 +16,10 @@ function occ() {
 source .env
 
 echo "Setting up ONLYOFFICE with onlyoffice$DOMAIN_SUFFIX on $CONTAINER"
-docker-compose up -d onlyoffice
+if docker compose up -d onlyoffice 2>/dev/null; then
+    :
+else
+    docker-compose up -d onlyoffice
+fi
 occ app:enable onlyoffice --force
 occ config:app:set onlyoffice DocumentServerUrl --value="http://onlyoffice$DOMAIN_SUFFIX"
