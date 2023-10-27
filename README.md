@@ -245,6 +245,19 @@ For dnsmasq adding the following configuration would be sufficient for `DOMAIN_S
 address=/.local/127.0.0.1
 ```
 
+To run dnsmasq in a container, you can use the following example:
+
+```
+docker run --rm -it \
+    -e DMQ_DHCP_RANGES=" " \
+    -e DMQ_DHCP_DNS=" " \
+    -e DMQ_DHCP_GATEWAY=" " \
+    -e DMQ_DNS_ADDRESS="address=/.local/127.0.0.1" \
+    -p 53:53 \
+    -p 53:53/udp \
+    drpsychick/dnsmasq:latest 
+```
+
 ### Use DNS Service Discovery on MacOS
 
 You can also use the `dns-sd` tool on MacOS to advertise the container domains on the network. This is especially useful if you try to connect from an iPhone or iPad, since those devices do not allow to edit the `/etc/hosts` file. Use the tool like this:
