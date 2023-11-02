@@ -28,6 +28,13 @@ output() {
 	echo "$@" >> /var/www/html/installing.html
 }
 
+fatal() {
+	output "======================================================================================="
+	output "$@"
+	output "======================================================================================="
+	exit 1
+}
+
 OCC() {
 	output "occ" "$@"
 	# shellcheck disable=SC2068
@@ -58,19 +65,42 @@ configure_xdebug_mode() {
 
 wait_for_other_containers() {
 	output "⌛ Waiting for other containers"
-	if [ "$SQL" = "mysql" ]
-	then
-		output " - MySQL"
-		while ! timeout 1 bash -c "(echo > /dev/tcp/database-mysql/3306) 2>/dev/null"; do sleep 2; done
-		[ $? -ne 0 ] && echo "⚠ Unable to connect to the MySQL server"
-		sleep 2
-	fi
-	if [ "$SQL" = "pgsql" ]
-	then
-		while ! timeout 1 bash -c "(echo > /dev/tcp/database-postgres/5432) 2>/dev/null"; do sleep 2; done
-		[ $? -ne 0 ] && echo "⚠ Unable to connect to the PostgreSQL server"
-		sleep 2
-	fi
+	retry_with_timeout() {
+		local cmd=$1
+		local timeout=$2
+		local error_message=$3
+		local START_TIME=$SECONDS
+
+		while ! bash -c "$cmd"; do
+			if [ "$((SECONDS - START_TIME))" -ge "$timeout" ]; then
+				fatal "$error_message"
+			fi
+			sleep 2
+		done
+	}
+
+	case "$SQL" in
+		"mysql" | "mariadb-replica")
+			output " - MySQL"
+			retry_with_timeout "(echo > /dev/tcp/database-$SQL/3306) 2>/dev/null" 30 "⚠ Unable to connect to the MySQL server"
+			sleep 2
+			;;
+		"pgsql")
+			retry_with_timeout "(echo > /dev/tcp/database-postgres/5432) 2>/dev/null" 30 "⚠ Unable to connect to the PostgreSQL server"
+			sleep 2
+			;;
+		"maxscale")
+			for node in database-mariadb-primary database-mariadb-replica; do
+				echo " - Waiting for $node"
+				retry_with_timeout "(echo > /dev/tcp/$node/3306) 2>/dev/null" 30 "⚠ Unable to reach to the $node"
+				retry_with_timeout "mysql -u root -pnextcloud -h $node -e 'SELECT 1' 2>/dev/null" 30 "⚠ Unable to connect to the $node"
+				echo "✅"
+			done
+			;;
+		*)
+			fatal 'Not implemented'
+			;;
+	esac
 	[ $? -eq 0 ] && output "✅ Database server ready"
 }
 
@@ -185,35 +215,8 @@ configure_add_user() {
 
 install() {
 	DBNAME=$(echo "$VIRTUAL_HOST" | cut -d '.' -f1)
+	SQLHOST="database-$SQL"
 	echo "database name will be $DBNAME"
-
-	if [ "$SQL" = "mysql" ]
-	then
-		cp /root/autoconfig_mysql.php "$WEBROOT"/config/autoconfig.php
-		sed -i "s/dbname' => 'nextcloud'/dbname' => '$DBNAME'/" "$WEBROOT/config/autoconfig.php"
-		SQLHOST=database-mysql
-	fi
-
-	if [ "$SQL" = "pgsql" ]
-	then
-		cp /root/autoconfig_pgsql.php "$WEBROOT"/config/autoconfig.php
-		sed -i "s/dbname' => 'nextcloud'/dbname' => '$DBNAME'/" "$WEBROOT/config/autoconfig.php"
-		SQLHOST=database-postgres
-	fi
-
-	if [ "$SQL" = "oci" ]
-	then
-		cp /root/autoconfig_oci.php "$WEBROOT"/config/autoconfig.php
-	fi
-
-	# We copy the default config to the container
-	cp /root/default.config.php "$WEBROOT"/config/config.php
-	chown -R www-data:www-data "$WEBROOT"/config/config.php
-
-	mkdir -p "$WEBROOT/apps-extra"
-	mkdir -p "$WEBROOT/apps-shared"
-
-	update_permission
 
 	USER="admin"
 	PASSWORD="admin"
@@ -227,6 +230,14 @@ install() {
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name="$DBNAME" --database-host="$SQLHOST" --database-user=postgres --database-pass=postgres
 	elif [ "$SQL" = "mysql" ]; then
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name="$DBNAME" --database-host="$SQLHOST" --database-user=root --database-pass=nextcloud
+	elif [ "$SQL" = "mariadb-replica" ]; then
+		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="mysql" --database-name="$DBNAME" --database-host="database-mariadb-primary" --database-user=root --database-pass=nextcloud
+	elif [ "$SQL" = "maxscale" ]; then
+		sleep 10
+		# FIXME only works for main container as maxscale does not pass root along
+		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="mysql" --database-name="$DBNAME" --database-host="database-mariadb-primary" --database-user=nextcloud --database-pass=nextcloud
+		OCC config:system:set dbhost --value="database-maxscale"
+		OCC config:system:set dbuser --value="nextcloud"
 	else
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL"
 	fi;
@@ -343,10 +354,21 @@ setup() {
 		# configuration that should be applied on each start
 		configure_ssl_proxy
 	else
+		# We copy the default config to the container
+		cp /root/default.config.php "$WEBROOT"/config/config.php
+		chown -R www-data:www-data "$WEBROOT"/config/config.php
+
+		mkdir -p "$WEBROOT/apps-extra"
+		mkdir -p "$WEBROOT/apps-shared"
+
+		update_permission
+
 		if [ "$NEXTCLOUD_AUTOINSTALL" != "NO" ]
 		then
 			add_hosts
 			install
+		else
+			touch "${WEBROOT}/config/CAN_INSTALL"
 		fi
 	fi
 }

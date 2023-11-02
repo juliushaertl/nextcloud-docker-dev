@@ -92,6 +92,8 @@ ENV WITH_REDIS NO
 ENV WEBROOT /var/www/html
 WORKDIR /var/www/html
 
+RUN apt update && apt-get install -y mariadb-client
+
 ENTRYPOINT  ["/usr/local/bin/bootstrap.sh"]
 CMD ["apache2-foreground"]
 
