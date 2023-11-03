@@ -506,6 +506,9 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
 
+  database-sqlite:
+    image: rwgrim/docker-noop
+
   database-mysql:
     image: mariadb:10.6
     environment:
@@ -665,6 +668,7 @@ services:
     image: onlyoffice/documentserver:latest
     environment:
       VIRTUAL_HOST: onlyoffice${DOMAIN_SUFFIX}
+      USE_UNAUTHORIZED_STORAGE: true
     expose:
       - '80'
     volumes:
@@ -742,6 +746,7 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
       PROXY_ADDRESS_FORWARDING: "true"
+      KC_PROXY: edge
 
   av:
     image: mkodockx/docker-clamav:alpine

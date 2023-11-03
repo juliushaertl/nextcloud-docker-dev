@@ -19,3 +19,6 @@ echo "Setting up ONLYOFFICE with onlyoffice$DOMAIN_SUFFIX on $CONTAINER"
 docker-compose up -d onlyoffice
 occ app:enable onlyoffice --force
 occ config:app:set onlyoffice DocumentServerUrl --value="http://onlyoffice$DOMAIN_SUFFIX"
+
+
+docker-compose exec onlyoffice /var/www/onlyoffice/documentserver/npm/json -f /etc/onlyoffice/documentserver/local.json 'services.CoAuthoring.secret.session.string'
