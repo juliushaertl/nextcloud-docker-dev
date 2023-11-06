@@ -668,7 +668,7 @@ services:
     image: onlyoffice/documentserver:latest
     environment:
       VIRTUAL_HOST: onlyoffice${DOMAIN_SUFFIX}
-      USE_UNAUTHORIZED_STORAGE: true
+      USE_UNAUTHORIZED_STORAGE: "true"
     expose:
       - '80'
     volumes:
