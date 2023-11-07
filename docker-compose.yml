@@ -639,7 +639,7 @@ services:
       aliasgroup2: http://gs1${DOMAIN_SUFFIX}
       aliasgroup3: http://gs2${DOMAIN_SUFFIX}
       aliasgroup4: http://stable20${DOMAIN_SUFFIX}
-      aliasgroup5: http://stable21${DOMAIN_SUFFIX}
+      aliasgroup5: http://stable26${DOMAIN_SUFFIX}
       aliasgroup6: http://stable22${DOMAIN_SUFFIX}
       aliasgroup7: http://stable23${DOMAIN_SUFFIX}
       aliasgroup8: http://stable24${DOMAIN_SUFFIX}
@@ -650,7 +650,7 @@ services:
       VIRTUAL_HOST: collabora${DOMAIN_SUFFIX}
       VIRTUAL_PORT: 9980
       VIRTUAL_PROTO: http
-      extra_params: "--o:ssl.enable=false --o:net.frame_ancestors=*${DOMAIN_SUFFIX} --o:home_mode.enable=true"
+      extra_params: "--o:ssl.enable=false --o:net.frame_ancestors=*${DOMAIN_SUFFIX} --o:home_mode.enable=true --o:ssl.termination=false ${COLLABORA_PARAMS:-}"
 
   codedev:
     privileged: true

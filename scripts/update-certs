@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if ! [ -x "$(command -v mkcert)" ]; then
+  echo 'Error: mkcert is not installed.' >&2
+  exit 1
+fi
+
+
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 CERT_DIR="${SCRIPT_DIR}/../data/ssl/"
 
