@@ -108,9 +108,18 @@ services:
         - RUN_UID=${RUN_UID}
         - RUN_GROUP=${RUN_GROUP}
         - RUN_GID=${RUN_GID}
+    environment:
+      - DISPLAY=${DISPLAY}
+      - LD_LIBRARY_PATH=/opt/app/desktop/lib
+      - XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR}
+      #- XDG_SESSION_PATH=${XDG_SESSION_PATH}
     volumes:
       - '${CLIENT_REPO_PATH}:/usr/src/desktop'
       - '${CLIENT_BUILD_PATH}:/opt/app/desktop'
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /run/user/${RUN_UID}/:/run/user/${RUN_UID}/:ro
+      - '${CLIENT_CONFIG_PATH}:/home/$RUN_USER/.config/Nextcloud'
+      - '${CLIENT_CONFIG_PATH}/data:/home/$RUN_USER/Nextcloud'
 
   nextcloud2:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest

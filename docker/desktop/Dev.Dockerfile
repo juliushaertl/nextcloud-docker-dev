@@ -6,6 +6,6 @@ ARG RUN_GROUP
 ARG RUN_GID
 
 RUN groupadd -o -g $RUN_GID $RUN_GROUP  && \
-   useradd -o -u $RUN_UID -g $RUN_GID $RUN_USER
+   useradd -m -s /bin/bash -o -u $RUN_UID -g $RUN_GID $RUN_USER
 
 USER $RUN_USER

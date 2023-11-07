@@ -529,16 +529,22 @@ This is for setting up a development environment
 
 
 ```
-## optional make the bash image (if not public yet)
-make docker/desktop/Dockerfile
+## compile (adjust PARALLEL_LEVEL to your needs)
+docker-compose build desktop-dev
+docker-compose run --rm -e CMAKE_BUILD_PARALLEL_LEVEL=6 desktop-dev 
 
-## optional, make sure that .env file has RUN_USER or recreate .env file
-grep RUN_USER .env || (rm -f .env && ./bootstrap)
-
-## compile
-docker-compose up --build  desktop-dev
+## test
+docker-compose run --rm desktop-dev /opt/app/desktop/bin/nextcloud
 
 ```
 
 This will create the *DEV* build in workspace/desktop-build
 
+If the build fails ensure that the following are executed
+```
+## optional make the bash image (if not public yet)
+make docker/desktop/Dockerfile
+
+## optional, make sure that .env file has RUN_USER or recreate .env file
+grep RUN_USER .env || (rm -f .env && ./bootstrap)
+```

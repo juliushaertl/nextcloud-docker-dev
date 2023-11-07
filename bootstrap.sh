@@ -45,6 +45,8 @@ function install_desktop() {
 		return
 	fi
 	mkdir -p workspace/
+	mkdir -p workspace/desktop-build
+	mkdir -p workspace/desktop-config/data
 	(
 		(
 			echo "🌏 Fetching Nextcloud desktop (this might take a while to finish)" &&
@@ -117,6 +119,7 @@ REPO_PATH_SERVER=$BASE/workspace/server
 STABLE_ROOT_PATH=$BASE/workspace
 CLIENT_REPO_PATH=$BASE/workspace/desktop
 CLIENT_BUILD_PATH=$BASE/desktop-build
+CLIENT_CONFIG_PATH=$BASE/desktop-config
 NEXTCLOUD_AUTOINSTALL_APPS="${NEXTCLOUD_AUTOINSTALL_APPS[@]}"
 DOCKER_SUBNET=192.168.21.0/24
 PORTBASE=821
@@ -177,7 +180,8 @@ cat <<EOF
 
  🚀  Compile the nextcloud desktop
 
-	$ docker-compose up -d desktop-dev
+	$ docker-compose run -e CMAKE_BUILD_PARALLEL_LEVEL=6 desktop-dev 
+
 
 
 For more details about the individual setup options see
