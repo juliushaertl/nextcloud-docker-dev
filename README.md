@@ -523,3 +523,22 @@ sudo sh -c "echo '127.0.0.1 pgadmin.local' >> /etc/hosts"
 
 After you have started the container open `pgadmin.local` in a web browser. The password for the `nextcloud.local` is `postgres`.
 That's it, open the following path to see the Nextcloud tables: `Server group 1 -> nextcloud.local -> Databases -> nextcloud -> Schemas -> public -> Tables`
+
+## Nextcloud Desktop Development
+This is for setting up a development environment 
+
+
+```
+## optional make the bash image (if not public yet)
+make docker/desktop/Dockerfile
+
+## optional, make sure that .env file has RUN_USER or recreate .env file
+grep RUN_USER .env || (rm -f .env && ./bootstrap)
+
+## compile
+docker-compose up --build  desktop-dev
+
+```
+
+This will create the *DEV* build in workspace/desktop-build
+
