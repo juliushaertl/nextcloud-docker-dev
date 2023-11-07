@@ -532,13 +532,24 @@ This is for setting up a development environment
 ## compile (adjust PARALLEL_LEVEL to your needs)
 docker-compose build desktop-dev
 docker-compose run --rm -e CMAKE_BUILD_PARALLEL_LEVEL=6 desktop-dev 
+```
+This will create the *DEV* build in workspace/desktop-build
 
-## test
+Test in docker. This has some integration issues but the runtime libraries are the same as used for building. Data and config are in workspace/desktop-config
+```
+## test running docker
 docker-compose run --rm desktop-dev /opt/app/desktop/bin/nextcloud
 
 ```
 
-This will create the *DEV* build in workspace/desktop-build
+For local testing. This is running in the host system and this could have implications and side effects for a already existing installation.
+Set up data dir to a new empty dir .e.g ~/Nextcloud-test
+Config dir is ./workspace/desktop-test
+
+```
+LD_LIBRARY_PATH=./workspace/desktop-build/lib ./workspace/desktop-build/bin/nextcloud --confdir ./workspace/desktop-test --logdir ./workspace/desktop-test/
+```
+
 
 If the build fails ensure that the following are executed
 ```
