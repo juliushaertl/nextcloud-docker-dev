@@ -3,7 +3,7 @@
 set -e 
 
 
-if [ -z "$@" ]; then
+if [ -z "$*" ]; then
   echo "[+] Compiling nextcloud desktop to /opt/app/desktop"
   set -x
   cd /usr/src/desktop
