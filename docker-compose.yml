@@ -65,7 +65,17 @@ services:
       - ./docker/configs/haproxy.conf:/usr/local/etc/haproxy/haproxy.cfg:ro
 
   nextcloud:
-    image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
+    #image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
+    image: nextcloud-${PHP_VERSION:-81}:local
+    build:
+      context: docker
+      dockerfile: Dev.Dockerfile
+      args:
+        - RUN_USER=${RUN_USER}
+        - RUN_UID=${RUN_UID}
+        - RUN_GROUP=${RUN_GROUP}
+        - RUN_GID=${RUN_GID}
+        - PHP_VERSION=${PHP_VERSION:-81}
     environment:
       SQL: ${SQL:-mysql}
       NEXTCLOUD_AUTOINSTALL: "YES"
@@ -82,8 +92,10 @@ services:
       - '${REPO_PATH_SERVER}:/var/www/html'
       - '${REPO_PATH_SERVER}/apps-extra:/var/www/html/apps-extra'
       - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
-      - data:/var/www/html/data
-      - config:/var/www/html/config
+      #- data:/var/www/html/data
+      - '${SERVER_DATA_PATH:-data}:/var/www/html/data'
+      - '${SERVER_CONFIG_PATH:-config}:/var/www/html/config'
+      #- config:/var/www/html/config
       - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
@@ -120,6 +132,7 @@ services:
       - /run/user/${RUN_UID}/:/run/user/${RUN_UID}/:ro
       - '${CLIENT_CONFIG_PATH}:/home/$RUN_USER/.config/Nextcloud'
       - '${CLIENT_CONFIG_PATH}/data:/home/$RUN_USER/Nextcloud'
+      - /dev/dri:/dev/dri:ro
 
   nextcloud2:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest

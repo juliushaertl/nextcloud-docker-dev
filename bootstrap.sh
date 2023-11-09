@@ -30,6 +30,8 @@ function install_server() {
 		return
 	fi
 	mkdir -p workspace/
+	mkdir -p workspace/server-data
+	mkdir -p workspace/server-config
 	(
 		(
 			echo "🌏 Fetching server (this might take a while to finish)" &&
@@ -116,6 +118,8 @@ cat <<EOT >.env
 COMPOSE_PROJECT_NAME=master
 DOMAIN_SUFFIX=.local
 REPO_PATH_SERVER=$BASE/workspace/server
+#SERVER_DATA_PATH=$BASE/workspace/server-data
+#SERVER_CONFIG_PATH=$BASE/workspace/server-config
 STABLE_ROOT_PATH=$BASE/workspace
 CLIENT_REPO_PATH=$BASE/workspace/desktop
 CLIENT_BUILD_PATH=$BASE/desktop-build
