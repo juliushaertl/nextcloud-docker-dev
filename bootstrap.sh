@@ -10,6 +10,7 @@ NEXTCLOUD_AUTOINSTALL_APPS=(viewer profiler hmr_enabler)
 # You can specify additional apps to install on the command line.
 APPS_TO_INSTALL+=( "$@" )
 NEXTCLOUD_AUTOINSTALL_APPS+=( "$@" )
+BASE=$(readlink -f $(dirname $0))
 
 indent() {
 	sed 's/^/    /'
@@ -29,12 +30,31 @@ function install_server() {
 		return
 	fi
 	mkdir -p workspace/
+	mkdir -p workspace/server-data
+	mkdir -p workspace/server-config
 	(
 		(
 			echo "🌏 Fetching server (this might take a while to finish)" &&
 				git clone https://github.com/nextcloud/server.git --depth 1 workspace/server 2>&1 | indent_cli &&
 				cd workspace/server && git submodule update --init 2>&1 | indent_cli
 		) || echo "❌ Failed to clone Nextcloud server code"
+	) | indent
+}
+
+function install_desktop() {
+	if [ -d workspace/desktop/.git ]; then
+		echo "🆗 Desktop is already installed." | indent
+		return
+	fi
+	mkdir -p workspace/
+	mkdir -p workspace/desktop-build
+	mkdir -p workspace/desktop-config/data
+	(
+		(
+			echo "🌏 Fetching Nextcloud desktop (this might take a while to finish)" &&
+				git clone git@github.com:nextcloud/desktop.git --depth 1 workspace/desktop 2>&1 | indent_cli &&
+				cd workspace/desktop 
+		) || echo "❌ Failed to clone Nextcloud desktop code"
 	) | indent
 }
 
@@ -83,18 +103,28 @@ for app in "${APPS_TO_INSTALL[@]}"
 do
 	install_app "$app"
 done
+install_desktop
 
 
 echo
 echo
 echo "⏩ Setup your environment in an .env file"
+RUN_USER=$USER
+RUN_UID=`getent passwd $RUN_USER | cut -d: -f 3`
+RUN_GID=`getent passwd $RUN_USER | cut -d: -f 4`
+RUN_GROUP=`getent group vgouv | cut -d: -f 1`
 if [ ! -f ".env" ]; then
 cat <<EOT >.env
 COMPOSE_PROJECT_NAME=master
 PROTOCOL=http
 DOMAIN_SUFFIX=.local
-REPO_PATH_SERVER=$PWD/workspace/server
-STABLE_ROOT_PATH=$PWD/workspace
+REPO_PATH_SERVER=$BASE/workspace/server
+#SERVER_DATA_PATH=$BASE/workspace/server-data
+#SERVER_CONFIG_PATH=$BASE/workspace/server-config
+STABLE_ROOT_PATH=$BASE/workspace
+CLIENT_REPO_PATH=$BASE/workspace/desktop
+CLIENT_BUILD_PATH=$BASE/desktop-build
+CLIENT_CONFIG_PATH=$BASE/desktop-config
 NEXTCLOUD_AUTOINSTALL_APPS="${NEXTCLOUD_AUTOINSTALL_APPS[@]}"
 DOCKER_SUBNET=192.168.21.0/24
 PORTBASE=821
@@ -103,6 +133,13 @@ PHP_XDEBUG_MODE=develop
 SQL=mysql
 DB_SERVICE=database-mysql
 # other values: "database-postgres"
+#PROXY_PORT_HTTP=80
+#PROXY_PORT_HTTPS=443
+# desktop-dev
+RUN_USER=$RUN_USER
+RUN_UID=$RUN_UID
+RUN_GROUP=$RUN_GROUP
+RUN_GID=$RUN_GID
 EOT
 fi
 
@@ -144,6 +181,12 @@ cat <<EOF
 	$ git fetch origin
 
 	This may take some time depending on your internet connection speed.
+
+
+ 🚀  Compile the nextcloud desktop
+
+	$ docker-compose run -e CMAKE_BUILD_PARALLEL_LEVEL=6 desktop-dev 
+
 
 
 For more details about the individual setup options see

@@ -191,6 +191,21 @@ Remove all relevant containers and volumes:
 Start master or the branch you want to run:
 `docker-compose up stable23 proxy`
 
+#### 9. Setting up local data and config folders
+- Define the variables in .env
+```
+SERVER_DATA_PATH=..../workspace/server-data
+SERVER_CONFIG_PATH=...../workspace/server-config
+
+```
+- Ensure that db is initialized along with empty folders
+```
+docker-compose down -v
+rm -rf workspace/server-config/* workspace/server-data/{*,.??*}
+mkdir -p workspace/server-config/ workspace/server-data
+```
+
+
 ## Running into errors
 
 - If your setup isn't working and you can not figure out the reason why, running
@@ -313,6 +328,9 @@ Xdebug is shipped but disabled by default. It can be turned on by running:
 ```
 docker compose exec nextcloud bash
 sudo -E -u www-data php -dxdebug.start_with_request=yes -dxdebug.client_host=host.docker.internal cron.php
+# or as a single line
+docker-compose exec nextcloud sudo -E -u www-data php -dxdebug.start_with_request=yes -dxdebug.client_host=host.docker.internal occ
+
 ```
 
 ## 👥 LDAP
@@ -523,3 +541,47 @@ sudo sh -c "echo '127.0.0.1 pgadmin.local' >> /etc/hosts"
 
 After you have started the container open `pgadmin.local` in a web browser. The password for the `nextcloud.local` is `postgres`.
 That's it, open the following path to see the Nextcloud tables: `Server group 1 -> nextcloud.local -> Databases -> nextcloud -> Schemas -> public -> Tables`
+
+
+## Database (mysql) access
+
+```
+docker-compose run  database-mysql bash -c 'mysql -h database-mysql -u root -p${MYSQL_ROOT_PASSWORD}'
+```
+
+## Nextcloud Desktop Development
+This is for setting up a development environment 
+
+
+```
+## compile (adjust PARALLEL_LEVEL to your needs)
+docker-compose build desktop-dev
+docker-compose run --rm -e CMAKE_BUILD_PARALLEL_LEVEL=6 desktop-dev 
+```
+This will create the *DEV* build in workspace/desktop-build
+
+Test in docker. This has some integration issues but the runtime libraries are the same as used for building. Data and config are in workspace/desktop-config
+This setup might have browser integration issues
+```
+## test running docker
+docker-compose run --rm desktop-dev /opt/app/desktop/bin/nextcloud
+
+```
+
+For local testing. This is running in the host system and this could have implications and side effects for a already existing installation.
+Set up data dir to a new empty dir .e.g ~/Nextcloud-test
+Config dir is ./workspace/desktop-test
+
+```
+LD_LIBRARY_PATH=./workspace/desktop-build/lib ./workspace/desktop-build/bin/nextcloud --confdir ./workspace/desktop-test --logdir ./workspace/desktop-test/ --localdirpath ./workspace/desktop-test/data
+```
+
+
+If the build fails ensure that the following are executed
+```
+## optional make the bash image (if not public yet)
+make docker/desktop/Dockerfile
+
+## optional, make sure that .env file has RUN_USER or recreate .env file
+grep RUN_USER .env || (rm -f .env && ./bootstrap)
+```
