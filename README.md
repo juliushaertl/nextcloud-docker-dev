@@ -312,7 +312,9 @@ Xdebug is shipped but disabled by default. It can be turned on by running:
 
 ```
 docker compose exec nextcloud bash
-sudo -E -u www-data php -dxdebug.start_with_request=yes -dxdebug.client_host=host.docker.internal cron.php
+# use this if you have configured path mapping in PHPstorm to match the server name configured
+export PHP_IDE_CONFIG=serverName=localhost
+sudo -E -u www-data php -dxdebug.mode=debug -dxdebug.client_host=host.docker.internal -dxdebug.start_with_request=yes -dxdebug.idekey=PHPSTORM occ
 ```
 
 ## 👥 LDAP
