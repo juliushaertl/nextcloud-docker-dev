@@ -54,3 +54,4 @@ template-apply:
 	cat docker/Dockerfile.php.template | sed 's/php:8.2/php:8.0/' > docker/Dockerfile.php80
 	cat docker/Dockerfile.php.template | sed 's/php:8.2/php:8.1/' > docker/Dockerfile.php81
 	cat docker/Dockerfile.php.template | sed 's/php:8.2/php:8.2/' > docker/php82/Dockerfile
+	cat docker/Dockerfile.php.template | sed 's/php:8.2/php:8.3/' > docker/php83/Dockerfile

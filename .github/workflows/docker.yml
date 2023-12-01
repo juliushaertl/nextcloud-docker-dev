@@ -18,6 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         container:
+          - php83
           - php82
           - php81
           - php80

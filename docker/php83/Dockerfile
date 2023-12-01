@@ -1,4 +1,4 @@
-FROM php:8.2-apache
+FROM php:8.3-apache
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
@@ -11,7 +11,8 @@ RUN install-php-extensions \
     exif \
     gd \
     gmp \
-    imagick \
+    # waiting for https://github.com/mlocati/docker-php-extension-installer/pull/811
+    # imagick \
     intl \
     ldap \
     oci8 \
@@ -22,7 +23,7 @@ RUN install-php-extensions \
     redis \
     smbclient \
     sysvsem \
-    xdebug-^3.2 \
+    # xdebug \
     zip \
     @composer
 
