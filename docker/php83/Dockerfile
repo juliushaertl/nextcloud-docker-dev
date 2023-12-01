@@ -11,7 +11,8 @@ RUN install-php-extensions \
     exif \
     gd \
     gmp \
-    imagick \
+    # waiting for https://github.com/mlocati/docker-php-extension-installer/pull/811
+    # imagick \
     intl \
     ldap \
     oci8 \
@@ -22,7 +23,7 @@ RUN install-php-extensions \
     redis \
     smbclient \
     sysvsem \
-    xdebug \
+    # xdebug \
     zip \
     @composer
 
