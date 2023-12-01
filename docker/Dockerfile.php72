@@ -65,6 +65,7 @@ RUN wget -q -O - https://packages.blackfire.io/gpg.key | sudo apt-key add - \
     && echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list \
     && apt-get update  \
     && (apt-get install -y --no-install-recommends blackfire \
+		&& rm -f /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini \
 		&& printf "\n\nblackfire.agent_socket=tcp://blackfire:8307\n" >> $PHP_INI_DIR/conf.d/zz-blackfire.ini && \
         mv $PHP_INI_DIR/conf.d/zz-blackfire.ini $PHP_INI_DIR/conf.d/zz-blackfire.ini.disabled) \
 		|| echo "Skipped blackfire as the installation failed" \
