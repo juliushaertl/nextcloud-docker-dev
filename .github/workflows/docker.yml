@@ -65,7 +65,7 @@ jobs:
           context: docker/
           platforms: ${{ matrix.platform }}
           file: ${{ steps.dockerfile.outputs.DOCKERFILE }}
-          outputs: type=image,name=nextcloud-dev-${{ matrix.container }},push-by-digest=true,name-canonical=true,push=true
+          outputs: type=image,name=ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }},push-by-digest=true,name-canonical=true,push=true
       - name: Build and push by digest
         id: build
         uses: docker/build-push-action@v5
