@@ -10,13 +10,16 @@ on:
 
 
 jobs:
-  push_to_registry:
+  build:
     name: Build image
     runs-on: ubuntu-latest
     if: github.repository == 'juliushaertl/nextcloud-docker-dev'
     strategy:
       fail-fast: false
       matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
         container:
           - php83
           - php82
@@ -79,6 +82,18 @@ jobs:
             ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
+      - name: Export digest
+        run: |
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"          
+      - name: Upload digest
+        uses: actions/upload-artifact@v3
+        with:
+          name: digests
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
       - name: Push container image
         uses: docker/build-push-action@v5
         if: github.ref == 'refs/heads/master'
@@ -88,6 +103,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           file: ${{ steps.dockerfile.outputs.DOCKERFILE }}
           tags: |
+            ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}:${{ github.sha }}
             ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
@@ -96,4 +112,59 @@ jobs:
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
+  merge:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    strategy:
+      matrix:
+        container:
+          - php83
+          - php82
+          - php81
+          - php80
+          - php74
+          - php73
+          - php72
+          - php71
+          - push
+          - saml
+          - nginx
+          - elasticsearch
+          - mailhog
+          - ldap
+          - lookupserver
+          - smb
+          - codedev
+          - code
+          - talk-janus
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v3
+        with:
+          name: digests
+          path: /tmp/digests
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+      - name: Login to GitHub Container Registry
+        if: needs.prepare.outputs.push == 'true'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create manifest list and push
+        working-directory: /tmp/digests
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.REGISTRY_IMAGE }}@sha256:%s ' *)          
+      - name: Inspect image
+        run: |
+          docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}          
+  
 
