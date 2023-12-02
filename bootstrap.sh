@@ -15,11 +15,12 @@ NEXTCLOUD_AUTOINSTALL_APPS+=( "$@" )
 if [ -f ".env" ]; then
 	echo "⏩ .env file found, so assuming you already ran this script."
 	echo " Validating the setup"
+	# shellcheck disable=SC1091
 	source .env
 
 	set +o errexit
-	echo "Server master repository path: $REPO_PATH_SERVER"
-	REPO_VERSION=$(cat $REPO_PATH_SERVER/version.php |  grep "OC_VersionString" | cut -d "'" -f 2)
+	echo "Server master repository path: ${REPO_PATH_SERVER}"
+	REPO_VERSION=$(grep "OC_VersionString" "${REPO_PATH_SERVER}/version.php" | cut -d "'" -f 2)
 	if [ -d "$REPO_PATH_SERVER" ] && [ -n "$REPO_VERSION" ]; then
 		echo "✅ $REPO_VERSION"
 	elif [ -z "$REPO_VERSION" ]; then
@@ -30,9 +31,9 @@ if [ -f ".env" ]; then
 
 	for i in stable26 stable27 stable28
 	do
-		echo "Stable $i repository path: $STABLE_ROOT_PATH/$i"
-		STABLE_VERSION=$(cat $STABLE_ROOT_PATH/$i/version.php |  grep "OC_VersionString" | cut -d "'" -f 2)
-		if [ -d "$STABLE_ROOT_PATH/$i" ] && [ -n "$STABLE_VERSION" ]; then
+		echo "Stable $i repository path: ${STABLE_ROOT_PATH}/${i}"
+		STABLE_VERSION=$(grep "OC_VersionString" "${STABLE_ROOT_PATH}/${i}/version.php" | cut -d "'" -f 2)
+		if [ -d "${STABLE_ROOT_PATH}/${i}" ] && [ -n "$STABLE_VERSION" ]; then
 			echo "✅ $STABLE_VERSION"
 		elif [ -z "$REPO_VERSION" ]; then
 			echo "❌ $i version.php cannot be detected"
@@ -65,8 +66,8 @@ function install_server() {
 	(
 		(
 			echo "🌏 Fetching server (this might take a while to finish)" &&
-				git clone https://github.com/nextcloud/server.git --depth 1 workspace/server 2>&1 | indent_cli &&
-				cd workspace/server && git submodule update --init 2>&1 | indent_cli
+				git clone https://github.com/nextcloud/server.git --depth 1 workspace/server --progress 2>&1 &&
+				cd workspace/server && git submodule update --init --progress 2>&1
 		) || echo "❌ Failed to clone Nextcloud server code"
 	) | indent
 }
