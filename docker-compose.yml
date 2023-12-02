@@ -690,6 +690,7 @@ services:
     environment:
       VIRTUAL_HOST: onlyoffice${DOMAIN_SUFFIX}
       USE_UNAUTHORIZED_STORAGE: "true"
+      JWT_SECRET: secret
     expose:
       - '80'
     volumes:
