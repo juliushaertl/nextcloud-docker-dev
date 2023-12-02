@@ -90,8 +90,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           file: ${{ steps.dockerfile.outputs.DOCKERFILE }}
           tags: |
-            ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}:${{ github.sha }}
             ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}:${{ github.event_name == 'release' && 'latest' || 'nightly' }}
+            ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}:${{ github.event_name == 'release' && github.ref || github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       - name: Move cache
