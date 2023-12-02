@@ -199,6 +199,8 @@ install() {
 	USER="admin"
 	PASSWORD="admin"
 
+	run_hook_before_install
+
 	output "🔧 Starting auto installation"
 	if [ "$SQL" = "oci" ]; then
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name=xe --database-host="$SQLHOST" --database-user=system --database-pass=oracle
@@ -285,7 +287,25 @@ install() {
 	configure_add_user alice &
 	configure_add_user bob &
 
+	run_hook_after_install
+
 	output "🚀 Finished setup using $SQL database…"
+}
+
+run_hook_before_install() {
+	[ -e /shared/hooks/before-install.sh ] && bash /shared/hooks/before-install.sh
+}
+
+run_hook_after_install() {
+	[ -e /shared/hooks/after-install.sh ] && bash /shared/hooks/after-install.sh
+}
+
+run_hook_before_start() {
+	[ -e /shared/hooks/before-start.sh ] && bash /shared/hooks/before-start.sh
+}
+
+run_hook_after_start() {
+	[ -e /shared/hooks/after-start.sh ] && bash /shared/hooks/after-start.sh
 }
 
 add_hosts() {
@@ -310,7 +330,6 @@ setup() {
 			install
 		fi
 	fi
-
 }
 check_source() {
 	FILE=/var/www/html/status.php
@@ -348,9 +367,11 @@ pkill -USR1 apache2
 	check_source
 	wait_for_other_containers
 	setup
+	run_hook_before_start
 	rm /etc/apache2/conf-enabled/install.conf
 	rm -f /var/www/html/installing.html
 	pkill -USR1 apache2
+	run_hook_after_start
 ) &
 
 touch /var/log/cron/nextcloud.log "$WEBROOT"/data/nextcloud.log /var/log/xdebug.log
