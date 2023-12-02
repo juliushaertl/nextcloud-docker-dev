@@ -24,7 +24,7 @@ RUN install-php-extensions \
     redis \
     smbclient \
     sysvsem \
-    # xdebug \
+    xdebug \
     zip \
     @composer
 
