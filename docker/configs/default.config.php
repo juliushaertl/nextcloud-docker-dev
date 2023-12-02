@@ -1,4 +1,13 @@
-<?php $CONFIG=[
+docker/configs/default.config.php<?php
+$hostname = gethostname();
+$primary = isset($_ENV['PRIMARY']) ? $_ENV['PRIMARY'] : '';
+$virtualHost = isset($_ENV['VIRTUAL_HOST']) ? $_ENV['VIRTUAL_HOST'] : '';
+$virtualHost = explode(".", $virtualHost);
+if (count($virtualHost) > 0) {
+	$hostname = array_shift($virtualHost);
+}
+
+$CONFIG=[
 	'debug' => true,
 	'profiler' => true,
 	'apps_paths' => 
@@ -44,5 +53,17 @@
 
 	'setup_create_db_user' => false,
 
-	//PLACEHOLDER
+	'debug' => true,
+	'loglevel' => 2,
+
+	// 'htaccess.RewriteBase' => '/',
+	'log_query' => false,
+	'query_log_file' => '/shared/log/querylog-' . $hostname .'.log',
+	'query_log_file_requestid' => 'yes',
+
+	'diagnostics.logging' => false,
+	'diagnostics.logging.threshold' => 0,
+	'log.condition' => [
+        'apps' => ['diagnostics', 'admin_audit'],
+	],
 ];

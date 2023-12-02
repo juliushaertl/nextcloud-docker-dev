@@ -13,7 +13,7 @@ use cases
 ```bash
 #!/bin/bash
 
-echo "🎉🎉🎉🎉🎉🎉🎉🎉 triggered hook before-start.sh"
+echo "🤖 triggered hook before-start.sh"
 env
 export OC_PASS="mycustomuser"
 occ user:add --password-from-env mycustomuser

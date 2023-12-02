@@ -94,5 +94,5 @@ ENTRYPOINT  ["/usr/local/bin/bootstrap.sh"]
 CMD ["apache2-foreground"]
 
 ADD data/installing.html /root/installing.html
-ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php configs/s3.php configs/config.php configs/redis.config.php configs/apcu.config.php /root/
+ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php configs/default.config.php configs/storage.config.php configs/redis.config.php configs/apcu.config.php /root/
 ADD bin/bootstrap.sh bin/occ /usr/local/bin/

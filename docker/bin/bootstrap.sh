@@ -193,7 +193,7 @@ install() {
 	fi
 
 	# We copy the default config to the container
-	cp /root/config.php "$WEBROOT"/config/config.php
+	cp /root/default.config.php "$WEBROOT"/config/config.php
 	chown -R www-data:www-data "$WEBROOT"/config/config.php
 
 	mkdir -p "$WEBROOT/apps-extra"

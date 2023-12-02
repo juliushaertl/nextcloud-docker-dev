@@ -41,9 +41,8 @@ RUN wget -O /usr/local/bin/phpunit8 https://phar.phpunit.de/phpunit-8.phar \
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash \
     && export NVM_DIR="/root/.nvm" \
     && . "$NVM_DIR/nvm.sh" \
-    && nvm install lts/gallium \
     && nvm install lts/fermium \
-    && npm install -g npm@7
+    && nvm install lts/hydrogen \
 RUN wget https://gist.githubusercontent.com/nickvergessen/e21ee0a09ee3b3f7fd1b04c83dd3e114/raw/83142be1e50c23e8de1bd7aae88a95e5d6ae1ce2/nextcloud_log.json && lnav -i nextcloud_log.json && rm nextcloud_log.json
 
 RUN { \
@@ -95,5 +94,5 @@ ENTRYPOINT  ["/usr/local/bin/bootstrap.sh"]
 CMD ["apache2-foreground"]
 
 ADD data/installing.html /root/installing.html
-ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php configs/s3.php configs/config.php configs/redis.config.php configs/apcu.config.php /root/
+ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php configs/default.config.php configs/storage.config.php configs/redis.config.php configs/apcu.config.php /root/
 ADD bin/bootstrap.sh bin/occ /usr/local/bin/
