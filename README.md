@@ -300,6 +300,13 @@ alias blackfire='docker-compose exec -e BLACKFIRE_CLIENT_ID=$BLACKFIRE_CLIENT_ID
 blackfire curl http://192.168.21.8/
 ```
 
+## configuration
+
+You can specify custom config.php values in data/shared/config.php. The file
+needs to be created before starting the container, but can be edited on the fly
+without needing to restart the container. Note that this config is shared
+accross all nextcloud containers.
+
 ## Xdebug
 
 Xdebug is shipped but disabled by default. It can be turned on by running:

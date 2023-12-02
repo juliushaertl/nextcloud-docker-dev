@@ -25,6 +25,11 @@ update_permission() {
 	chown -R www-data:www-data "$WEBROOT"/data
 	chown www-data:www-data "$WEBROOT"/config
 	chown www-data:www-data "$WEBROOT"/config/config.php 2>/dev/null
+
+	if [ -f /shared/config.php ]
+	then
+		ln -sf /shared/config.php "$WEBROOT"/config/user.config.php
+	fi
 }
 
 configure_xdebug_mode() {
