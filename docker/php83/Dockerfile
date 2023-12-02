@@ -15,6 +15,7 @@ RUN install-php-extensions \
     # imagick \
     intl \
     ldap \
+    memcached \
     oci8 \
     opcache \
     pcntl \
