@@ -11,6 +11,39 @@ NEXTCLOUD_AUTOINSTALL_APPS=(viewer profiler hmr_enabler)
 APPS_TO_INSTALL+=( "$@" )
 NEXTCLOUD_AUTOINSTALL_APPS+=( "$@" )
 
+# Already executed
+if [ -f ".env" ]; then
+	echo "⏩ .env file found, so assuming you already ran this script."
+	echo " Validating the setup"
+	source .env
+
+	set +o errexit
+	echo "Server master repository path: $REPO_PATH_SERVER"
+	REPO_VERSION=$(cat $REPO_PATH_SERVER/version.php |  grep "OC_VersionString" | cut -d "'" -f 2)
+	if [ -d "$REPO_PATH_SERVER" ] && [ -n "$REPO_VERSION" ]; then
+		echo "✅ $REPO_VERSION"
+	elif [ -z "$REPO_VERSION" ]; then
+		echo "❌ Repository version.php cannot be detected"
+	else
+		echo "❌ Repository path does not exist"
+	fi
+
+	for i in stable26 stable27 stable28
+	do
+		echo "Stable $i repository path: $STABLE_ROOT_PATH/$i"
+		STABLE_VERSION=$(cat $STABLE_ROOT_PATH/$i/version.php |  grep "OC_VersionString" | cut -d "'" -f 2)
+		if [ -d "$STABLE_ROOT_PATH/$i" ] && [ -n "$STABLE_VERSION" ]; then
+			echo "✅ $STABLE_VERSION"
+		elif [ -z "$REPO_VERSION" ]; then
+			echo "❌ $i version.php cannot be detected"
+		else
+			echo "❌ $i repository path does not exist"
+		fi
+	done
+
+	exit 0
+fi
+
 indent() {
 	sed 's/^/    /'
 }
@@ -75,15 +108,6 @@ is_installed git
 		(echo "❌ Cannot run docker ps, you might need to check that your user is able to use docker properly" && exit 1)
 ) | indent
 
-echo
-echo "⏩ Setting up folder structure and fetching repositories"
-install_server
-mkdir -p workspace/server/apps-extra
-for app in "${APPS_TO_INSTALL[@]}"
-do
-	install_app "$app"
-done
-
 
 echo
 echo
@@ -106,12 +130,23 @@ DB_SERVICE=database-mysql
 EOT
 fi
 
+./scripts/update-hosts
+
 if [[ $(uname -m) == 'arm64' ]]; then
 	echo "Setting custom containers for arm platform"
 
 	echo "CONTAINER_ONLYOFFICE=onlyoffice/documentserver:latest-arm64" >> .env
 	echo "CONTAINER_KEYCLOAK=mihaibob/keycloak:15.0.1" >> .env
 fi
+
+echo
+echo "⏩ Setting up folder structure and fetching repositories"
+install_server
+mkdir -p workspace/server/apps-extra
+for app in "${APPS_TO_INSTALL[@]}"
+do
+	install_app "$app"
+done
 
 cat <<EOF
 
