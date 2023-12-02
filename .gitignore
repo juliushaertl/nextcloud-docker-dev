@@ -1,9 +1,9 @@
-data/ssl/
-data/shared/
-workspace/
-.env
-*.env
+/data/ssl/
+/data/shared/
+/workspace/
+/.env
+/*.env
 !example.env
-.*
-data/skeleton/
-wip/
+/data/skeleton/
+/wip/
+/site
