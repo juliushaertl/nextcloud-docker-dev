@@ -59,6 +59,7 @@ $CONFIG += array(
 	//  'htaccess.RewriteBase' => '/',
 	'log_query' => false,
 	'query_log_file' => '/var/www/html/data/query.log',
+	'query_log_file_requestid' => 'yes',
 
 	'diagnostics.logging' => false,
 	'diagnostics.logging.threshold' => 0,

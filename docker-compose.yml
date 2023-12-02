@@ -89,8 +89,6 @@ services:
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
-    ports:
-      - "${PORTBASE:-800}0:80"
     depends_on:
       - ${DB_SERVICE:-database-mysql}
       - redis
@@ -190,8 +188,6 @@ services:
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
-    ports:
-      - "${PORTBASE:-800}0:80"
     depends_on:
       - ${DB_SERVICE:-database-mysql}
       - redis
@@ -221,8 +217,6 @@ services:
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
-    ports:
-      - "${PORTBASE:-800}0:80"
     depends_on:
       - ${DB_SERVICE:-database-mysql}
       - redis
@@ -252,8 +246,6 @@ services:
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
-    ports:
-      - "${PORTBASE:-800}0:80"
     depends_on:
       - ${DB_SERVICE:-database-mysql}
       - redis
@@ -283,8 +275,6 @@ services:
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
-    ports:
-      - "${PORTBASE:-800}0:80"
     depends_on:
       - ${DB_SERVICE:-database-mysql}
       - redis
@@ -315,8 +305,6 @@ services:
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
-    ports:
-      - "${PORTBASE:-800}0:80"
     depends_on:
       - ${DB_SERVICE:-database-mysql}
       - redis
@@ -377,8 +365,6 @@ services:
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
-    ports:
-      - "${PORTBASE:-800}0:80"
     depends_on:
       - ${DB_SERVICE:-database-mysql}
       - redis
@@ -547,6 +533,9 @@ services:
       MYSQL_PASSWORD: 'nextcloud'
       MYSQL_USER: 'nextcloud'
       MYSQL_DATABASE: 'nextcloud'
+    command: [
+      '--wait_timeout=300',
+    ]
     ports:
       - "${PORTBASE:-800}2:3306"
     volumes:
@@ -670,17 +659,18 @@ services:
       aliasgroup2: http://gs1${DOMAIN_SUFFIX}
       aliasgroup3: http://gs2${DOMAIN_SUFFIX}
       aliasgroup4: http://stable20${DOMAIN_SUFFIX}
-      aliasgroup5: http://stable26${DOMAIN_SUFFIX}
-      aliasgroup6: http://stable22${DOMAIN_SUFFIX}
-      aliasgroup7: http://stable23${DOMAIN_SUFFIX}
-      aliasgroup8: http://stable24${DOMAIN_SUFFIX}
-      aliasgroup9: http://stable25${DOMAIN_SUFFIX}
+      aliasgroup5: http://stable24${DOMAIN_SUFFIX}
+      aliasgroup6: http://stable25${DOMAIN_SUFFIX}
+      aliasgroup7: http://stable26${DOMAIN_SUFFIX}
+      aliasgroup8: http://stable27${DOMAIN_SUFFIX}
+      aliasgroup9: http://stable28${DOMAIN_SUFFIX}
       dictionaries: de_DE en_US en_GB
       username: admin
       password: admin
       VIRTUAL_HOST: collabora${DOMAIN_SUFFIX}
       VIRTUAL_PORT: 9980
       VIRTUAL_PROTO: http
+      server_name: collabora${DOMAIN_SUFFIX}
       extra_params: "--o:ssl.enable=false --o:net.frame_ancestors=*${DOMAIN_SUFFIX} --o:home_mode.enable=true --o:ssl.termination=false ${COLLABORA_PARAMS:-}"
 
   codedev:
@@ -713,7 +703,7 @@ services:
       VIRTUAL_PORT: 9001
       MINIO_ROOT_USER: nextcloud
       MINIO_ROOT_PASSWORD: nextcloud
-      MINIO_BROWSER_REDIRECT_URL: http://minio${DOMAIN_SUFFIX}
+      MINIO_BROWSER_REDIRECT_URL: ${PROTOCOL}://minio${DOMAIN_SUFFIX}
     volumes:
       - objectstorage_minio:/data
     command: server /data --console-address :9001
