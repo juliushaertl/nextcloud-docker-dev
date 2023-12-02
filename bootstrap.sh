@@ -4,7 +4,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-APPS_TO_INSTALL=(viewer recommendations files_pdfviewer profiler hmr_enabler)
+APPS_TO_INSTALL=(viewer recommendations files_pdfviewer profiler hmr_enabler circles)
 NEXTCLOUD_AUTOINSTALL_APPS=(viewer profiler hmr_enabler)
 
 # You can specify additional apps to install on the command line.
