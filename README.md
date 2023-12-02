@@ -15,6 +15,9 @@ Features
 - 🚀 Blackfire
 - 📄 Collabora
 
+## Tutorial
+
+You can find a step by step tutorial on how to use this setup in the [Nextcloud Developer Portal](https://nextcloud.com/developer/). It will guide you through the setup and show you how to use it for app development: https://cloud.nextcloud.com/s/iyNGp8ryWxc7Efa?path=%2F1%20Setting%20up%20a%20development%20environment
 
 ## Standalone containers
 
