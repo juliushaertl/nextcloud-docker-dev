@@ -1,4 +1,4 @@
-docker/configs/default.config.php<?php
+<?php
 $hostname = gethostname();
 $primary = isset($_ENV['PRIMARY']) ? $_ENV['PRIMARY'] : '';
 $virtualHost = isset($_ENV['VIRTUAL_HOST']) ? $_ENV['VIRTUAL_HOST'] : '';

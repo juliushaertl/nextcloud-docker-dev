@@ -1,6 +1,8 @@
 #!/bin/bash
 # shellcheck disable=SC2181
 
+# set -o xtrace
+
 DOMAIN_SUFFIX=".$(echo "$VIRTUAL_HOST" | cut -d '.' -f2-)"
 IS_STANDALONE=$([ -z "$VIRTUAL_HOST" ] && echo "true" )
 
@@ -8,6 +10,18 @@ indent() { sed 's/^/   /'; }
 
 # Prepare waiting page during auto installation
 cp /root/installing.html /var/www/html/installing.html
+
+tee /etc/apache2/conf-enabled/install.conf << EOF
+<Directory "/var/www/html">
+AllowOverride None
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_URI} !/installing.html$
+RewriteRule .* /installing.html [L]
+</Directory>
+EOF
+
+pkill -USR1 apache2
 
 output() {
 	echo "$@"
@@ -341,6 +355,17 @@ check_source() {
 	if [ -f "$FILE" ]; then
 		output "Server source is mounted, continuing"
 	else
+		# Only autoinstall when not running in docker-compose
+		if [ -n "$NEXTCLOUD_AUTOINSTALL_APPS" ] && [ ! -f "$WEBROOT"/config/version.php ]
+		then
+			output "======================================================================================="
+			output " 🚨 Could not find a valid Nextcloud source in $WEBROOT                                "
+			output " Double check your REPO_PATH_SERVER and STABLE_ROOT_PATH environment variables in .env "
+			output "======================================================================================="
+
+			exit 1
+		fi
+
 		output "Server source is not present, fetching ${SERVER_BRANCH:-master}"
 		git clone --depth 1 --branch "${SERVER_BRANCH:-master}" https://github.com/nextcloud/server.git /tmp/server
 		(cd /tmp/server && git submodule update --init)
@@ -357,17 +382,6 @@ check_source() {
 	output "Nextcloud server source is ready"
 }
 
-tee /etc/apache2/conf-enabled/install.conf << EOF
-<Directory "/var/www/html">
-AllowOverride None
-RewriteEngine On
-RewriteBase /
-RewriteCond %{REQUEST_URI} !/installing.html$
-RewriteRule .* /installing.html [L]
-</Directory>
-EOF
-
-pkill -USR1 apache2
 (
 	check_source
 	wait_for_other_containers
