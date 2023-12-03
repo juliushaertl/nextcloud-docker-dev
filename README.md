@@ -19,11 +19,49 @@ Features
 
 You can find a step by step tutorial on how to use this setup in the [Nextcloud Developer Portal](https://nextcloud.com/developer/). It will guide you through the setup and show you how to use it for app development: https://cloud.nextcloud.com/s/iyNGp8ryWxc7Efa?path=%2F1%20Setting%20up%20a%20development%20environment
 
-## Standalone containers
+In detail explanation of the setup and its features and configuration options can be found in the [nextcloud-docker-dev documentation](https://juliushaertl.github.io/nextcloud-docker-dev/).
 
-::: tip
-This is a very simple way but doesn't cover all features. If you are looking for a fully featured setup you may skip to the next section
-:::
+## Quickstart
+
+### Persistent development setup
+
+> [!TIP]
+> This is the recommended way to run the setup for development. You will have a local clone of all required source code.
+
+To start the setup run the following commands to clone the repository and bootstrap the setup. This will prepare your setp and clone the Nextcloud server repository and required apps into the `workspace` folder.
+```bash
+git clone https://github.com/juliushaertl/nextcloud-docker-dev
+cd nextcloud-docker-dev
+./bootstrap.sh
+````
+
+This may take some time depending on your internet connection speed.
+
+
+Once done you can start the Nextcloud container using:
+```bash
+docker-compose up nextcloud
+```
+
+You can also start it in the background using `docker-compose up -d nextcloud`.
+
+You can then access your Nextcloud instance at [http://nextcloud.local](http://nextcloud.local). The default username is `admin` and the password is `admin`. [Other users can be found in the documentation](https://juliushaertl.github.io/nextcloud-docker-dev/basics/overview/#default-users).
+
+> [!WARN]
+> Note that for performance reasons the server repository might have been cloned with `--depth=1` by default. To get the full history it is highly recommended to run:
+>
+> ```bash
+> cd workspace/server
+> git fetch --unshallow
+> git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+> git fetch origin
+> ```
+
+
+### Standalone containers
+
+> [!TIP]
+> This is a very simple way but doesn't cover all features. If you are looking for a fully featured setup you may skip to the next section
 
 There is a standalone version of the Nextcloud containers available that can be used to run Nextcloud without the other services. This is useful if you are just wanting to get started with app development against a specific server version, or to just have a quick way to develop, test or debug.
 
@@ -54,26 +92,11 @@ You can also mount your local server source code into the container to run a loc
 ```bash
 docker run --rm -p 8080:80 -e SERVER_BRANCH=v24.0.1 -v /tmp/server:/var/www/html ghcr.io/juliushaertl/nextcloud-dev-php80:latest
 ```
-## Simple master setup
+## More features
 
-The easiest way to get the setup running the ```master``` branch is by running the ```bootstrap.sh``` script:
-```
-git clone https://github.com/juliushaertl/nextcloud-docker-dev
-cd nextcloud-docker-dev
-./bootstrap.sh
-sudo sh -c "echo '127.0.0.1 nextcloud.local' >> /etc/hosts"
-docker-compose up nextcloud proxy
-```
-Note that for performance reasons the server repository might have been cloned with --depth=1 by default. To get the full history it is highly recommended to run:
+Note that all of the following content will soon get moved and probably reworked into the [nextcloud-docker-dev documentation](https://juliushaertl.github.io/nextcloud-docker-dev/).
 
-	cd workspace/server
-	git fetch --unshallow
-	git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
-	git fetch origin
-
-This may take some time depending on your internet connection speed.
-
-## Additional apps
+### Additional apps
 
 To install additional apps add them to the bootstrap command:
 
@@ -86,46 +109,7 @@ In this case it will clone the apps but not update the `.env` file.
 If you want your apps to be installed in the Nextcloud instance by default
 add them to the `NEXTCLOUD_AUTOINSTALL_APPS` variable in `.env`.
 
-## Complex setup
-
-In order to achieve a more complex dev environment with different branches of the server, follow the manual steps:
-
-##### 1. Create a workspace folder and clone the server repository
-
-```
-mkdir workspace && cd workspace
-git clone https://github.com/nextcloud/server.git
-```
-
-##### 2. The Nextcloud code base needs to be available including the [`3rdparty`](https://github.com/nextcloud/3rdparty) submodule:
-
-```
-cd server
-git submodule update --init
-pwd
-```
-
-The last command prints the path to the Nextcloud server directory.
-Use it for setting the `REPO_PATH_SERVER` in the next step.
-
-Since the viewer app is kind of required for Nextcloud server, you should also clone the viewer app:
-
-```
-cd apps
-git clone https://github.com/nextcloud/viewer.git
-```
-
-##### 3. Environment variables
-
-A `.env` file should be created in the repository root, to keep configuration default on the dev setup:
-
-```
-cp example.env .env
-```
-
-Replace `REPO_PATH_SERVER` with the path from above.
-
-##### 4. Running different stable versions
+### Running different stable versions
 
 The docker-compose file provides individual containers for stable Nextcloud releases. In order to run those you will need a checkout of the stable version server branch to your workspace directory. Using [git worktree](https://blog.juliushaertl.de/index.php/2018/01/24/how-to-checkout-multiple-git-branches-at-the-same-time/) makes it easy to have different branches checked out in parallel in separate directories.
 
@@ -139,7 +123,7 @@ cd ../stable23
 git submodule update --init
 ```
 
-The same can be done for `stable24`, `stable25`... and so on. 
+The same can be done for `stable24`, `stable25`... and so on.
 
 Git worktrees can also be used to have a checkout of an apps stable branch within the server stable directory.
 
@@ -159,14 +143,8 @@ git worktree add ../../../stable25/apps/viewer stable25
 - Use `apps-extra/` for apps that support only one specific nextcloud version (like `talk`)
 - Use `apps-shared/` for apps that support multiple nextcloud versions as this directory is shared between all containers
 
-##### 5. Editing `/etc/hosts`
 
-You can then add `stable23.local`, `stable24.local` and so on to your `/etc/hosts` file to access it.
-```
-sudo sh -c "echo '127.0.0.1 nextcloud.local' >> /etc/hosts"
-```
-
-##### 6. Setting the PHP version to be used
+### Setting the PHP version to be used
 
 The Nextcloud instance is setup to run with PHP 7.2 by default.
 If you wish to use a different version of PHP, set the `PHP_VERSION` `.env` variable.
@@ -180,19 +158,6 @@ The variable supports the following values:
 - PHP 8.0: `80`
 - PHP 8.1: `81`
 
-##### 7. Starting the containers
-
-- Minimum to run `master`: `docker-compose up proxy nextcloud` (nextcloud mysql redis mailhog)
-- Start stable branches: `docker-compose up stable23 proxy`
-- Start full setup: `docker-compose up`
-
-##### 8. Switching between stable versions and master
-
-Remove all relevant containers and volumes:
-`docker-compose down -v`
-
-Start master or the branch you want to run:
-`docker-compose up stable23 proxy`
 
 ## Running into errors
 
@@ -258,7 +223,7 @@ docker run --rm -it \
     -e DMQ_DNS_ADDRESS="address=/.local/127.0.0.1" \
     -p 53:53 \
     -p 53:53/udp \
-    drpsychick/dnsmasq:latest 
+    drpsychick/dnsmasq:latest
 ```
 
 ### Use DNS Service Discovery on MacOS
