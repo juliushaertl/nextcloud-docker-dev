@@ -19,3 +19,29 @@ The following user accounts are available by default:
 - `user2` / `user2`
 - `user3` / `user3`
 - `user4` / `user4`
+
+## App directories
+
+The Nextcloud containers are configured to use multiple app directories.
+
+- Use `apps/` for required apps (like `viewer`)
+- Use `apps-extra/` for apps that support only one specific nextcloud version (like `talk`)
+- Use `apps-shared/` for apps that support multiple nextcloud versions as this directory is shared between all containers
+
+## Cronjobs
+
+The cronjobs are configured to run every 5 minutes in the individual containers.
+
+For testing you can also run them manually:
+
+```bash
+docker-compose exec nextcloud php cron.php
+```
+
+### occ
+
+Run inside of the Nextcloud container:
+
+```
+set XDEBUG_CONFIG=idekey=PHPSTORM
+sudo -E -u www-data php -dxdebug.remote_host=192.168.21.1 occ

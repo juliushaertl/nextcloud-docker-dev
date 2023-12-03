@@ -10,6 +10,6 @@ The following shell function allows you to run `nc-dev` instead of `docker-compo
 
 ````
 nc-dev() {
-	(cd ~/path/to/nextcloud-docker-dev && docker-compose $@)
+ (cd ~/path/to/nextcloud-docker-dev && docker-compose $@)
 }
 ```

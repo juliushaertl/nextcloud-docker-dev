@@ -13,11 +13,11 @@ By default MySQL will be used as database backend. You can change this by settin
 Changing the database env value will require to recreate your setup. You can do this by running `docker-compose down -v` and then `docker-compose up -d nextcloud`.
 
 All databases use the following credentials by default:
+
 - Root password: `nextcloud`
 - Username: `nextcloud`
 - Password: `nextcloud`
 - Database: `nextcloud` or the name of the stable container e.g. `stable27``
-
 
 ## Accessing the database
 
@@ -29,7 +29,7 @@ You can access the database with the following command:
 docker-compose exec mariadb mysql -u root -pnextcloud
 ```
 
-If you prefer a GUI frontend you can additionally launch the phpmyadmin container with `docker-compose up -d phpmyadmin` and access it via http://phpmyadmin.local.
+If you prefer a GUI frontend you can additionally launch the phpmyadmin container with `docker-compose up -d phpmyadmin` and access it via <http://phpmyadmin.local>.
 
 Alternatively you can use a database client to access the database from the host system. The port can be obtained with `docker-compose port database-mysql 3306`. The host is `localhost` and the credentials are the same as above.
 
@@ -41,9 +41,12 @@ You can access the database with the following command:
 docker-compose exec postgres psql -U nextcloud -d nextcloud
 ```
 
-If you prefer a GUI frontend you can additionally launch the pgadmin container with `docker-compose up -d pgadmin` and access it via http://pgadmin.local.
+If you prefer a GUI frontend you can additionally launch the pgadmin container with `docker-compose up -d pgadmin` and access it via <http://pgadmin.local>.
 
 Alternatively you can use a database client to access the database from the host system. The port can be obtained with `docker-compose port database-postgresql 5432`. The host is `localhost` and the credentials are the same as above.
+
+After you have started the container open `pgadmin.local` in a web browser. The password for the `nextcloud.local` is `postgres`.
+That's it, open the following path to see the Nextcloud tables: `Server group 1 -> nextcloud.local -> Databases -> nextcloud -> Schemas -> public -> Tables`
 
 ### SQLite
 

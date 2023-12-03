@@ -1,3 +1,5 @@
 site_name: nextcloud-docker-dev
 theme:
   name: readthedocs
+markdown_extensions:
+  - admonition
