@@ -29,7 +29,7 @@ You can access the database with the following command:
 docker-compose exec mariadb mysql -u root -pnextcloud
 ```
 
-If you prefer a GUI frontend you can additionally launch the phpmyadmin container with `docker-compose up -d phpmyadmin` and access it via `http://phpmyadmin.local`.
+If you prefer a GUI frontend you can additionally launch the phpmyadmin container with `docker-compose up -d phpmyadmin` and access it via http://phpmyadmin.local.
 
 Alternatively you can use a database client to access the database from the host system. The port can be obtained with `docker-compose port database-mysql 3306`. The host is `localhost` and the credentials are the same as above.
 
@@ -41,7 +41,7 @@ You can access the database with the following command:
 docker-compose exec postgres psql -U nextcloud -d nextcloud
 ```
 
-If you prefer a GUI frontend you can additionally launch the pgadmin container with `docker-compose up -d pgadmin` and access it via `http://pgadmin.local`.
+If you prefer a GUI frontend you can additionally launch the pgadmin container with `docker-compose up -d pgadmin` and access it via http://pgadmin.local.
 
 Alternatively you can use a database client to access the database from the host system. The port can be obtained with `docker-compose port database-postgresql 5432`. The host is `localhost` and the credentials are the same as above.
 
@@ -67,3 +67,5 @@ docker-compose exec database-mariadb-replica mysql -u root -pnextcloud
 ### MaxScale
 
 This mode runs a mariadb primary and read replica setup with maxscale as load balancer. The primary is used for writes and the replica for reads where MaxScale is used to perform a read-write-split.
+
+The logs of MaxScale can be accessed with `docker-compose exec maxscale cat /var/log/maxscale/maxscale.log`.
