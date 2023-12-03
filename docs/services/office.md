@@ -20,3 +20,10 @@ It requires to have the [richdocuments](https://github.com/nextcloud/richdocumen
 - Make sure you have the [richdocuments app](https://github.com/nextcloud/richdocuments) cloned to your `apps-extra` directory and built the frontend code of the app with `npm ci && npm run build`
 - Enable the app and configure `collabora.local` in the Collabora settings inside of Nextcloud
 
+## Using with HTTPS
+
+To properly work with HTTPS, you need to add the following parameter to the Collabora container in the `.env`file:
+
+```
+COLLABORA_PARAMS="--o:ssl.termination=true"
+```

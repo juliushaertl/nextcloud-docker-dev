@@ -81,6 +81,47 @@ jobs:
             ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
+      - name: Start containers with docker compose
+        run: |
+          ./bootstrap.sh
+          PHP_VERSION=$(echo ${{ matrix.container }} | sed -e 's/^php//')
+          echo "PHP_VERSION=${PHP_VERSION}" >> .env
+          # exit if php version is not numeric or below 80
+          if ! [[ $PHP_VERSION =~ ^[0-9]+$ ]] || [[ $PHP_VERSION -lt 80 ]]; then
+            exit 0
+          fi
+          docker-compose up -d nextcloud
+          # wait for nextcloud to be up
+          # wait up to 5 minutes
+          for i in {1..300}; do
+            if curl -s http://nextcloud.local/index.php/login | grep -q 'Login'; then
+              break
+            fi
+            sleep 1
+          done
+          curl http://nextcloud.local/status.php
+      - uses: actions/setup-node@v3
+        if: matrix.container == 'php80' || matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
+        with:
+          node-version: 18
+      - name: Install dependencies
+        if: matrix.container == 'php80' || matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
+        working-directory: tests
+        run: npm ci
+      - name: Install Playwright Browsers
+        if: matrix.container == 'php80' || matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
+        working-directory: tests
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
+        if: matrix.container == 'php80' || matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
+        working-directory: tests
+        run: npx playwright test
+      - uses: actions/upload-artifact@v3
+        if: matrix.container == 'php80' || matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
+        with:
+          name: playwright-report
+          path: tests/playwright-report/
+          retention-days: 30
       - name: Push container image
         uses: docker/build-push-action@v5
         if: github.ref == 'refs/heads/master' || github.event_name == 'release'
@@ -98,5 +139,3 @@ jobs:
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-
-
