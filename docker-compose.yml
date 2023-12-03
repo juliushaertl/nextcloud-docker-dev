@@ -593,7 +593,7 @@ services:
       - postgres:/var/lib/postgresql
 
   database-oci:
-    image: ghcr.io/gvenzl/oracle-xe:18
+    image: ghcr.io/gvenzl/oracle-xe:21
     environment:
       ORACLE_PASSWORD: nextcloud
       APP_USER: nextcloud
