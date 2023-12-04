@@ -293,6 +293,8 @@ install() {
 
 	output "🔧 Preparing cron job"
 
+	OCC dav:sync-system-addressbook
+
 	# Setup initial configuration
 	OCC background:cron
 
