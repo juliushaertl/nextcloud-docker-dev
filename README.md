@@ -1,5 +1,7 @@
 # Nextcloud development environment on Docker Compose
 
+[Documentation](https://juliushaertl.github.io/nextcloud-docker-dev/) | [Nextcloud Developer Portal](https://nextcloud.com/developer/)
+
 Nextcloud development environment using docker-compose providing a large variety of services for Nextcloud server and app development and testing.
 
 ⚠ **DO NOT USE THIS IN PRODUCTION** Various settings in this setup are considered insecure and default passwords and secrets are used all over the place
