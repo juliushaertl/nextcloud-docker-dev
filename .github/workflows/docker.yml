@@ -131,7 +131,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           file: ${{ steps.dockerfile.outputs.DOCKERFILE }}
           tags: |
-            ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}:${{ github.event_name == 'release' && 'latest' || 'nightly' }}
+            ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}:${{ github.event_name == 'release' && 'release' || 'latest' }}
             ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}:${{ github.ref_name }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
