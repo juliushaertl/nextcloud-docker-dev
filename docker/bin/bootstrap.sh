@@ -97,6 +97,14 @@ wait_for_other_containers() {
 				echo "✅"
 			done
 			;;
+		"oci")
+			output " - Oracle"
+			retry_with_timeout "(echo > /dev/tcp/database-$SQL/1521) 2>/dev/null" 30 "⚠ Unable to connect to the Oracle server"
+			sleep 2
+			;;
+		"sqlite")
+			output " - SQLite"
+			;;
 		*)
 			fatal 'Not implemented'
 			;;
@@ -225,7 +233,7 @@ install() {
 
 	output "🔧 Starting auto installation"
 	if [ "$SQL" = "oci" ]; then
-		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name=xe --database-host="$SQLHOST" --database-user=system --database-pass=oracle
+		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name=nextcloud --database-host="$SQLHOST" --database-port=1521 --database-user=nextcloud --database-pass=nextcloud
 	elif [ "$SQL" = "pgsql" ]; then
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name="$DBNAME" --database-host="$SQLHOST" --database-user=postgres --database-pass=postgres
 	elif [ "$SQL" = "mysql" ]; then
