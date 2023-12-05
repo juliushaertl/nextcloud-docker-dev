@@ -6,6 +6,59 @@ set -o pipefail
 
 APPS_TO_INSTALL=(viewer recommendations files_pdfviewer profiler hmr_enabler circles)
 NEXTCLOUD_AUTOINSTALL_APPS=(viewer profiler hmr_enabler)
+SERVER_CLONE=squashed
+APPS_CLONE_FILTER=
+
+print_help() {
+	cat << EOF
+  boottrap.sh [--full-clone|--clone-no-blobs] [--clone-all-apps-filtered] [--] APPS
+
+This command will initialize the debug environment for app developers.
+
+The following options can be provided:
+
+  --full-clone      Clone the server repository with the complete history included
+  --clone-no-blobs  Clone the server repository with the history but omitting the
+                    file contents. A network connection might be required if checking
+                    out commits is done.
+                    --full-clone and --clone-no-blobs is mutually exclusive.
+  --clone-all-apps-filtered
+                    Do not only reduce the history of the server repository but also
+                    the cloned apps.
+  
+  APPS              The apps to add to the development setup on top of the default apps
+
+The default apps to be installed: ${APPS_TO_INSTALL[@]}
+EOF
+}
+
+while [ $# -gt 0 ]
+do
+	case "$1" in
+		--full-clone)
+			SERVER_CLONE=full
+			;;
+		--clone-no-blobs)
+			SERVER_CLONE=filter-blobs
+			;;
+		--clone-all-apps-filtered)
+			APPS_CLONE_FILTER=y
+			;;
+		--help|-h)
+			print_help
+			exit 0
+			;;
+		--)
+			shift
+			break
+			;;
+		*)
+			APPS_TO_INSTALL+=("$1")
+			NEXTCLOUD_AUTOINSTALL_APPS+=("$1")
+			;;
+	esac
+	shift
+done
 
 # You can specify additional apps to install on the command line.
 APPS_TO_INSTALL+=( "$@" )
@@ -45,6 +98,28 @@ if [ -f ".env" ]; then
 	exit 0
 fi
 
+case $SERVER_CLONE in
+	squashed)
+		CLONE_PARAMS=(--depth 1)
+		;;
+	clone-no-blobs)
+		CLONE_PARAMS=(--filter blob:none)
+		;;
+	full)
+		CLONE_PARAMS=()
+		;;
+	*)
+		echo "Unknown cloning parameter $SERVER_CLONE was found. Please report this."
+		exit 1
+esac
+
+if [ -n "$APPS_CLONE_FILTER" ]
+then
+	APPS_CLONE_PARAMS=("${CLONE_PARAMS[@]}")
+else
+	APPS_CLONE_PARAMS=()
+fi
+
 indent() {
 	sed 's/^/    /'
 }
@@ -66,7 +141,7 @@ function install_server() {
 	(
 		(
 			echo "🌏 Fetching server (this might take a while to finish)" &&
-				git clone https://github.com/nextcloud/server.git --depth 1 workspace/server --progress 2>&1 &&
+				git clone "${CLONE_PARAMS[@]}" https://github.com/nextcloud/server.git --depth 1 workspace/server --progress 2>&1 &&
 				cd workspace/server && git submodule update --init --progress 2>&1
 		) || echo "❌ Failed to clone Nextcloud server code"
 	) | indent
@@ -80,7 +155,7 @@ function install_app() {
 	fi
 	(
 		echo "🌏 Fetching $1"
-		(git clone https://github.com/nextcloud/"$1".git "$TARGET" 2>&1 | indent_cli &&
+		(git clone "${APPS_CLONE_PARAMS[@]}" https://github.com/nextcloud/"$1".git "$TARGET" 2>&1 | indent_cli &&
 			echo "✅ $1 installed") ||
 			echo "❌ Failed to install $1"
 	) | indent
@@ -168,7 +243,11 @@ cat <<EOF
  🗑  Fresh install and wipe all data
 
 	$ docker-compose down -v
+EOF
 
+case $SERVER_CLONE in
+	squashed)
+		cat <<EOF
 
 	Note that for performance reasons the server repository has been cloned with
 	--depth=1. To get the full history it is highly recommended to run:
@@ -180,6 +259,30 @@ cat <<EOF
 
 	This may take some time depending on your internet connection speed.
 
+	You might as well use the script in scripts/download-full-history.sh.
+EOF
+		;;
+	clone-no-blobs)
+		cat <<EOF
+
+	Note that for performance reasons the server repository has been cloned with
+	--filter=blob:none. You have a complete history in the server repository.
+	If you checkout older commits, git will eventually download missing blobs on
+	the fly if they are not present locally.
+
+	You should be prepared to have a live internet connection when browsing the
+	history of the server repository.
+
+	You might as well use the script in scripts/download-full-history.sh.
+EOF
+		;;
+	full)
+		;;
+esac
+
+
+
+cat <<EOF
 
 For more details about the individual setup options see
 the README.md file or checkout the repo at
