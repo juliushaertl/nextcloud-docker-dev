@@ -20,7 +20,7 @@ docker run --rm -p 8080:80 \
     ghcr.io/juliushaertl/nextcloud-dev-php80:latest
 ```
 
-The `SERVER_BRANCH` environment variable can be used to run different versions of Nextcloud by specificing either a server branch or git tag.
+The `SERVER_BRANCH` environment variable can be used to run different versions of Nextcloud by specifying either a server branch or git tag.
 
 ```bash
 docker run --rm -p 8080:80 -e SERVER_BRANCH=v24.0.1 ghcr.io/juliushaertl/nextcloud-dev-php80:latest

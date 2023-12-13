@@ -2,7 +2,7 @@
 
 ## Introduction
 
-By default MySQL will be used as database backend. You can change this by setting the `SQL` variable in the `.env` file. The following databases are supported:
+By default, MySQL will be used as database backend. You can change this by setting the `SQL` variable in the `.env` file. The following databases are supported:
 
 - `mysql`
 - `pgsql`

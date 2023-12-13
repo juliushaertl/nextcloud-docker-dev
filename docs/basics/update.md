@@ -19,4 +19,4 @@ docker-compose exec nextcloud occ upgrade
 
 In case Nextcloud server bumps the major version, you will need to pull all repositories again to the latest state to get the compatibility changes.
 
-You might want to take the opportunity to then setup the previous version as a new stable version setup. See [stable versions](stable-versions.md) for more information.
+You might want to take the opportunity to then set up the previous version as a new stable version setup. See [stable versions](stable-versions.md) for more information.
