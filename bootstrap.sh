@@ -176,8 +176,15 @@ echo
 echo "⏩ Performing system checks"
 
 is_installed docker
-is_installed docker-compose
 is_installed git
+
+docker-compose version >/dev/null 2>/dev/null && DCC='docker-compose'
+docker compose version >/dev/null 2>/dev/null && DCC='docker compose'
+
+if [ -z "$DCC" ]; then
+	echo "❌ Install docker-compose before running this script"
+	exit 1
+fi
 
 (
 	(docker ps 2>&1 >/dev/null && echo "✅ Docker is properly executable") ||
@@ -233,17 +240,17 @@ cat <<EOF
 
  🚀  Start the Nextcloud server by running
 
-	$ docker-compose up -d nextcloud
+	$ $DCC up -d nextcloud
 
 
  💤  Stop it with
 
-	$ docker-compose stop nextcloud
+	$ $DCC stop nextcloud
 
 
  🗑  Fresh install and wipe all data
 
-	$ docker-compose down -v
+	$ $DCC down -v
 EOF
 
 case $SERVER_CLONE in
