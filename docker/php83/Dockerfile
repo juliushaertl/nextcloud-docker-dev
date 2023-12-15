@@ -7,7 +7,6 @@ RUN chmod +x /usr/local/bin/install-php-extensions
 RUN install-php-extensions \
     apcu \
     bcmath \
-    blackfire \
     exif \
     gd \
     gmp \
@@ -24,8 +23,9 @@ RUN install-php-extensions \
     redis \
     smbclient \
     sysvsem \
-    # xdebug \
+    xdebug \
     zip \
+    blackfire \
     @composer
 
 # dev tools separate install so we quickly change without rebuilding all php extensions
