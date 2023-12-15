@@ -12,7 +12,7 @@
 ## SAML
 
 ```
-docker-compose up -d proxy nextcloud saml
+docker compose up -d proxy nextcloud saml
 ```
 
 - uid mapping: `urn:oid:0.9.2342.19200300.100.1.1`

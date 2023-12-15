@@ -42,8 +42,8 @@ dockerfilelint:
 
 .ONESHELL:
 shellcheck:
-	for file in $$(find . -type f -iname '*.sh' -not -path './wip/*'); do shellcheck --format=gcc $$file; done;
-	for file in $$(find ./scripts -type f); do shellcheck --format=gcc $$file; done;
+	for file in $$(find . -type f -iname '*.sh' -not -path './wip/*'); do shellcheck --format=gcc -x $$file; done;
+	for file in $$(find ./scripts -type f); do shellcheck --format=gcc -x $$file; done;
 
 .ONESHELL:
 template-apply:

@@ -1,4 +1,4 @@
-This documentation covers a Nextcloud development environment using docker-compose providing a large variety of services for Nextcloud server and app development and testing.
+This documentation covers a Nextcloud development environment using docker compose providing a large variety of services for Nextcloud server and app development and testing.
 
 ⚠ **DO NOT USE THIS IN PRODUCTION** 
 

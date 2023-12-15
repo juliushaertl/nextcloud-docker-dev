@@ -1,7 +1,7 @@
 ## Global scale
 
 ```
-docker-compose up -d proxy portal gs1 gs2 lookup database-mysql
+docker compose up -d proxy portal gs1 gs2 lookup database-mysql
 ```
 
 Users are named the same as the instance name, e.g. `gs1`, `gs2`
@@ -9,7 +9,7 @@ Users are named the same as the instance name, e.g. `gs1`, `gs2`
 ## [Fulltextsearch](https://github.com/nextcloud/fulltextsearch)
 
 ```
-docker-compose up -d elasticsearch elasticsearch-ui
+docker compose up -d elasticsearch elasticsearch-ui
 ```
 
 - Address for configuring in Nextcloud: `http://elastic:elastic@elasticsearch:9200`

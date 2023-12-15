@@ -29,7 +29,7 @@ git worktree add ../../../stable28/apps/viewer stable28
 ## Start the stable28 container
 
 ```bash
-docker-compose up -d stable28
+docker compose up -d stable28
 ```
 
 ## Apps without stable branches

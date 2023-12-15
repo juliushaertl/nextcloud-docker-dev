@@ -2,7 +2,7 @@
 
 [Documentation](https://juliushaertl.github.io/nextcloud-docker-dev/) | [Nextcloud Developer Portal](https://nextcloud.com/developer/)
 
-Nextcloud's development environment using docker-compose providing a large variety of services for Nextcloud server and app development and testing.
+Nextcloud's development environment using Docker Compose providing a large variety of services for Nextcloud server and app development and testing.
 
 ⚠ **DO NOT USE THIS IN PRODUCTION** Various settings in this setup are considered insecure and default passwords and secrets are used all over the place
 
@@ -36,14 +36,16 @@ cd nextcloud-docker-dev
 ./bootstrap.sh
 ```
 
+Depending on your docker version you will need to use `docker-compose` instead of `docker compose` in the following commands.
+
 This may take some time depending on your internet connection speed.
 
 Once done you can start the Nextcloud container using:
 ```bash
-docker-compose up nextcloud
+docker compose up nextcloud
 ```
 
-You can also start it in the background using `docker-compose up -d nextcloud`.
+You can also start it in the background using `docker compose up -d nextcloud`.
 
 You can then access your Nextcloud instance at [http://nextcloud.local](http://nextcloud.local). The default username is `admin` and the password is `admin`. [Other users can be found in the documentation](https://juliushaertl.github.io/nextcloud-docker-dev/basics/overview/#default-users).
 

@@ -1,9 +1,11 @@
 #!/bin/bash
 
+set -e
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
-
-# shellcheck disable=SC1091
+# shellcheck source=example.env
 source "${SCRIPT_DIR}/../.env"
+# shellcheck source=scripts/functions.sh
+source "${SCRIPT_DIR}/functions.sh"
 
 function addhost() {
 	ETC_HOSTS=/etc/hosts

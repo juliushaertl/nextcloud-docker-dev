@@ -10,4 +10,4 @@ make docker/Dockerfile.php81
 make docker/Dockerfile.php80
 ```
 
-Afterward you can recreate the container with `docker-compose up -d --force-recreate nextcloud` to run the new image or use `docker-compose down -v` before to also reinstall Nextcloud.
+Afterward you can recreate the container with `docker compose up -d --force-recreate nextcloud` to run the new image or use `docker compose down -v` before to also reinstall Nextcloud.

@@ -90,7 +90,7 @@ jobs:
           if ! [[ $PHP_VERSION =~ ^[0-9]+$ ]] || [[ $PHP_VERSION -lt 80 ]]; then
             exit 0
           fi
-          docker-compose up -d nextcloud
+          docker compose up -d nextcloud
           # wait for nextcloud to be up
           # wait up to 5 minutes
           for i in {1..300}; do

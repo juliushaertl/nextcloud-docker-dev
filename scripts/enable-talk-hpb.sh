@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+set -e
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+# shellcheck source=example.env
+source "${SCRIPT_DIR}/../.env"
+# shellcheck source=scripts/functions.sh
+source "${SCRIPT_DIR}/functions.sh"
+
 if [ -z "$1" ]
   then
     echo "Usage $0 CONTAINER"
@@ -9,14 +16,11 @@ fi
 CONTAINER=$1
 
 function occ() {
-    docker compose exec "$CONTAINER" sudo -E -u www-data "./occ" "$@"
+    docker_compose exec "$CONTAINER" sudo -E -u www-data "./occ" "$@"
 }
 
-# shellcheck disable=SC1091
-source .env
-
 echo "Setting up talk signaling with http://talk-signaling$DOMAIN_SUFFIX on $CONTAINER"
-docker-compose up -d talk-signaling talk-janus
+docker_compose up -d talk-signaling talk-janus
 
 if ! occ talk:signaling:list --output="plain" | grep -q "http://talk-signaling$DOMAIN_SUFFIX"; then
   occ talk:signaling:add "http://talk-signaling$DOMAIN_SUFFIX" "1234"

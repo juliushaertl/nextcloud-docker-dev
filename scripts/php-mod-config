@@ -1,5 +1,12 @@
 #!/bin/bash
 
+set -e
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+# shellcheck source=example.env
+source "${SCRIPT_DIR}/../.env"
+# shellcheck source=scripts/functions.sh
+source "${SCRIPT_DIR}/functions.sh"
+
 if [ -z "$1" ]
   then
     echo "Usage $0 CONTAINER blackfire on|off"
@@ -10,17 +17,12 @@ fi
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 restart() {
-    (cd "$SCRIPT_DIR/.." && docker compose exec "$1" pkill -USR1 apache2)
+    (cd "$SCRIPT_DIR/.." && docker_compose exec "$1" pkill -USR1 apache2)
 }
 
 docker_exec() {
     # shellcheck disable=SC2068
-    (cd "$SCRIPT_DIR/.." && docker compose exec $@)
-}
-
-docker_compose() {
-    # shellcheck disable=SC2068
-    (cd "$SCRIPT_DIR/.." && docker compose $@)
+    (cd "$SCRIPT_DIR/.." && docker_compose exec $@)
 }
 
 if [[ "$2" == "blackfire" ]]

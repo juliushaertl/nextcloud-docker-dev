@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+set -e
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+# shellcheck source=example.env
+source "${SCRIPT_DIR}/../.env"
+# shellcheck source=scripts/functions.sh
+source "${SCRIPT_DIR}/functions.sh"
+
 if [ -z "$1" ]
   then
     echo "Usage $0 CONTAINER"
@@ -9,14 +16,13 @@ fi
 CONTAINER=$1
 
 function occ() {
-    docker compose exec "$CONTAINER" sudo -E -u www-data "./occ" "$@"
+    docker_compose exec "$CONTAINER" sudo -E -u www-data "./occ" "$@"
 }
 
-# shellcheck disable=SC1091
-source .env
+
 
 echo "Setting up Collabora with collabora$DOMAIN_SUFFIX on $CONTAINER"
-docker-compose up -d collabora
+docker_compose up -d collabora
 occ app:enable richdocuments
 occ config:app:set richdocuments wopi_url --value="${PROTOCOL:-http}://collabora${DOMAIN_SUFFIX}"
 occ config:app:set richdocuments public_wopi_url --value="${PROTOCOL:-http}://collabora${DOMAIN_SUFFIX}"

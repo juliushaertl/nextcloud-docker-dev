@@ -35,7 +35,7 @@ The cronjobs are configured to run every 5 minutes in the individual containers.
 For testing, you can also run them manually:
 
 ```bash
-docker-compose exec nextcloud php cron.php
+docker compose exec nextcloud php cron.php
 ```
 
 ### occ

@@ -1,5 +1,12 @@
 #!/bin/bash
 
+set -e
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+# shellcheck source=example.env
+source "${SCRIPT_DIR}/../.env"
+# shellcheck source=scripts/functions.sh
+source "${SCRIPT_DIR}/functions.sh"
+
 # Default container name to operate on
 instance=${INSTANCE:-nextcloud}
 
@@ -19,7 +26,7 @@ EOF
 }
 
 run_mysql() {
-    docker compose exec database-mysql mysql -u nextcloud -pnextcloud "$instance" "$@"
+    docker_compose exec database-mysql mysql -u nextcloud -pnextcloud "$instance" "$@"
     exit $?
 }
 

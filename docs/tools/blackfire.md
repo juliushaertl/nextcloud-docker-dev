@@ -13,6 +13,6 @@ After that you can use Blackfire through the browser plugin or curl as described
 ### Using with curl
 
 ```
-alias blackfire='docker-compose exec -e BLACKFIRE_CLIENT_ID=$BLACKFIRE_CLIENT_ID -e BLACKFIRE_CLIENT_TOKEN=$BLACKFIRE_CLIENT_TOKEN blackfire blackfire'
+alias blackfire='docker compose exec -e BLACKFIRE_CLIENT_ID=$BLACKFIRE_CLIENT_ID -e BLACKFIRE_CLIENT_TOKEN=$BLACKFIRE_CLIENT_TOKEN blackfire blackfire'
 blackfire curl http://192.168.21.8/
 ```

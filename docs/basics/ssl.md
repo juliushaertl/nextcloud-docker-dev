@@ -10,7 +10,7 @@ mkcert is a simple tool for making locally-trusted development certificates. It 
 * Go to `data/ssl`
 * `mkcert -cert-file nextcloud.local.crt -key-file nextcloud.local.key nextcloud.local`
 * Add `PROTOCOL=https` to your `.env` file
-* `docker-compose restart proxy`
+* `docker compose restart proxy`
 * There is also a script to generate/update all certs: `./scripts/update-certs`
 
 ## Use self-signed certificates

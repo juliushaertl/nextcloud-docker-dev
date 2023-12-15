@@ -16,7 +16,7 @@ It requires to have the [richdocuments](https://github.com/nextcloud/richdocumen
 
 - Make sure to have the Collabora hostname setup in your `/etc/hosts` file: `127.0.0.1 collabora.local`
 - Clone, build and enable the [richdocuments](https://github.com/nextcloud/richdocuments) app
-- Start the Collabora Online server in addition to your other containers `docker-compose up -d collabora`
+- Start the Collabora Online server in addition to your other containers `docker compose up -d collabora`
 - Make sure you have the [richdocuments app](https://github.com/nextcloud/richdocuments) cloned to your `apps-extra` directory and built the frontend code of the app with `npm ci && npm run build`
 - Enable the app and configure `collabora.local` in the Collabora settings inside of Nextcloud
 

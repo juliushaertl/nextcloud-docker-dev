@@ -20,13 +20,14 @@ cd nextcloud-docker-dev
 
 This may take some time depending on your internet connection speed.
 
+Depending on your docker version you will need to use `docker-compose` instead of `docker compose` in the following commands.
 
 Once done you can start the Nextcloud container using:
 ```bash
-docker-compose up nextcloud
+docker compose up nextcloud
 ```
 
-You can also start it in the background using `docker-compose up -d nextcloud`.
+You can also start it in the background using `docker compose up -d nextcloud`.
 
 You can then access your Nextcloud instance at [http://nextcloud.local](http://nextcloud.local). The default username is `admin` and the password is `admin`. [Other users can be found in the documentation](https://juliushaertl.github.io/nextcloud-docker-dev/basics/overview/#default-users).
 

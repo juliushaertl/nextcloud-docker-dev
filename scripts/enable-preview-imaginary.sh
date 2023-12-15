@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
+
+set -e
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+# shellcheck source=example.env
+source "${SCRIPT_DIR}/../.env"
+# shellcheck source=scripts/functions.sh
+source "${SCRIPT_DIR}/functions.sh"
+
 function OCC () {
-    docker compose exec nextcloud sudo -E -u www-data "./occ" "$@"
+    docker_compose exec nextcloud sudo -E -u www-data "./occ" "$@"
 }
 
 OCC config:system:set enabledPreviewProviders 0 --value 'OC\Preview\MP3'
