@@ -4,7 +4,7 @@
 
 In order to use the hostnames provided by the environment you need to add them to the /etc/hosts file (which is the simplest method).
 
-You can do this by running the following command, which will automatically update entires:
+You can do this by running the following command, which will automatically update entries:
 
 ```bash
 ./scripts/update-hosts.sh
@@ -33,9 +33,9 @@ docker run --rm -it \
     drpsychick/dnsmasq:latest 
 ```
 
-## Use DNS Service Discovery on MacOS
+## Use DNS Service Discovery on macOS
 
-You can also use the `dns-sd` tool on MacOS to advertise the container domains on the network. This is especially useful if you try to connect from an iPhone or iPad, since those devices do not allow to edit the `/etc/hosts` file. Use the tool like this:
+You can also use the `dns-sd` tool on macOS to advertise the container domains on the network. This is especially useful if you try to connect from an iPhone or iPad, since those devices do not allow to edit the `/etc/hosts` file. Use the tool like this:
 
 ```
 dns-sd -P nextcloud _http._tcp local 80 nextcloud.local 192.168.0.10

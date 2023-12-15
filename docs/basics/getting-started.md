@@ -2,7 +2,7 @@
 
 ## Tutorial
 
-You can find a [step by step tutorial on how to use this setup](https://cloud.nextcloud.com/s/iyNGp8ryWxc7Efa?path=%2F1%20Setting%20up%20a%20development%20environment) in the [Nextcloud Developer Portal](https://nextcloud.com/developer/). It will guide you through the setup and show you how to use it for app development.
+You can find a [step-by-step tutorial on how to use this setup](https://cloud.nextcloud.com/s/iyNGp8ryWxc7Efa?path=%2F1%20Setting%20up%20a%20development%20environment) in the [Nextcloud Developer Portal](https://nextcloud.com/developer/). It will guide you through the setup and show you how to use it for app development.
 
 There are two ways of using this setup. **A persistent setup is the most common one** where you have a local git clone of all required repositories. The other one is a standalone setup that can be used to quickly run parts of the Nextcloud ecosystem source code without having to clone everything.
 
@@ -11,7 +11,7 @@ There are two ways of using this setup. **A persistent setup is the most common 
 !!! note
     This is the recommended way to run the setup for development. You will have a local clone of all required source code.
 
-To start the setup run the following commands to clone the repository and bootstrap the setup. This will prepare your setp and clone the Nextcloud server repository and required apps into the `workspace` folder.
+To start the setup run the following commands to clone the repository and bootstrap the setup. This will prepare your setup and clone the Nextcloud server repository and required apps into the `workspace` folder.
 ```bash
 git clone https://github.com/juliushaertl/nextcloud-docker-dev
 cd nextcloud-docker-dev
@@ -64,7 +64,7 @@ For app development you can mount your app directly into the container:
 docker run --rm -p 8080:80 -v ~/path/to/appid:/var/www/html/apps-extra/appid ghcr.io/juliushaertl/nextcloud-dev-php80:latest
 ```
 
-The `SERVER_BRANCH` environment variable can be used to run different versions of Nextcloud by specificing either a server branch or git tag.
+The `SERVER_BRANCH` environment variable can be used to run different versions of Nextcloud by specifying either a server branch or git tag.
 
 ```bash
 docker run --rm -p 8080:80 -e SERVER_BRANCH=v24.0.1 ghcr.io/juliushaertl/nextcloud-dev-php80:latest

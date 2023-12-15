@@ -2,7 +2,7 @@
 
 [Documentation](https://juliushaertl.github.io/nextcloud-docker-dev/) | [Nextcloud Developer Portal](https://nextcloud.com/developer/)
 
-Nextcloud development environment using docker-compose providing a large variety of services for Nextcloud server and app development and testing.
+Nextcloud's development environment using docker-compose providing a large variety of services for Nextcloud server and app development and testing.
 
 ⚠ **DO NOT USE THIS IN PRODUCTION** Various settings in this setup are considered insecure and default passwords and secrets are used all over the place
 
@@ -18,7 +18,7 @@ Nextcloud development environment using docker-compose providing a large variety
 
 ## Tutorial
 
-You can find a step by step tutorial on how to use this setup in the [Nextcloud Developer Portal](https://nextcloud.com/developer/). It will guide you through the setup and show you how to use it for app development: https://cloud.nextcloud.com/s/iyNGp8ryWxc7Efa?path=%2F1%20Setting%20up%20a%20development%20environment
+You can find a step-by-step tutorial on how to use this setup in the [Nextcloud Developer Portal](https://nextcloud.com/developer/). It will guide you through the setup and show you how to use it for app development: https://cloud.nextcloud.com/s/iyNGp8ryWxc7Efa?path=%2F1%20Setting%20up%20a%20development%20environment
 
 In detail explanation of the setup and its features and configuration options can be found in the [nextcloud-docker-dev documentation](https://juliushaertl.github.io/nextcloud-docker-dev/).
 
@@ -29,7 +29,7 @@ In detail explanation of the setup and its features and configuration options ca
 > [!TIP]
 > This is the recommended way to run the setup for development. You will have a local clone of all required source code.
 
-To start the setup run the following commands to clone the repository and bootstrap the setup. This will prepare your setp and clone the Nextcloud server repository and required apps into the `workspace` folder.
+To start the setup run the following commands to clone the repository and bootstrap the setup. This will prepare your setup and clone the Nextcloud server repository and required apps into the `workspace` folder.
 ```bash
 git clone https://github.com/juliushaertl/nextcloud-docker-dev
 cd nextcloud-docker-dev
@@ -81,7 +81,7 @@ For app development you can mount your app directly into the container:
 docker run --rm -p 8080:80 -v ~/path/to/appid:/var/www/html/apps-extra/appid ghcr.io/juliushaertl/nextcloud-dev-php80:latest
 ```
 
-The `SERVER_BRANCH` environment variable can be used to run different versions of Nextcloud by specificing either a server branch or git tag.
+The `SERVER_BRANCH` environment variable can be used to run different versions of Nextcloud by specifying either a server branch or git tag.
 
 ```bash
 docker run --rm -p 8080:80 -e SERVER_BRANCH=v24.0.1 ghcr.io/juliushaertl/nextcloud-dev-php80:latest
