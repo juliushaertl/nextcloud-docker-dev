@@ -201,6 +201,7 @@ PORTBASE=821
 PHP_XDEBUG_MODE=develop
 # SQL variant to use, possible values: sqlite, mysql, pgsql
 SQL=mysql
+PRIMARY=local
 # other values: "database-postgres"
 EOT
 fi

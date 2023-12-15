@@ -77,7 +77,7 @@ services:
       NEXTCLOUD_TRUSTED_DOMAINS:
       BLACKFIRE_CLIENT_ID:
       BLACKFIRE_CLIENT_TOKEN:
-      PRIMARY: ${PRIMARY}
+      PRIMARY: ${PRIMARY:-local}
       PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${REPO_PATH_SERVER}:/var/www/html'
@@ -90,7 +90,7 @@ services:
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
     depends_on:
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - redis
       - mail
       - ${PROXY_SERVICE:-proxy}
@@ -111,7 +111,7 @@ services:
     ports:
       - "${PORTBASE:-800}1:80"
     depends_on:
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - redis
       - mail
       - ${PROXY_SERVICE:-proxy}
@@ -131,7 +131,7 @@ services:
       - ./docker/configs/config.php:/var/www/html/config/writable.config.php:ro
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
     depends_on:
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - redis
       - mail
       - ${PROXY_SERVICE:-proxy}
@@ -160,7 +160,7 @@ services:
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
     depends_on:
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - redis
       - mail
       - ${PROXY_SERVICE:-proxy}
@@ -189,7 +189,7 @@ services:
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
     depends_on:
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - redis
       - mail
       - ${PROXY_SERVICE:-proxy}
@@ -218,7 +218,7 @@ services:
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
     depends_on:
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - redis
       - mail
       - ${PROXY_SERVICE:-proxy}
@@ -247,7 +247,7 @@ services:
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
     depends_on:
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - redis
       - mail
       - ${PROXY_SERVICE:-proxy}
@@ -276,7 +276,7 @@ services:
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
     depends_on:
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - redis
       - mail
       - ${PROXY_SERVICE:-proxy}
@@ -293,7 +293,7 @@ services:
       VIRTUAL_HOST: stable21${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
-      PRIMARY: ${PRIMARY}
+      PRIMARY: ${PRIMARY:-local}
       PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable21:/var/www/html'
@@ -306,7 +306,7 @@ services:
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
     depends_on:
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - redis
       - mail
       - ${PROXY_SERVICE:-proxy}
@@ -323,7 +323,7 @@ services:
       VIRTUAL_HOST: stable22${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
-      PRIMARY: ${PRIMARY}
+      PRIMARY: ${PRIMARY:-local}
       PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable22:/var/www/html'
@@ -336,7 +336,7 @@ services:
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
     depends_on:
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - redis
       - mail
       - ${PROXY_SERVICE:-proxy}
@@ -353,7 +353,7 @@ services:
       VIRTUAL_HOST: stable23${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
-      PRIMARY: ${PRIMARY}
+      PRIMARY: ${PRIMARY:-local}
       PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable23:/var/www/html'
@@ -366,7 +366,7 @@ services:
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
     depends_on:
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - redis
       - mail
       - ${PROXY_SERVICE:-proxy}
@@ -383,7 +383,7 @@ services:
       VIRTUAL_HOST: stable24${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
-      PRIMARY: ${PRIMARY}
+      PRIMARY: ${PRIMARY:-local}
       PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable24:/var/www/html'
@@ -396,7 +396,7 @@ services:
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
     depends_on:
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - redis
       - mail
       - ${PROXY_SERVICE:-proxy}
@@ -413,7 +413,7 @@ services:
       VIRTUAL_HOST: stable25${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
-      PRIMARY: ${PRIMARY}
+      PRIMARY: ${PRIMARY:-local}
       PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable25:/var/www/html'
@@ -426,7 +426,7 @@ services:
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
     depends_on:
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - redis
       - mail
       - ${PROXY_SERVICE:-proxy}
@@ -443,7 +443,7 @@ services:
       VIRTUAL_HOST: stable26${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
-      PRIMARY: ${PRIMARY}
+      PRIMARY: ${PRIMARY:-local}
       PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable26:/var/www/html'
@@ -456,7 +456,7 @@ services:
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
     depends_on:
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - redis
       - mail
       - ${PROXY_SERVICE:-proxy}
@@ -473,7 +473,7 @@ services:
       VIRTUAL_HOST: stable27${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
-      PRIMARY: ${PRIMARY}
+      PRIMARY: ${PRIMARY:-local}
       PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable27:/var/www/html'
@@ -486,7 +486,7 @@ services:
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
     depends_on:
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - redis
       - mail
       - ${PROXY_SERVICE:-proxy}
@@ -503,7 +503,7 @@ services:
       VIRTUAL_HOST: stable28${DOMAIN_SUFFIX}
       ADDITIONAL_APPS_PATH:
       NEXTCLOUD_TRUSTED_DOMAINS:
-      PRIMARY: ${PRIMARY}
+      PRIMARY: ${PRIMARY:-local}
       PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${STABLE_ROOT_PATH}/stable28:/var/www/html'
@@ -516,7 +516,7 @@ services:
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
     depends_on:
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - redis
       - mail
       - ${PROXY_SERVICE:-proxy}
@@ -841,7 +841,7 @@ services:
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
     depends_on:
       - ${PROXY_SERVICE:-proxy}
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - lookup
       - redis
       - mail
@@ -864,7 +864,7 @@ services:
     depends_on:
       - ${PROXY_SERVICE:-proxy}
       - portal
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - lookup
       - redis
       - mail
@@ -887,7 +887,7 @@ services:
     depends_on:
       - ${PROXY_SERVICE:-proxy}
       - portal
-      - database-${SQL}
+      - database-${SQL:-mysql}
       - lookup
       - redis
       - mail
