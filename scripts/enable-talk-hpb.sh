@@ -19,10 +19,10 @@ function occ() {
     docker_compose exec "$CONTAINER" sudo -E -u www-data "./occ" "$@"
 }
 
-echo "Setting up talk signaling with http://talk-signaling$DOMAIN_SUFFIX on $CONTAINER"
+echo "Setting up talk signaling with ${PROTOCOL:-http}://talk-signaling$DOMAIN_SUFFIX on $CONTAINER"
 docker_compose up -d talk-signaling talk-janus
 
-if ! occ talk:signaling:list --output="plain" | grep -q "http://talk-signaling$DOMAIN_SUFFIX"; then
-  occ talk:signaling:add "http://talk-signaling$DOMAIN_SUFFIX" "1234"
+if ! occ talk:signaling:list --output="plain" | grep -q "${PROTOCOL:-http}://talk-signaling$DOMAIN_SUFFIX"; then
+  occ talk:signaling:add "${PROTOCOL:-http}://talk-signaling$DOMAIN_SUFFIX" "1234"
 fi
 
