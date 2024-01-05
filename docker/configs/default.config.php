@@ -67,3 +67,45 @@ $CONFIG=[
         'apps' => ['diagnostics', 'admin_audit'],
 	],
 ];
+
+
+if ($primary === 'minio') {
+	$CONFIG += [
+		'objectstore' =>
+		array (
+			'class' => 'OC\\Files\\ObjectStore\\S3',
+			'arguments' =>
+			array (
+				'bucket' => 'nc-' . $hostname,
+				'key' => 'nextcloud',
+				'secret' => 'nextcloud',
+				'hostname' => 'minio',
+				'port' => '9000',
+				'use_ssl' => false,
+				'use_path_style' => true,
+				'autocreate' => true,
+				'verify_bucket_exists' => true,
+			),
+		)
+	];
+}
+
+if ($primary === 'minio-multibucket') {
+	$CONFIG += [
+		'objectstore_multibucket' => array(
+			'class' => 'OC\\Files\\ObjectStore\\S3',
+			'arguments' => array(
+				// optional, defaults to 64
+				'num_buckets' => 64,
+				// n integer in the range from 0 to (num_buckets-1) will be appended
+				'bucket' => 'nc-' . $hostname,
+				'key' => 'nextcloud',
+				'secret' => 'nextcloud',
+				'hostname' => 'minio',
+				'port' => '9000',
+				'use_ssl' => false,
+				'use_path_style' => true,
+			),
+		),
+	];
+}
