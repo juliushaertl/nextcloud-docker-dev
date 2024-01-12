@@ -902,6 +902,30 @@ services:
     #  - '${STABLE_ROOT_PATH}/lookupserver:/var/www/html'
     extra_hosts:
       - host.docker.internal:host-gateway
+  tinyproxy:
+    image: docker.io/kalaksi/tinyproxy
+    cap_drop:
+      - ALL
+    ports:
+      - 8888:8888
+    environment:
+      MAX_CLIENTS: 100
+      ALLOWED_NETWORKS: 0.0.0.0/0
+      # One of Critical, Error, Warning, Notice, Connect, Info
+      LOG_LEVEL: Notice
+      # Maximum number of seconds idle connections are allowed to remain open
+      TIMEOUT: 900
+      # Username for BasicAuth
+      # AUTH_USER: ''
+      # Password for BasicAuth (letters and digits only)
+      # Prefer secrets-mechanisms instead of environment variables.
+      # AUTH_PASSWORD: ''
+    healthcheck:
+      test: ["CMD", "curl", "-I", "-H", "Host: tinyproxy.stats", "${PROTOCOL}://nextcloud${DOMAIN_SUFFIX}/"]
+      interval: 5m
+      timeout: 10s
+      retries: 1
+
 
   previews_hpb:
     image: nextcloud/aio-imaginary:latest
