@@ -43,7 +43,7 @@ docker compose exec postgres psql -U nextcloud -d nextcloud
 
 If you prefer a GUI frontend you can additionally launch the pgadmin container with `docker compose up -d pgadmin` and access it via <http://pgadmin.local>.
 
-Alternatively you can use a database client to access the database from the host system. The port can be obtained with `docker compose port database-postgresql 5432`. The host is `localhost` and the credentials are the same as above.
+Alternatively you can use a database client to access the database from the host system. The port can be obtained with `docker compose port database-pgsql 5432`. The host is `localhost` and the credentials are the same as above.
 
 After you have started the container open `pgadmin.local` in a web browser. The password for the `nextcloud.local` is `postgres`.
 That's it, open the following path to see the Nextcloud tables: `Server group 1 -> nextcloud.local -> Databases -> nextcloud -> Schemas -> public -> Tables`

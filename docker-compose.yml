@@ -582,7 +582,7 @@ services:
     ports:
       - '3306'
 
-  database-postgres:
+  database-pgsql:
     image: postgres:latest
     environment:
       POSTGRES_DB: nextcloud

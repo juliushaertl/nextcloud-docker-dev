@@ -86,7 +86,7 @@ wait_for_other_containers() {
 			sleep 2
 			;;
 		"pgsql")
-			retry_with_timeout "(echo > /dev/tcp/database-postgres/5432) 2>/dev/null" 30 "⚠ Unable to connect to the PostgreSQL server"
+			retry_with_timeout "(echo > /dev/tcp/database-pgsql/5432) 2>/dev/null" 30 "⚠ Unable to connect to the PostgreSQL server"
 			sleep 2
 			;;
 		"maxscale")

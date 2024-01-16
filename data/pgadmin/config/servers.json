@@ -5,7 +5,7 @@
             "Group": "Server Group 1",
             "Port": 5432,
             "Username": "postgres",
-            "Host": "database-postgres",
+            "Host": "database-pgsql",
             "SSLMode": "prefer",
             "MaintenanceDB": "postgres",
             "PassFile": "/pgadmin4/config/pgpassfile"

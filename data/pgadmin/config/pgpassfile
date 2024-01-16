@@ -1,1 +1,1 @@
-nextcloud.local:5432:database-postgres:postgres:postgres
+nextcloud.local:5432:database-pgsql:postgres:postgres
