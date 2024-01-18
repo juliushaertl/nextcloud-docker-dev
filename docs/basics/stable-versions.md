@@ -31,6 +31,7 @@ git worktree add ../../../stable28/apps/viewer stable28
 ```bash
 docker compose up -d stable28
 ```
+You can now access the stable Nextcloud instance at [http://stable28.local](http://stable28.local).
 
 ## Apps without stable branches
 
