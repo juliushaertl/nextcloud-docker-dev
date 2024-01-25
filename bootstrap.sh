@@ -141,7 +141,7 @@ function install_server() {
 	(
 		(
 			echo "🌏 Fetching server (this might take a while to finish)" &&
-				git clone "${CLONE_PARAMS[@]}" https://github.com/nextcloud/server.git --depth 1 workspace/server --progress 2>&1 &&
+				git clone "${CLONE_PARAMS[@]}" -b v28.0.1 https://github.com/nextcloud/server.git --depth 1 workspace/server --progress 2>&1 &&
 				cd workspace/server && git submodule update --init --progress 2>&1
 		) || echo "❌ Failed to clone Nextcloud server code"
 	) | indent
