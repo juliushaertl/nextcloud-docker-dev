@@ -1,16 +1,8 @@
 {
   "folders": [
     {
-      "path": "mmr-server/src/main/webui",
-      "name": "WebUI"
-    },
-    {
-      "path": "mmr-server",
-      "name": "Server"
-    },
-    {
-      "path": "mmr-config",
-      "name": "Configurations"
+      "path": ".",
+      "name": "NextCloud"
     }
   ],
   "tasks": {
@@ -49,19 +41,6 @@
   "settings": {
     "files.eol": "\n",
     "input-assist.languages": ["plaintext"],
-    "task.allowAutomaticTasks": "on",
-    "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "interactive",
-    "terminal.integrated.env.linux": {
-      "GRAALVM_HOME": "/usr/local/sdkman/candidates/java/17.0.7-graal"
-    },
-    "microprofile.tools.validation.unknown.excluded": [
-      "*/mp-rest/providers/*/priority",
-      "mp.openapi.schema.*",
-      "kafka-streams.*",
-      "camel.*",
-      "quarkus.oidc.*",
-      "mp.openapi.extensions.smallrye.*"
-    ]
+    "task.allowAutomaticTasks": "on"
   }
 }
