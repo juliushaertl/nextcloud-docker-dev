@@ -89,6 +89,7 @@ services:
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
+      - .:/workspace
     depends_on:
       - database-${SQL:-mysql}
       - redis
