@@ -4,10 +4,10 @@
   // "overrideCommand": false,
   "shutdownAction": "stopCompose",
   "service": "nextcloud",
-  "runServices": ["nextcloud", "database-${SQL:-mysql}", "redis", "mail", "${PROXY_SERVICE:-proxy}"],
+  "runServices": ["nextcloud", "database-mysql", "redis", "mail", "proxy"],
 
   "workspaceFolder": "/workspace",
-  "forwardPorts": ["proxy:80", "proxy:443"],
+  "forwardPorts": ["nextcloud:80", "nextcloud:443"],
 
   // // // Forward Jupyter port locally, mark required
   // // "forwardPorts": [8888], // 5000, 9000
