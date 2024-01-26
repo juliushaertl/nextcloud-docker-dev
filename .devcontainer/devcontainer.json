@@ -4,7 +4,7 @@
   // "overrideCommand": false,
   "shutdownAction": "stopCompose",
   "service": "nextcloud",
-  "runServices": ["nextcloud", "database-mysql", "redis", "mail", "proxy"],
+  "runServices": ["nextcloud", "database-mysql", "redis", "mail", "haproxy"],
 
   "workspaceFolder": "/workspace",
   "forwardPorts": ["nextcloud:80", "nextcloud:443"],
@@ -162,7 +162,10 @@
         // "james-yu.latex-workshop",
         "ms-vscode.hexeditor",
         "redhat.fabric8-analytics",
-        "dbaeumer.vscode-eslint"
+        "dbaeumer.vscode-eslint",
+        "ms-vscode.makefile-tools",
+        "vue.volar",
+        "vue.vscode-typescript-vue-plugin"
         // "runem.lit-plugin",
         // "bierner.lit-html",
         // "mgmcdermott.vscode-language-babel",
