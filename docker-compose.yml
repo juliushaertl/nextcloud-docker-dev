@@ -55,6 +55,7 @@ services:
           - pgadmin${DOMAIN_SUFFIX}
           - phpmyadmin${DOMAIN_SUFFIX}
           - talk-signaling${DOMAIN_SUFFIX}
+          - talk-recording${DOMAIN_SUFFIX}
 
   haproxy:
     image: haproxy
@@ -951,6 +952,21 @@ services:
   talk-janus:
     image: ghcr.io/juliushaertl/nextcloud-dev-talk-janus:latest
 
+  talk-recording:
+    image: nextcloud/aio-talk-recording:latest
+    environment:
+      NC_DOMAIN: "nextcloud${DOMAIN_SUFFIX}"
+      ALLOW_ALL: true
+      HPB_PROTOCOL: "${PROTOCOL:-http}"
+      HPB_DOMAIN: "talk-signaling${DOMAIN_SUFFIX}"
+      HPB_PATH : ""
+      SKIP_VERIFY: true
+      RECORDING_SECRET: "6789"
+      INTERNAL_SECRET: "4567"
+      VIRTUAL_HOST: "talk-recording${DOMAIN_SUFFIX}"
+      VIRTUAL_PORT: 1234
+    shm_size: 2147483648
+    
 volumes:
   data:
   config:
