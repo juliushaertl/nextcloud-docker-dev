@@ -106,9 +106,14 @@ services:
       PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${REPO_PATH_SERVER}:/var/www/html'
-      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
+      - '${REPO_PATH_SERVER}/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
+      - data2:/var/www/html/data
+      - config2:/var/www/html/config
+      - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+      - ./data/shared:/shared
     ports:
       - "${PORTBASE:-800}1:80"
     depends_on:
@@ -127,10 +132,14 @@ services:
       PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
     volumes:
       - '${REPO_PATH_SERVER}:/var/www/html'
-      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-extra'
+      - '${REPO_PATH_SERVER}/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
+      - data3:/var/www/html/data
+      - config3:/var/www/html/config
+      - /var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
-      - ./docker/configs/config.php:/var/www/html/config/writable.config.php:ro
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+      - ./data/shared:/shared
     depends_on:
       - database-${SQL:-mysql}
       - redis
@@ -974,6 +983,8 @@ volumes:
   postgres:
   data2:
   config2:
+  data3:
+  config3:
   document_data:
   document_log:
   objectstorage_minio:
