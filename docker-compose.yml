@@ -965,11 +965,11 @@ services:
     image: nextcloud/aio-talk-recording:latest
     environment:
       NC_DOMAIN: "nextcloud${DOMAIN_SUFFIX}"
-      ALLOW_ALL: true
+      ALLOW_ALL: "true"
       HPB_PROTOCOL: "${PROTOCOL:-http}"
       HPB_DOMAIN: "talk-signaling${DOMAIN_SUFFIX}"
       HPB_PATH : ""
-      SKIP_VERIFY: true
+      SKIP_VERIFY: "true"
       RECORDING_SECRET: "6789"
       INTERNAL_SECRET: "4567"
       VIRTUAL_HOST: "talk-recording${DOMAIN_SUFFIX}"
