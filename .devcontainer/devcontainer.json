@@ -164,8 +164,8 @@
         "redhat.fabric8-analytics",
         "dbaeumer.vscode-eslint",
         "ms-vscode.makefile-tools",
-        "vue.volar",
-        "vue.vscode-typescript-vue-plugin"
+        "vue.volar"
+        // "vue.vscode-typescript-vue-plugin"
         // "runem.lit-plugin",
         // "bierner.lit-html",
         // "mgmcdermott.vscode-language-babel",
