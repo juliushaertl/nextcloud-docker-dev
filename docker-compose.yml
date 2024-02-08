@@ -86,7 +86,7 @@ services:
       - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
       - data:/var/www/html/data
       - config:/var/www/html/config
-      - /var/www/html/apps-writable
+      - apps-writable:/var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
@@ -110,7 +110,7 @@ services:
       - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
       - data2:/var/www/html/data
       - config2:/var/www/html/config
-      - /var/www/html/apps-writable
+      - apps-writable2:/var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
@@ -136,7 +136,7 @@ services:
       - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
       - data3:/var/www/html/data
       - config3:/var/www/html/config
-      - /var/www/html/apps-writable
+      - apps-writable3:/var/www/html/apps-writable
       - ./data/skeleton/:/skeleton
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
@@ -629,6 +629,8 @@ services:
 
   redis:
     image: redis:7
+    volumes:
+      - redis:/data
 
   ldap:
     image: osixia/openldap
@@ -979,12 +981,16 @@ services:
 volumes:
   data:
   config:
+  apps-writable:
   mysql:
   postgres:
+  redis:
   data2:
   config2:
+  apps-writable2:
   data3:
   config3:
+  apps-writable3:
   document_data:
   document_log:
   objectstorage_minio:
