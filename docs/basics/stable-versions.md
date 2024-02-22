@@ -35,17 +35,19 @@ You can now access the stable Nextcloud instance at [http://stable28.local](http
 
 ## Apps without stable branches
 
-Some apps do not have stable branches or cover multiple Nextcloud version. You can use the `ADDITIONAL_APPS_PATH` variable in your `.env` file to add a cloned app to all Nextcloud containers:
+Some apps do not have stable branches or cover multiple Nextcloud version. 
+You can clone the apps you need in the stable versions to the path set in `ADDITIONAL_APPS_PATH`.
+By default, this path set to `./data/apps-extra` and then mounted to `/var/www/html/apps-shared` in `docker-compose.yml`:
+
+```
+'${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
+```
+
+You can change the default value in the `.env` file:
 
 ```
 ADDITIONAL_APPS_PATH=/path-to-your-app/
 ```
-By default, this is set to `./data/apps-extra` in `docker-compose.yml`:
-
-```
-- '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
-```
-Everything under the path defined in `ADDITIONAL_APPS_PATH` will be listed under `/var/www/html/apps-shared` once the volumes are created.
 
 #### 🤓 How to check if the ADDITIONAL_APPS_PATH mounting worked as expected
 1. Check if your app is listed at [http://stable28.local/index.php/settings/apps/disabled](http://stable28.local/index.php/settings/apps/disabled)
