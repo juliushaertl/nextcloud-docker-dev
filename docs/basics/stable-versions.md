@@ -35,4 +35,30 @@ You can now access the stable Nextcloud instance at [http://stable28.local](http
 
 ## Apps without stable branches
 
-Some apps do not have stable branches or cover multiple Nextcloud version. You can use the `ADDITIONAL_APPS_PATH` variable in your `.env` file to add a cloned app to all Nextcloud containers. By default, this is set to `./data/apps-extra`
+Some apps do not have stable branches or cover multiple Nextcloud version. 
+You can clone the apps you need in the stable versions to the path set in `ADDITIONAL_APPS_PATH`.
+By default, this path set to `./data/apps-extra` and then mounted to `/var/www/html/apps-shared` in `docker-compose.yml`:
+
+```
+'${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
+```
+
+You can change the default value in the `.env` file:
+
+```
+ADDITIONAL_APPS_PATH=/path-to-your-app/
+```
+
+#### 🤓 How to check if the ADDITIONAL_APPS_PATH mounting worked as expected
+1. Check if your app is listed at [http://stable28.local/index.php/settings/apps/disabled](http://stable28.local/index.php/settings/apps/disabled)
+2. Alternatively, login into the container created from the image `nextcloud-dev-php<PHP version>` and run `occ app:list`:
+```bash
+  docker exec -it <container name or ID> /bin/bash
+  occ app:list
+```
+Your app should be listed under the `Disabled` list.
+
+- https://docs.docker.com/engine/reference/commandline/container_exec/
+- https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/occ_command.html#apps-commands-label
+
+
