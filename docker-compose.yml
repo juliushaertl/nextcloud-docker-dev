@@ -575,7 +575,7 @@ services:
       MYSQL_USER: 'nextcloud'
       MYSQL_DATABASE: 'nextcloud'
     command: [
-      '--wait_timeout=300',
+      '--wait_timeout=28800',
     ]
     ports:
       - "${PORTBASE:-800}2:3306"
