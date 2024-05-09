@@ -1,0 +1,50 @@
+{
+  "folders": [
+    {
+      "path": "data",
+      "name": "Data"
+    },
+    {
+      "path": "workspace",
+      "name": "NextCloud"
+    }
+  ],
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Check home-dot-ssh",
+        "type": "process",
+        "command": "/bin/sh",
+        "args": ["-c", "[ ! -d ~/.ssh ] && mkdir ~/.ssh || exit 0"],
+        "presentation": {
+          "echo": false,
+          "reveal": "never",
+          "revealProblems": "never",
+          "focus": false,
+          "panel": "new",
+          "showReuseMessage": false,
+          "clear": true,
+          "close": true
+        },
+        "windows": {
+          "command": "wsl.exe",
+          "args": [
+            "--shell-type standard",
+            "--system",
+            "--",
+            "[ ! -d ~/.ssh ] && mkdir ~/.ssh || exit 0"
+          ]
+        },
+        "runOptions": {
+          "runOn": "folderOpen"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "files.eol": "\n",
+    "input-assist.languages": ["plaintext"],
+    "task.allowAutomaticTasks": "on"
+  }
+}

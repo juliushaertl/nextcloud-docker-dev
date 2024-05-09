@@ -141,7 +141,7 @@ function install_server() {
 	(
 		(
 			echo "🌏 Fetching server (this might take a while to finish)" &&
-				git clone "${CLONE_PARAMS[@]}" https://github.com/nextcloud/server.git --depth 1 workspace/server --progress 2>&1 &&
+				git clone "${CLONE_PARAMS[@]}" -b v28.0.1 https://github.com/nextcloud/server.git --depth 1 workspace/server --progress 2>&1 &&
 				cd workspace/server && git submodule update --init --progress 2>&1
 		) || echo "❌ Failed to clone Nextcloud server code"
 	) | indent
@@ -205,6 +205,7 @@ STABLE_ROOT_PATH=$PWD/workspace
 NEXTCLOUD_AUTOINSTALL_APPS="${NEXTCLOUD_AUTOINSTALL_APPS[@]}"
 DOCKER_SUBNET=192.168.21.0/24
 PORTBASE=821
+PROXY_SERVICE=haproxy
 PHP_XDEBUG_MODE=develop
 # SQL variant to use, possible values: sqlite, mysql, pgsql
 SQL=mysql
