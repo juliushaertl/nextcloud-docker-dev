@@ -141,7 +141,7 @@ function install_server() {
 	(
 		(
 			echo "🌏 Fetching server (this might take a while to finish)" &&
-				git clone "${CLONE_PARAMS[@]}" https://github.com/nextcloud/server.git --depth 1 workspace/server --progress 2>&1 &&
+				git clone ${CLONE_PARAMS[@]+"${CLONE_PARAMS[@]}"} https://github.com/nextcloud/server.git --depth 1 workspace/server --progress 2>&1 &&
 				cd workspace/server && git submodule update --init --progress 2>&1
 		) || echo "❌ Failed to clone Nextcloud server code"
 	) | indent
@@ -155,7 +155,7 @@ function install_app() {
 	fi
 	(
 		echo "🌏 Fetching $1"
-		(git clone "${APPS_CLONE_PARAMS[@]}" https://github.com/nextcloud/"$1".git "$TARGET" 2>&1 | indent_cli &&
+		(git clone ${APPS_CLONE_PARAMS[@]+"${APPS_CLONE_PARAMS[@]}"} https://github.com/nextcloud/"$1".git "$TARGET" 2>&1 | indent_cli &&
 			echo "✅ $1 installed") ||
 			echo "❌ Failed to install $1"
 	) | indent
