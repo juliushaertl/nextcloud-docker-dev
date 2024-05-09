@@ -119,10 +119,16 @@
 
       // Add the IDs of extensions you want installed when the container is created.
       "extensions": [
+        "github.vscode-github-actions",
+        "dotjoshjohnson.xml",
+        "davidanson.vscode-markdownlint",
+        "bmewburn.vscode-intelephense-client",
+        "xdebug.php-debug",
         "GitHub.vscode-pull-request-github",
         // "ms-ossdata.vscode-postgresql",
         // "ms-mssql.mssql",
         // "ms-mssql.sql-database-projects-vscode",
+        "mgmcdermott.vscode-language-babel",
         // "ms-databasemigration.data-access-migration-toolkit",
         // "redhat.java",
         // "vscjava.vscode-java-pack",
@@ -164,19 +170,20 @@
         "redhat.fabric8-analytics",
         "dbaeumer.vscode-eslint",
         "ms-vscode.makefile-tools",
-        "vue.volar"
+        "vue.volar",
         // "vue.vscode-typescript-vue-plugin"
         // "runem.lit-plugin",
         // "bierner.lit-html",
         // "mgmcdermott.vscode-language-babel",
         // "Tobermory.es6-string-html",
-        // "christian-kohler.npm-intellisense"
+        "christian-kohler.npm-intellisense"
       ]
     }
   }
 
   // Use 'postCreateCommand' to run commands after the container is created.
   // "postCreateCommand": "pip3 install --user -r requirements.txt",
+  // "onCreateCommand": "apt update && apt install -y libmagickcore-6.q16hdri-6-extra"
   // "postStartCommand": "nohup bash -c 'jupyter notebook --ip=0.0.0.0 --port=8888 --allow-root &'",
   // "postCreateCommand": "bash -c 'export SDKMAN_DIR=/usr/local/sdkman && . /usr/local/sdkman/bin/sdkman-init.sh && sdk install quarkus' && echo 'PATH=\"${PATH}:/usr/local/sdkman/candidates/quarkus/current/bin\"' | tee -a /home/codespace/.bashrc >> /home/codespace/.bash_profile && umask 0002 && npm install -g yarn && npm cache clean --force",
   // "initializeCommand": "bash -c 'cd .devcontainer; if [ ! -f awscliv2.zip ]; then curl \"https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip\" -o \"awscliv2.zip\"; fi; if [ ! -f .env ]; then touch .env; fi; chmod 600 .env; . .env; if [ -z \"${DB_ROOT_PASSWORD}\" ]; then echo \"DB_ROOT_PASSWORD=changeRootPass\" >> .env; fi; if [ -z \"${DB_PASSWORD}\" ]; then echo \"DB_PASSWORD=changeMe\" >> .env; fi; if [ -z \"${KEYCLOAK_ADMIN_PASSWORD}\" ]; then echo \"KEYCLOAK_ADMIN_PASSWORD=changeKeycloak\" >> .env; fi; if [ -z \"${CLT_SECRET}\" ]; then echo \"CLT_SECRET=$(dd if=/dev/urandom bs=8 count=4 | base64)\" >> .env; fi; if [ ! -f vscode.env ]; then touch vscode.env; fi; chmod 600 vscode.env; cd ../mmr-config && (rm -f *.env; ln -sf ../.devcontainer/*.env; ln -sf ../.devcontainer/.env ./secrets.env)'",

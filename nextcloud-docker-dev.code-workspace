@@ -1,6 +1,10 @@
 {
   "folders": [
     {
+      "path": "data",
+      "name": "Data"
+    },
+    {
       "path": "workspace",
       "name": "NextCloud"
     }
