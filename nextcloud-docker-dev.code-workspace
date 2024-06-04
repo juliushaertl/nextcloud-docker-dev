@@ -1,6 +1,14 @@
 {
   "folders": [
     {
+      "path": "data/apps-extra/photo-nc",
+      "name": "PhotoNC"
+    },
+    {
+      "path": "data/apps-extra/helloworld",
+      "name": "HelloWorld"
+    },
+    {
       "path": "data",
       "name": "Data"
     },

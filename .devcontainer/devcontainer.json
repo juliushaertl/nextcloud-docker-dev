@@ -4,7 +4,7 @@
   // "overrideCommand": false,
   "shutdownAction": "stopCompose",
   "service": "nextcloud",
-  "runServices": ["nextcloud", "database-mysql", "redis", "mail", "haproxy"],
+  "runServices": ["nextcloud", "database-mysql", "redis", "mail"],
 
   "workspaceFolder": "/workspace",
   "forwardPorts": ["nextcloud:80", "nextcloud:443"],
