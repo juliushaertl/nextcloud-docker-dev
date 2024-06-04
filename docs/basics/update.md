@@ -10,7 +10,19 @@
 
 ## Updating the Nextcloud server
 
-As Nextcloud containers are bound to a server major version and the code is updated through manual git pull, you only need to call occ update on demand
+As Nextcloud containers are bound to a server major version and the code is updated through manual git pull.
+
+It is recommended to stay up to date with the latest development version of the Nextcloud server:
+
+```bash
+cd workspace/server
+git pull
+git submodule update
+```
+
+For other apps checked out you might want to run a separate `git pull` in the respective directories.
+
+If nextcloud requires migration steps it will ask you to run an upgrade which can be done with the following command:
 
 ```bash
 docker compose exec nextcloud occ upgrade
