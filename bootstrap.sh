@@ -178,6 +178,7 @@ echo "⏩ Performing system checks"
 is_installed docker
 is_installed git
 
+DCC=
 docker-compose version >/dev/null 2>/dev/null && DCC='docker-compose'
 docker compose version >/dev/null 2>/dev/null && DCC='docker compose'
 
