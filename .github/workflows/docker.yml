@@ -101,23 +101,23 @@ jobs:
           done
           curl http://nextcloud.local/status.php
       - uses: actions/setup-node@v4
-        if: matrix.container == 'php80' || matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
+        if: matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
         with:
           node-version: 18
       - name: Install dependencies
-        if: matrix.container == 'php80' || matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
+        if: matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
         working-directory: tests
         run: npm ci
       - name: Install Playwright Browsers
-        if: matrix.container == 'php80' || matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
+        if: matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
         working-directory: tests
         run: npx playwright install --with-deps
       - name: Run Playwright tests
-        if: matrix.container == 'php80' || matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
+        if: matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
         working-directory: tests
         run: npx playwright test
       - uses: actions/upload-artifact@v3
-        if: matrix.container == 'php80' || matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
+        if: matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
         with:
           name: playwright-report
           path: tests/playwright-report/
