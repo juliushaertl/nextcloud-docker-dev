@@ -37,7 +37,8 @@ RUN apt update && apt-get install -y --no-install-recommends \
 RUN wget -O /usr/local/bin/phpunit8 https://phar.phpunit.de/phpunit-8.phar \
     && chmod +x /usr/local/bin/phpunit8 \
     && wget -O /usr/local/bin/phpunit9 https://phar.phpunit.de/phpunit-9.phar \
-    && chmod +x /usr/local/bin/phpunit9
+    && chmod +x /usr/local/bin/phpunit9 \
+    && ln -s /usr/local/bin/phpunit9 /usr/local/bin/phpunit
 
 # Install NVM
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash \
