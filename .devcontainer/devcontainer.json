@@ -4,11 +4,17 @@
   // "overrideCommand": false,
   "shutdownAction": "stopCompose",
   "service": "nextcloud",
-  "runServices": ["nextcloud", "database-mysql", "redis", "mail"],
-
+  "runServices": [
+    "nextcloud",
+    "database-mysql",
+    "redis",
+    "mail"
+  ],
   "workspaceFolder": "/workspace",
-  "forwardPorts": ["nextcloud:80", "nextcloud:443"],
-
+  "forwardPorts": [
+    "nextcloud:80",
+    "nextcloud:443"
+  ],
   // // // Forward Jupyter port locally, mark required
   // // "forwardPorts": [8888], // 5000, 9000
   // "portsAttributes": {
@@ -49,7 +55,6 @@
     // "CHOKIDAR_USEPOLLING": "true",
     "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
   },
-
   // "features": {
   //   "ghcr.io/devcontainers/features/common-utils:2": {
   //     "installZsh": "true",
@@ -88,15 +93,91 @@
   //     //   "dockerDashComposeVersion": "v2"
   //   }
   // },
-
   // Configure tool-specific properties.
   "customizations": {
     // Configure properties specific to VS Code.
     "vscode": {
       // Set *default* container specific settings.json values on container create.
       "settings": {
+        "intelephense.stubs": [
+          "apache",
+          "bcmath",
+          "bz2",
+          "calendar",
+          "com_dotnet",
+          "Core",
+          "ctype",
+          "curl",
+          "date",
+          "dba",
+          "dom",
+          "enchant",
+          "exif",
+          "FFI",
+          "fileinfo",
+          "filter",
+          "fpm",
+          "ftp",
+          "gd",
+          "gettext",
+          "gmp",
+          "hash",
+          "iconv",
+          "imagick",
+          "imap",
+          "intl",
+          "json",
+          "ldap",
+          "libxml",
+          "mbstring",
+          "meta",
+          "mysqli",
+          "oci8",
+          "odbc",
+          "openssl",
+          "pcntl",
+          "pcre",
+          "PDO",
+          "pdo_ibm",
+          "pdo_mysql",
+          "pdo_pgsql",
+          "pdo_sqlite",
+          "pgsql",
+          "Phar",
+          "posix",
+          "pspell",
+          "random",
+          "readline",
+          "Reflection",
+          "session",
+          "shmop",
+          "SimpleXML",
+          "snmp",
+          "soap",
+          "sockets",
+          "sodium",
+          "SPL",
+          "sqlite3",
+          "standard",
+          "superglobals",
+          "sysvmsg",
+          "sysvsem",
+          "sysvshm",
+          "tidy",
+          "tokenizer",
+          "xml",
+          "xmlreader",
+          "xmlrpc",
+          "xmlwriter",
+          "xsl",
+          "Zend OPcache",
+          "zip",
+          "zlib"
+        ],
         "files.eol": "\n",
-        "input-assist.languages": ["plaintext"]
+        "input-assist.languages": [
+          "plaintext"
+        ]
         // "graalvm.home": "/usr/local/sdkman/candidates/java/17.0.7-graal",
         // "graalvm.installations": ["/usr/local/sdkman/candidates/java/17.0.7-graal"],
         // "java.import.gradle.java.home": "/usr/local/sdkman/candidates/java/current",
@@ -116,7 +197,6 @@
         // "java.compile.nullAnalysis.mode": "automatic",
         // "java.editor.reloadChangedSources": "auto"
       },
-
       // Add the IDs of extensions you want installed when the container is created.
       "extensions": [
         "github.vscode-github-actions",
@@ -167,7 +247,7 @@
         "msrvida.vscode-sanddance",
         // "james-yu.latex-workshop",
         "ms-vscode.hexeditor",
-        "redhat.fabric8-analytics",
+        // "redhat.fabric8-analytics",
         "dbaeumer.vscode-eslint",
         "ms-vscode.makefile-tools",
         "vue.volar",
@@ -180,14 +260,12 @@
       ]
     }
   }
-
   // Use 'postCreateCommand' to run commands after the container is created.
   // "postCreateCommand": "pip3 install --user -r requirements.txt",
   // "onCreateCommand": "apt update && apt install -y libmagickcore-6.q16hdri-6-extra"
   // "postStartCommand": "nohup bash -c 'jupyter notebook --ip=0.0.0.0 --port=8888 --allow-root &'",
   // "postCreateCommand": "bash -c 'export SDKMAN_DIR=/usr/local/sdkman && . /usr/local/sdkman/bin/sdkman-init.sh && sdk install quarkus' && echo 'PATH=\"${PATH}:/usr/local/sdkman/candidates/quarkus/current/bin\"' | tee -a /home/codespace/.bashrc >> /home/codespace/.bash_profile && umask 0002 && npm install -g yarn && npm cache clean --force",
   // "initializeCommand": "bash -c 'cd .devcontainer; if [ ! -f awscliv2.zip ]; then curl \"https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip\" -o \"awscliv2.zip\"; fi; if [ ! -f .env ]; then touch .env; fi; chmod 600 .env; . .env; if [ -z \"${DB_ROOT_PASSWORD}\" ]; then echo \"DB_ROOT_PASSWORD=changeRootPass\" >> .env; fi; if [ -z \"${DB_PASSWORD}\" ]; then echo \"DB_PASSWORD=changeMe\" >> .env; fi; if [ -z \"${KEYCLOAK_ADMIN_PASSWORD}\" ]; then echo \"KEYCLOAK_ADMIN_PASSWORD=changeKeycloak\" >> .env; fi; if [ -z \"${CLT_SECRET}\" ]; then echo \"CLT_SECRET=$(dd if=/dev/urandom bs=8 count=4 | base64)\" >> .env; fi; if [ ! -f vscode.env ]; then touch vscode.env; fi; chmod 600 vscode.env; cd ../mmr-config && (rm -f *.env; ln -sf ../.devcontainer/*.env; ln -sf ../.devcontainer/.env ./secrets.env)'",
-
   // Set `remoteUser` to `root` to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
   // "remoteUser": "codespace",
   // "containerUser": "codespace"
