@@ -71,7 +71,7 @@ jobs:
           DOCKERFILE=$([[ -f "docker/$NAME/Dockerfile" ]] && echo "docker/$NAME/Dockerfile" || echo "docker/Dockerfile.$NAME")
           echo "DOCKERFILE=$DOCKERFILE" >> $GITHUB_OUTPUT
       - name: Build container image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: false
           context: docker/
@@ -123,7 +123,7 @@ jobs:
           path: tests/playwright-report/
           retention-days: 30
       - name: Push container image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         if: github.ref == 'refs/heads/master' || github.event_name == 'release'
         with:
           push: true
