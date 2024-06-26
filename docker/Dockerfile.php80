@@ -7,6 +7,7 @@ RUN chmod +x /usr/local/bin/install-php-extensions
 RUN install-php-extensions \
     apcu \
     bcmath \
+    excimer \
     exif \
     gd \
     gmp \
