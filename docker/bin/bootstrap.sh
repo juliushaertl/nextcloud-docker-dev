@@ -388,7 +388,7 @@ check_source() {
 		output "Server source is mounted, continuing"
 	else
 		# Only autoinstall when not running in docker compose
-		if [ -n "$NEXTCLOUD_AUTOINSTALL_APPS" ] && [ ! -f "$WEBROOT"/config/version.php ]
+		if [ -n "$VIRTUAL_HOST" ] && [ ! -f "$WEBROOT"/version.php ]
 		then
 			output "======================================================================================="
 			output " 🚨 Could not find a valid Nextcloud source in $WEBROOT                                "
