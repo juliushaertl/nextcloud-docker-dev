@@ -45,7 +45,7 @@ RUN wget -O /usr/local/bin/phpunit8 https://phar.phpunit.de/phpunit-8.phar \
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash \
     && export NVM_DIR="/root/.nvm" \
     && . "$NVM_DIR/nvm.sh" \
-    && nvm install 14 && nvm install 16 && nvm install 20 \
+    && nvm install 20 \
     && nvm alias default 20
 
 RUN wget https://gist.githubusercontent.com/nickvergessen/e21ee0a09ee3b3f7fd1b04c83dd3e114/raw/83142be1e50c23e8de1bd7aae88a95e5d6ae1ce2/nextcloud_log.json && lnav -i nextcloud_log.json && rm nextcloud_log.json
