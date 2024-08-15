@@ -25,7 +25,7 @@ The following options can be provided:
   --clone-all-apps-filtered
                     Do not only reduce the history of the server repository but also
                     the cloned apps.
-  
+
   APPS              The apps to add to the development setup on top of the default apps
 
 The default apps to be installed: ${APPS_TO_INSTALL[@]}
@@ -82,7 +82,7 @@ if [ -f ".env" ]; then
 		echo "❌ Repository path does not exist"
 	fi
 
-	for i in stable26 stable27 stable28
+	for i in stable26 stable27 stable28 stable29 stable30
 	do
 		echo "Stable $i repository path: ${STABLE_ROOT_PATH}/${i}"
 		STABLE_VERSION=$(grep "OC_VersionString" "${STABLE_ROOT_PATH}/${i}/version.php" | cut -d "'" -f 2)
