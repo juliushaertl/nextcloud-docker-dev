@@ -67,6 +67,14 @@ services:
     volumes:
       - ./docker/configs/haproxy.conf:/usr/local/etc/haproxy/haproxy.cfg:ro
 
+  dockersocketproxy:
+    image: ghcr.io/cloud-py-api/nextcloud-appapi-dsp:release
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    privileged: true
+    environment:
+      NC_HAPROXY_PASSWORD: secret
+
   nextcloud:
     image: ghcr.io/juliushaertl/nextcloud-dev-php${PHP_VERSION:-81}:latest
     environment:
