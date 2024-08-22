@@ -20,6 +20,11 @@ After the DSP container is running, configure the Deploy daemon in AppAPI admin 
 - **Network**: `master_default` (the network of nextcloud-docker-dev docker-compose, by default it is `master_default`)
 - **HaProxy password**: `some_secure_password`
 
+or via OCC CLI:
+
+```bash
+./scripts/occ.sh nextcloud -- app_api:daemon:register dsp_http "DSP HTTP" docker-install http "http://nextcloud.local" --net=master_default --set-default
+```
 
 ## HTTPS AppAPI DSP
 
@@ -47,6 +52,12 @@ After the DSP container is running and the certificate is imported in Nextcloud,
 - **Enable https**: `true`
 - **Network**: `host` (with https enabled, the network is forced to `host`)
 - **HaProxy password**: `some_secure_password`
+
+or via OCC CLI:
+
+```bash
+./scripts/occ.sh nextcloud -- app_api:daemon:register dsp_https "DSP HTTPS" docker-install https "http://nextcloud.local" --net=host --set-default
+```
 
 
 ## Environment variables
