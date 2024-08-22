@@ -13,3 +13,5 @@ node_modules/
 /tests/playwright-report/
 /tests/blob-report/
 /tests/playwright/.cache/
+/.idea/
+.DS_Store

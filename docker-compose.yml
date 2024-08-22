@@ -1040,6 +1040,40 @@ services:
       VIRTUAL_PORT: 1234
     shm_size: 2147483648
 
+  appapi-dsp:
+    image: ghcr.io/cloud-py-api/nextcloud-appapi-dsp:release
+    container_name: nextcloud-appapi-dsp-http
+    network_mode: ${NETWORK_MODE:-master_default}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - NC_HAPROXY_PASSWORD=${NC_HAPROXY_PASSWORD:-some_secure_password}
+      - BIND_ADDRESS=${BIND_ADDRESS:-}
+      - HAPROXY_PORT=${HAPROXY_PORT:-2375}
+      - TIMEOUT_CONNECT=${TIMEOUT_CONNECT:-10s}
+      - TIMEOUT_CLIENT=${TIMEOUT_CLIENT:-30s}
+      - TIMEOUT_SERVER=${TIMEOUT_SERVER:-30s}
+      - EX_APPS_NET=${EX_APPS_NET:-ipv4@localhost}
+      - EX_APPS_COUNT=${EX_APPS_COUNT:-50}
+
+  appapi-dsp-https:
+    image: ghcr.io/cloud-py-api/nextcloud-appapi-dsp:release
+    container_name: nextcloud-appapi-dsp-https
+    network_mode: ${NETWORK_MODE:-host}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${CERT_PATH:-./data/ssl/app_api/app_api.pem}:/certs/cert.pem
+    environment:
+      - NC_HAPROXY_PASSWORD=${NC_HAPROXY_PASSWORD:-some_secure_password}
+      - BIND_ADDRESS=${BIND_ADDRESS:-172.17.0.1}
+      - HAPROXY_PORT=${HAPROXY_PORT:-2375}
+      - TIMEOUT_CONNECT=${TIMEOUT_CONNECT:-10s}
+      - TIMEOUT_CLIENT=${TIMEOUT_CLIENT:-30s}
+      - TIMEOUT_SERVER=${TIMEOUT_SERVER:-30s}
+      - EX_APPS_NET=${EX_APPS_NET:-ipv4@localhost}
+      - EX_APPS_COUNT=${EX_APPS_COUNT:-50}
+
+
 volumes:
   data:
   config:
