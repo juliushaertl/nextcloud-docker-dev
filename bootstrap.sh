@@ -102,7 +102,7 @@ case $SERVER_CLONE in
 	squashed)
 		CLONE_PARAMS=(--depth 1)
 		;;
-	clone-no-blobs)
+	filter-blobs)
 		CLONE_PARAMS=(--filter blob:none)
 		;;
 	full)
