@@ -18,6 +18,9 @@ cd nextcloud-docker-dev
 ./bootstrap.sh
 ```
 
+There are some options to simplify the later development by cloning not only the minimal data set but a bigger one that helps with later switching of branches etc.
+See also the [detailed page](nc-history.md) for an overview of the options.
+
 This may take some time depending on your internet connection speed.
 
 Depending on your docker version you will need to use `docker-compose` instead of `docker compose` in the following commands.
