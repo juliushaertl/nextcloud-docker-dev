@@ -8,7 +8,7 @@ Xdebug is shipped but disabled by default. It can be turned on by running:
 
 You can also enable other modes, e.g. trace:
 
-````
+```
 ./scripts/php-mod-config nextcloud xdebug.mode debug,trace
 ```
 
