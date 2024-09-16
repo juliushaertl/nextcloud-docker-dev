@@ -11,7 +11,7 @@ APPS_CLONE_FILTER=
 
 print_help() {
 	cat << EOF
-  boottrap.sh [--full-clone|--clone-no-blobs] [--clone-all-apps-filtered] [--] APPS
+  bootstrap.sh [--full-clone|--clone-no-blobs] [--clone-all-apps-filtered] [--] APPS
 
 This command will initialize the debug environment for app developers.
 
