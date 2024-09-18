@@ -1,19 +1,19 @@
 # Nextcloud server with history
 
 The script `bootstrap.sh` will download a clone of the server code repository.
-Depending on your use-case, you might be interested in havig the complete or a partial history of the Nextcloud server at your fingertips.
+Depending on your use case, you might be interested in having the complete or a partial history of the Nextcloud server at your fingertips.
 
 ## TL;DR
 
 If you want to have a quick and dirty solution to just bootstrap the dev environment, just use `./bootstrap.sh`.
 If you want to intensively work on the server, use `./bootstrap.sh --full-clone`.
-If you want to switch from time to time between server versinos and save bandwith/storage, use `./bootstrap.sh --clone-no-blobs`.
+If you want to switch from time to time between server versions and save bandwidth/storage, use `./bootstrap.sh --clone-no-blobs`.
 
 ## Clone with depth one by default
 
-If you do not provide any additional information to the bootstap script, it will truncate the history of the server repository.
+If you do not provide any additional information to the bootstrap script, it will truncate the history of the server repository.
 This truncation is done after exactly one commit.
-That means, the clone you will get will contain exactly this single commit.
+That means the clone you will get will contain exactly this single commit.
 
 !!! info
     This will create a clone with `--depth 1`.
@@ -21,12 +21,12 @@ That means, the clone you will get will contain exactly this single commit.
 
 As this is mainly the same data as the tarball, the download in this mode is the fastest of all options.
 
-If you want to play aroud with the different server versions, you need to download these and unshallow the repository using `git fetch --unshallow`.
+If you want to play around with the different server versions, you need to download these and unshallow the repository using `git fetch --unshallow`.
 This will take quite some time and will download the complete server history.
 
 ## Clone with complete history
 
-If you know that you will need the complete history of the server repository, you might want to avoid to first create a shallow copy and then unshallow it directly.
+If you know that you will need the complete history of the server repository, you might want to avoid first creating a shallow copy and then unshallow it directly.
 To cope with this, you can append `--full-clone` to the `./bootstrap.sh` command line:
 
 ```
@@ -39,7 +39,7 @@ The obvious drawback is that you have to download the complete history which mig
 ## Clone with the blobs filtered out
 
 There is also one more option to the script, namely `--clone-no-blobs`.
-This works only with a sufficient recent version of git.
+This works only with a sufficiently recent version of git.
 Instead of a shallow clone (where the history is truncated), a partial clone created by this parameter has the complete history attached.
 In that sense, you can navigate the complete history as you like.
 You would do the following to create such a partial clone:
@@ -47,10 +47,10 @@ You would do the following to create such a partial clone:
 ./bootstrap.sh --clone-no-blobs
 ```
 
-The main difference to a shallow clone is that the cloned repositoy will not download all files (git calls them _blobs_) stored in the past.
+The main difference to a shallow clone is that the cloned repository will not download all files (git calls them _blobs_) stored in the past.
 Instead, once you checkout a certain commit, git checks for all files if the corresponding file has been downloaded in the past.
 If it was, it uses this copy.
-If the file was not yet downloaded, a new connection to the upsteam repository has to be made and the missing blobs are downloaded.
+If the file was not yet downloaded, a new connection to the upstream repository has to be made and the missing blobs are downloaded.
 Just after the clone of such a partially cloned repo, git will download all blobs needed to view the (current) branch content.
 This is very similar to the shallow clone where only the content of the last commit is downloaded.
 
