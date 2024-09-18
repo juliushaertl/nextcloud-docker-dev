@@ -33,7 +33,7 @@ To cope with this, you can append `--full-clone` to the `./bootstrap.sh` command
 ./bootstrap.sh --full-clone
 ```
 
-The benefit is that the complete repository is present and you can surf the history as you like.
+The benefit is that the complete repository is present and you can browse the history as you like.
 The obvious drawback is that you have to download the complete history which might take a significant amount of time.
 
 ## Clone with the blobs filtered out
@@ -66,4 +66,4 @@ Any later update (using `git fetch` or `git pull`) will respect the setting and 
 The benefit of this approach is obviously that you can have a complete history that you can work with (as long as you do not need the file contents).
 The initial clone takes a bit longer than the shallow one as additionally the history commits (without the contents) need to be transmitted.
 
-The obvious drawback is that once you need to checkout a file that was never checked out in the clone, it has to be downloaded and a love internet connection is needed.
+The obvious drawback is that once you need to checkout a file that was never checked out in the clone, it has to be downloaded and a live internet connection is needed.
