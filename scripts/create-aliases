@@ -21,6 +21,14 @@ nc-dev() {
 occ-dev () {
     "$localPath/occ.sh" "\$@"
 }
+cd-dev () {
+    if [ \$# -eq 1 ]
+    then
+        cd "$basePath/workspace/\$1"
+    else
+        cd "$basePath/workspace"
+    fi
+}
 EOF
 
 cat <<EOF
