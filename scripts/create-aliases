@@ -1,0 +1,34 @@
+#!/bin/bash
+
+localPath="$(realpath "$(dirname "$0" )" )"
+basePath="$(dirname "$localPath")"
+
+DCC=
+docker-compose version >/dev/null 2>/dev/null && DCC='docker-compose'
+docker compose version >/dev/null 2>/dev/null && DCC='docker compose'
+
+if [ -z "$DCC" ]; then
+	echo "❌ Install docker-compose before running this script"
+	exit 1
+fi
+
+aliasesFile="$localPath/aliases"
+
+cat > "$aliasesFile" <<EOF
+nc-dev() {
+    (cd "$basePath" && $DCC "\$@")
+}
+occ-dev () {
+    "$localPath/occ.sh" "\$@"
+}
+EOF
+
+cat <<EOF
+The file $aliasesFile has been created.
+
+You can now source this file in your shell:
+    source "$aliasesFile"
+Then, the aliases will be available in your shell.
+
+You can as well put this source command in your .bashrc. That way, the aliases are available in all shells.
+EOF

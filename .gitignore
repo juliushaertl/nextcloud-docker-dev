@@ -15,3 +15,5 @@ node_modules/
 /tests/playwright/.cache/
 /.idea/
 .DS_Store
+/scripts/aliases
+
