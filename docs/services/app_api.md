@@ -1,6 +1,6 @@
 # AppAPI
 
-For [AppAPI](https://github.com/cloud-py-api/app_api) the [Docker Socket Proxy](https://github.com/cloud-py-api/docker-socket-proxy) (DSP) is required to work.
+For [AppAPI](https://github.com/nextcloud/app_api) the [Docker Socket Proxy](https://github.com/nextcloud/docker-socket-proxy) (DSP) is required to work.
 
 ## HTTP AppAPI DSP
 
@@ -28,7 +28,7 @@ or via OCC CLI:
 
 ## HTTPS AppAPI DSP
 
-For HTTPS DSP setup, please refer to the [HTTPS (remote)](https://github.com/cloud-py-api/docker-socket-proxy?tab=readme-ov-file#httpsremote) section.
+For HTTPS DSP setup, please refer to the [HTTPS (remote)](https://github.com/nextcloud/docker-socket-proxy?tab=readme-ov-file#httpsremote) section.
 
 ### 1. Generate self-signed certificates
 
@@ -69,10 +69,10 @@ and in the `example.env` file.
 
 ### Image of AppAPI DSP is not accessible
 
-In case the AppAPI DSP image is not accessible, you can build it locally by cloning the [Docker Socket Proxy](https://github.com/cloud-py-api/docker-socket-proxy) repository and running the following commands:
+In case the AppAPI DSP image is not accessible, you can build it locally by cloning the [Docker Socket Proxy](https://github.com/nextcloud/docker-socket-proxy) repository and running the following commands:
 
 ```bash
-git clone https://github.com/cloud-py-api/docker-socket-proxy.git
+git clone https://github.com/nextcloud/docker-socket-proxy.git
 ```
 
 ```bash

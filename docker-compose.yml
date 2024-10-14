@@ -1041,7 +1041,7 @@ services:
     shm_size: 2147483648
 
   appapi-dsp:
-    image: ghcr.io/cloud-py-api/nextcloud-appapi-dsp:release
+    image: ghcr.io/nextcloud/nextcloud-appapi-dsp:release
     container_name: nextcloud-appapi-dsp-http
     network_mode: ${NETWORK_MODE:-master_default}
     volumes:
@@ -1057,7 +1057,7 @@ services:
       - EX_APPS_COUNT=${EX_APPS_COUNT:-50}
 
   appapi-dsp-https:
-    image: ghcr.io/cloud-py-api/nextcloud-appapi-dsp:release
+    image: ghcr.io/nextcloud/nextcloud-appapi-dsp:release
     container_name: nextcloud-appapi-dsp-https
     network_mode: ${NETWORK_MODE:-host}
     volumes:
