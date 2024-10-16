@@ -17,6 +17,7 @@
     "files.eol": "\n",
     "input-assist.languages": [
       "plaintext"
-    ]
+    ],
+    "makefile.configureOnOpen": true
   }
 }
