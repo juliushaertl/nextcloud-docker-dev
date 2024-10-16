@@ -5,15 +5,11 @@
       "name": "PhotoNC"
     },
     {
-      "path": "data/apps-extra/helloworld",
-      "name": "HelloWorld"
-    },
-    {
       "path": "data",
       "name": "Data"
     },
     {
-      "path": "workspace/server",
+      "path": "workspace/stable28",
       "name": "NextCloud"
     }
   ],
