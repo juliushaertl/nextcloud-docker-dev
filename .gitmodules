@@ -1,0 +1,4 @@
+[submodule "data/apps-extra/photo_nc"]
+	path = data/apps-extra/photo_nc
+	url = https://github.com/olwimo/photo_nc.git
+	branch = v28

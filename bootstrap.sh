@@ -4,6 +4,8 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+BRANCH_VERSION="stable28"
+
 APPS_TO_INSTALL=(viewer recommendations files_pdfviewer profiler hmr_enabler circles)
 NEXTCLOUD_AUTOINSTALL_APPS=(viewer profiler hmr_enabler)
 SERVER_CLONE=squashed
@@ -133,7 +135,7 @@ indent_cli() {
 }
 
 function install_server() {
-	if [ -d workspace/server/.git ]; then
+	if [ -d workspace/$BRANCH_VERSION/.git ]; then
 		echo "🆗 Server is already installed." | indent
 		return
 	fi
@@ -141,21 +143,28 @@ function install_server() {
 	(
 		(
 			echo "🌏 Fetching server (this might take a while to finish)" &&
-				git clone ${CLONE_PARAMS[@]+"${CLONE_PARAMS[@]}"} https://github.com/nextcloud/server.git --depth 1 workspace/server --progress 2>&1 &&
-				cd workspace/server && git submodule update --init --progress 2>&1
+				git clone ${CLONE_PARAMS[@]+"${CLONE_PARAMS[@]}"} https://github.com/nextcloud/server.git --depth 1 --branch $BRANCH_VERSION workspace/$BRANCH_VERSION --progress 2>&1 &&
+				cd workspace/$BRANCH_VERSION && git submodule update --init --progress 2>&1
 		) || echo "❌ Failed to clone Nextcloud server code"
 	) | indent
 }
 
 function install_app() {
-	TARGET=workspace/server/apps-extra/"$1"
+	TARGET=workspace/$BRANCH_VERSION/apps-extra/"$1"
 	if [ -d "$TARGET"/.git ]; then
 		echo "🆗 App $1 is already installed." | indent
 		return
 	fi
+	
+    if [[ "$BRANCH_VERSION" == "server" || "$1" == "hmr_enabler" ]]; then
+        BRANCH="master" ;
+	else
+	    BRANCH="$BRANCH_VERSION" ;
+	fi
+
 	(
 		echo "🌏 Fetching $1"
-		(git clone ${APPS_CLONE_PARAMS[@]+"${APPS_CLONE_PARAMS[@]}"} https://github.com/nextcloud/"$1".git "$TARGET" 2>&1 | indent_cli &&
+		(git clone ${APPS_CLONE_PARAMS[@]+"${APPS_CLONE_PARAMS[@]}"} https://github.com/nextcloud/"$1".git --branch "$BRANCH" "$TARGET" 2>&1 | indent_cli &&
 			echo "✅ $1 installed") ||
 			echo "❌ Failed to install $1"
 	) | indent
@@ -226,7 +235,7 @@ fi
 echo
 echo "⏩ Setting up folder structure and fetching repositories"
 install_server
-mkdir -p workspace/server/apps-extra
+mkdir -p workspace/$BRANCH_VERSION/apps-extra
 for app in "${APPS_TO_INSTALL[@]}"
 do
 	install_app "$app"

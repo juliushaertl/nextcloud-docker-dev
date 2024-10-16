@@ -3,17 +3,17 @@
   "dockerComposeFile": "../docker-compose.yml",
   // "overrideCommand": false,
   "shutdownAction": "stopCompose",
-  "service": "nextcloud",
+  "service": "stable28",
   "runServices": [
-    "nextcloud",
+    "stable28",
     "database-mysql",
     "redis",
     "mail"
   ],
   "workspaceFolder": "/workspace",
   "forwardPorts": [
-    "nextcloud:80",
-    "nextcloud:443"
+    "stable28:80",
+    "stable28:443"
   ],
   // // // Forward Jupyter port locally, mark required
   // // "forwardPorts": [8888], // 5000, 9000
@@ -100,7 +100,7 @@
       // Set *default* container specific settings.json values on container create.
       "settings": {
         "intelephense.environment.includePaths": [
-          "/workspace/workspace/server/lib"
+          "/workspace/workspace/stable28/lib"
         ],    
         "intelephense.stubs": [
           "apache",
