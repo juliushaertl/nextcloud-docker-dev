@@ -295,5 +295,5 @@ cat <<EOF
 
 For more details about the individual setup options see
 the README.md file or checkout the repo at
-https://github.com/juliushaertl/nextcloud-docker-dev
+https://github.com/juliusknorr/nextcloud-docker-dev
 EOF
