@@ -9,7 +9,7 @@ Running the containers does not need this repository to be cloned.
 Example for running a Nextcloud server from the master branch of server:
 
 ```bash
-docker run --rm -p 8080:80 ghcr.io/juliushaertl/nextcloud-dev-php80:latest
+docker run --rm -p 8080:80 ghcr.io/juliusknorr/nextcloud-dev-php80:latest
 ```
 
 For app development you can mount your app directly into the container:
@@ -17,17 +17,17 @@ For app development you can mount your app directly into the container:
 ```bash
 docker run --rm -p 8080:80 \
     -v ~/path/to/appid:/var/www/html/apps-extra/appid \
-    ghcr.io/juliushaertl/nextcloud-dev-php80:latest
+    ghcr.io/juliusknorr/nextcloud-dev-php80:latest
 ```
 
 The `SERVER_BRANCH` environment variable can be used to run different versions of Nextcloud by specifying either a server branch or git tag.
 
 ```bash
-docker run --rm -p 8080:80 -e SERVER_BRANCH=v24.0.1 ghcr.io/juliushaertl/nextcloud-dev-php80:latest
+docker run --rm -p 8080:80 -e SERVER_BRANCH=v24.0.1 ghcr.io/juliusknorr/nextcloud-dev-php80:latest
 ```
 
 You can also mount your local server source code into the container to run a local version of Nextcloud:
 
 ```bash
-docker run --rm -p 8080:80 -e SERVER_BRANCH=v24.0.1 -v /tmp/server:/var/www/html ghcr.io/juliushaertl/nextcloud-dev-php80:latest
+docker run --rm -p 8080:80 -e SERVER_BRANCH=v24.0.1 -v /tmp/server:/var/www/html ghcr.io/juliusknorr/nextcloud-dev-php80:latest
 ```
