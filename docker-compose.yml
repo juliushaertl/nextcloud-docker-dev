@@ -665,14 +665,13 @@ services:
       - postgres:/var/lib/postgresql
 
   database-oci:
-    image: ghcr.io/gvenzl/oracle-xe:21
+    image: gvenzl/oracle-free:23
     environment:
-      ORACLE_PASSWORD: nextcloud
-      APP_USER: nextcloud
-      APP_USER_PASSWORD: nextcloud
-      ORACLE_DATABASE: nextcloud
+      ORACLE_PASSWORD: oracle
     ports:
-      - 1521:1521/tcp
+      - 1521:1521
+    volumes:
+      - oracle:/opt/oracle/oradata
 
   pgadmin:
     container_name: pgadmin_container
@@ -1080,6 +1079,7 @@ volumes:
   apps-writable:
   mysql:
   postgres:
+  oracle:
   redis:
   data2:
   config2:
