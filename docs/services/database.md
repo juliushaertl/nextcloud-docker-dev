@@ -9,10 +9,11 @@ By default, MySQL will be used as database backend. You can change this by setti
 - `sqlite`
 - `mariadb-replica`
 - `maxscale`
+- `oci`
 
 Changing the database env value will require to recreate your setup. You can do this by running `docker compose down -v` and then `docker compose up -d nextcloud`.
 
-All databases use the following credentials by default:
+All databases use the following credentials by default (except oracle):
 
 - Root password: `nextcloud`
 - Username: `nextcloud`
@@ -72,3 +73,11 @@ docker compose exec database-mariadb-replica mysql -u root -pnextcloud
 This mode runs a mariadb primary and read replica setup with maxscale as load balancer. The primary is used for writes and the replica for reads where MaxScale is used to perform a read-write-split.
 
 The logs of MaxScale can be accessed with `docker compose exec maxscale cat /var/log/maxscale/maxscale.log`.
+
+### Oracle
+
+You can access the database with the following command:
+
+```bash
+docker compose exec -ti database-oci sqlplus system/oracle
+```
