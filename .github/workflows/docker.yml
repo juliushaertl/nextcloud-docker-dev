@@ -119,7 +119,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.container }}
           path: tests/playwright-report/
           retention-days: 30
       - name: Push container image
