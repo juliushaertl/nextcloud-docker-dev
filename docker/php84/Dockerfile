@@ -23,7 +23,7 @@ RUN install-php-extensions \
     redis \
     smbclient \
     sysvsem \
-    xdebug \
+    xdebug-beta \
     zip \
     blackfire \
     @composer
