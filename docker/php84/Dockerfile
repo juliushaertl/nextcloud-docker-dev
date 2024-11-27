@@ -25,7 +25,7 @@ RUN install-php-extensions \
     sysvsem \
     xdebug-beta \
     zip \
-    blackfire \
+    # blackfire \
     @composer
 
 # dev tools separate install so we quickly change without rebuilding all php extensions
