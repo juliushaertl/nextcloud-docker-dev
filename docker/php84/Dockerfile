@@ -1,0 +1,101 @@
+FROM php:8.4-apache
+
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/install-php-extensions
+
+RUN install-php-extensions \
+    apcu \
+    bcmath \
+    excimer \
+    exif \
+    gd \
+    gmp \
+    imagick \
+    intl \
+    ldap \
+    memcached \
+    oci8 \
+    opcache \
+    pcntl \
+    pdo_mysql \
+    pdo_pgsql \
+    redis \
+    smbclient \
+    sysvsem \
+    xdebug-beta \
+    zip \
+    # blackfire \
+    @composer
+
+# dev tools separate install so we quickly change without rebuilding all php extensions
+RUN apt update && apt-get install -y --no-install-recommends \
+    git curl vim sudo cron smbclient iproute2 lnav wget iputils-ping gnupg2 jq ripgrep rsync mariadb-client \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install PHPUnit
+RUN wget -O /usr/local/bin/phpunit8 https://phar.phpunit.de/phpunit-8.phar \
+    && chmod +x /usr/local/bin/phpunit8 \
+    && wget -O /usr/local/bin/phpunit9 https://phar.phpunit.de/phpunit-9.phar \
+    && chmod +x /usr/local/bin/phpunit9 \
+    && ln -s /usr/local/bin/phpunit9 /usr/local/bin/phpunit
+
+# Install NVM
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash \
+    && export NVM_DIR="/root/.nvm" \
+    && . "$NVM_DIR/nvm.sh" \
+    && nvm install 20 \
+    && nvm alias default 20
+
+RUN wget https://gist.githubusercontent.com/nickvergessen/e21ee0a09ee3b3f7fd1b04c83dd3e114/raw/83142be1e50c23e8de1bd7aae88a95e5d6ae1ce2/nextcloud_log.json && lnav -i nextcloud_log.json && rm nextcloud_log.json
+
+RUN { \
+        echo '[global]'; \
+        echo 'client min protocol = SMB2'; \
+        echo 'client max protocol = SMB3'; \
+        echo 'hide dot files = no'; \
+} > /etc/samba/smb.conf
+
+RUN mkdir --parent /var/log/cron
+ADD configs/cron.conf /etc/nc-cron.conf
+RUN crontab /etc/nc-cron.conf
+
+ADD configs/php/nextcloud.ini /usr/local/etc/php/conf.d/nextcloud.ini
+ADD configs/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
+# Setup blackfire probe
+RUN wget -q -O - https://packages.blackfire.io/gpg.key | sudo apt-key add - \
+    && echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list \
+    && apt-get update  \
+    && (apt-get install -y --no-install-recommends blackfire \
+		&& mv /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini /usr/local/etc/php/conf.d/docker-php-ext-blackfire.ini.disabled \
+		&& printf "\n\nblackfire.agent_socket=tcp://blackfire:8307\n" >> $PHP_INI_DIR/conf.d/zz-blackfire.ini) \
+		|| echo "Skipped blackfire as the installation failed" \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# mod_rewrite
+RUN a2enmod rewrite headers
+
+# increase limit request body
+RUN echo "LimitRequestBody 0" > /etc/apache2/conf-available/limit-request-body.conf && a2enconf limit-request-body
+
+VOLUME /var/www/html
+VOLUME /var/www/html/apps-writable
+VOLUME /var/www/html/config
+VOLUME /var/www/html/data
+
+ENV SQL sqlite
+ENV NEXTCLOUD_AUTOINSTALL YES
+ENV WITH_REDIS NO
+
+ENV WEBROOT /var/www/html
+WORKDIR /var/www/html
+
+ENTRYPOINT  ["/usr/local/bin/bootstrap.sh"]
+CMD ["apache2-foreground"]
+
+ADD data/installing.html /root/installing.html
+ADD configs/autoconfig_mysql.php configs/autoconfig_pgsql.php configs/autoconfig_oci.php configs/default.config.php configs/storage.config.php configs/redis.config.php configs/apcu.config.php /root/
+ADD bin/bootstrap.sh bin/occ /usr/local/bin/
