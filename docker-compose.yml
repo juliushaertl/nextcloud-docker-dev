@@ -7,8 +7,8 @@ services:
   proxy:
     image: ghcr.io/juliusknorr/nextcloud-dev-nginx:latest
     ports:
-      - "${PROXY_PORT_HTTP:-80}:80"
-      - "${PROXY_PORT_HTTPS:-443}:443"
+      - "${IP_BIND:-127.0.0.1}:${PROXY_PORT_HTTP:-80}:80"
+      - "${IP_BIND:-127.0.0.1}:${PROXY_PORT_HTTPS:-443}:443"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./data/ssl/:/etc/nginx/certs
@@ -117,7 +117,7 @@ services:
       - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
       - ./data/shared:/shared
     ports:
-      - "${PORTBASE:-800}1:80"
+      - "${IP_BIND:-127.0.0.1}:${PORTBASE:-800}1:80"
     depends_on:
       - database-${SQL:-mysql}
       - redis
@@ -609,14 +609,14 @@ services:
       '--wait_timeout=28800',
     ]
     ports:
-      - "${PORTBASE:-800}2:3306"
+      - "${IP_BIND:-127.0.0.1}:${PORTBASE:-800}2:3306"
     volumes:
       - mysql:/var/lib/mysql
 
   database-mariadb-primary:
     image: docker.io/bitnami/mariadb:10.6
     ports:
-      - '3306'
+      - "${IP_BIND:-127.0.0.1}:3306:3306"
     volumes:
       - 'mariadb_primary_data:/bitnami/mariadb'
     environment:
@@ -631,7 +631,7 @@ services:
   database-mariadb-replica:
     image: docker.io/bitnami/mariadb:10.6
     ports:
-      - '3306'
+      - "${IP_BIND:-127.0.0.1}:3306:3306"
     depends_on:
       - database-mariadb-primary
     environment:
@@ -652,7 +652,7 @@ services:
     volumes:
       - './docker/maxscale/my-maxscale.cnf:/etc/maxscale.cnf.d/my-maxscale.cnf'
     ports:
-      - '3306'
+      - "${IP_BIND:-127.0.0.1}:3306:3306"
 
   database-pgsql:
     image: postgres:latest
@@ -660,7 +660,7 @@ services:
       POSTGRES_DB: nextcloud
       POSTGRES_PASSWORD: postgres
     ports:
-      - "${PORTBASE:-800}2:5432"
+      - "${IP_BIND:-127.0.0.1}:${PORTBASE:-800}2:5432"
     volumes:
       - postgres:/var/lib/postgresql
 
@@ -669,7 +669,7 @@ services:
     environment:
       ORACLE_PASSWORD: oracle
     ports:
-      - 1521:1521
+      - "${IP_BIND:-127.0.0.1}:1521:1521"
     volumes:
       - oracle:/opt/oracle/oradata
 
@@ -700,7 +700,7 @@ services:
       - 389
       - 636
     ports:
-      - 3389:389
+      - "${IP_BIND:-127.0.0.1}:3389:389"
     environment:
       LDAP_DOMAIN: planetexpress.com
       LDAP_BASE_DN: dc=planetexpress,dc=com
@@ -722,7 +722,7 @@ services:
       PHPLDAPADMIN_LDAP_HOSTS: ldap
       PHPLDAPADMIN_HTTPS: 'false'
     ports:
-      - "${PORTBASE:-800}8:80"
+      - "${IP_BIND:-127.0.0.1}:${PORTBASE:-800}8:80"
 
   saml:
     image: unicon/simplesamlphp
@@ -744,8 +744,8 @@ services:
   smb:
     image: dperson/samba
     ports:
-      - 139
-      - 445
+      - "${IP_BIND:-127.0.0.1}:139:139"
+      - "${IP_BIND:-127.0.0.1}:445:445"
     environment:
       # -u "<username;password>[;ID;group;GID]"
       USER: "admin;admin"
@@ -762,7 +762,7 @@ services:
   blackfire:
     image: blackfire/blackfire:2
     ports:
-      - 8307:8307
+      - "${IP_BIND:-127.0.0.1}:8307:8307"
     environment:
       - BLACKFIRE_SERVER_ID
       - BLACKFIRE_SERVER_TOKEN
@@ -858,7 +858,7 @@ services:
   elasticsearch-ui:
     image: appbaseio/dejavu
     ports:
-      - 1358:1358
+      - "${IP_BIND:-127.0.0.1}:1358:1358"
     expose:
       - 1358
     environment:
@@ -980,7 +980,7 @@ services:
     cap_drop:
       - ALL
     ports:
-      - 8888:8888
+      - "${IP_BIND:-127.0.0.1}:8888:8888"
     environment:
       MAX_CLIENTS: 100
       ALLOWED_NETWORKS: 0.0.0.0/0
@@ -1003,7 +1003,7 @@ services:
   previews_hpb:
     image: nextcloud/aio-imaginary:latest
     ports:
-      - "8088:8088"
+      - "${IP_BIND:-127.0.0.1}:8088:8088"
     environment:
       - PORT=8088
 
