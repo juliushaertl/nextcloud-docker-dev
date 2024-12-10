@@ -12,6 +12,7 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./data/ssl/:/etc/nginx/certs
+      - ./data/nginx/vhost.d/:/etc/nginx/vhost.d
     environment:
       DHPARAM_BITS: 2048
       DHPARAM_GENERATION: "false"
@@ -58,6 +59,8 @@ services:
           - phpmyadmin${DOMAIN_SUFFIX}
           - talk-signaling${DOMAIN_SUFFIX}
           - talk-recording${DOMAIN_SUFFIX}
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   haproxy:
     image: haproxy

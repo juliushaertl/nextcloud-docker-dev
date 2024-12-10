@@ -1,4 +1,5 @@
 /.vscode
+/data/nginx/vhost.d/
 /data/ssl/
 /data/shared/
 /workspace/
