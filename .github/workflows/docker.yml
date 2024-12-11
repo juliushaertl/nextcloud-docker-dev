@@ -15,11 +15,12 @@ jobs:
   push_to_registry:
     name: Build image
     runs-on: ubuntu-latest
-    if: github.repository == 'juliushaertl/nextcloud-docker-dev'
+    if: github.repository == 'juliusknorr/nextcloud-docker-dev'
     strategy:
       fail-fast: false
       matrix:
         container:
+          - php84
           - php83
           - php82
           - php81
@@ -71,14 +72,14 @@ jobs:
           DOCKERFILE=$([[ -f "docker/$NAME/Dockerfile" ]] && echo "docker/$NAME/Dockerfile" || echo "docker/Dockerfile.$NAME")
           echo "DOCKERFILE=$DOCKERFILE" >> $GITHUB_OUTPUT
       - name: Build container image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: false
           context: docker/
           platforms: linux/amd64,linux/arm64
           file: ${{ steps.dockerfile.outputs.DOCKERFILE }}
           tags: |
-            ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}:${{ github.sha }}
+            ghcr.io/juliusknorr/nextcloud-dev-${{ matrix.container }}:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       - name: Start containers with docker compose
@@ -101,29 +102,29 @@ jobs:
           done
           curl http://nextcloud.local/status.php
       - uses: actions/setup-node@v4
-        if: matrix.container == 'php80' || matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
+        if: matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
         with:
           node-version: 18
       - name: Install dependencies
-        if: matrix.container == 'php80' || matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
+        if: matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
         working-directory: tests
         run: npm ci
       - name: Install Playwright Browsers
-        if: matrix.container == 'php80' || matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
+        if: matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
         working-directory: tests
         run: npx playwright install --with-deps
       - name: Run Playwright tests
-        if: matrix.container == 'php80' || matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
+        if: matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
         working-directory: tests
         run: npx playwright test
-      - uses: actions/upload-artifact@v3
-        if: matrix.container == 'php80' || matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
+      - uses: actions/upload-artifact@v4
+        if: matrix.container == 'php81' || matrix.container == 'php82' || matrix.container == 'php83'
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.container }}
           path: tests/playwright-report/
           retention-days: 30
       - name: Push container image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         if: github.ref == 'refs/heads/master' || github.event_name == 'release'
         with:
           push: true
@@ -131,8 +132,8 @@ jobs:
           platforms: linux/amd64,linux/arm64
           file: ${{ steps.dockerfile.outputs.DOCKERFILE }}
           tags: |
-            ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}:${{ github.event_name == 'release' && 'release' || 'latest' }}
-            ghcr.io/juliushaertl/nextcloud-dev-${{ matrix.container }}:${{ github.ref_name }}
+            ghcr.io/juliusknorr/nextcloud-dev-${{ matrix.container }}:${{ github.event_name == 'release' && 'release' || 'latest' }}
+            ghcr.io/juliusknorr/nextcloud-dev-${{ matrix.container }}:${{ github.ref_name }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       - name: Move cache

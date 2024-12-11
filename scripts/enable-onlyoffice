@@ -24,7 +24,7 @@ occ app:enable onlyoffice --force
 occ config:app:set onlyoffice DocumentServerUrl --value="$PROTOCOL://onlyoffice$DOMAIN_SUFFIX"
 occ config:app:set onlyoffice jwt_secret --value="secret"
 occ config:app:set onlyoffice DocumentServerInternalUrl --value="http://onlyoffice/"
-occ config:app:set onlyoffice StorageUrl --value="http://nextcloud/"
+occ config:app:set onlyoffice StorageUrl --value="http://${CONTAINER}${DOMAIN_SUFFIX}/"
 occ onlyoffice:documentserver --check
 
 

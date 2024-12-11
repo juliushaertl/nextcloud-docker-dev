@@ -13,7 +13,7 @@ APPS_CLONE_FILTER=
 
 print_help() {
 	cat << EOF
-  boottrap.sh [--full-clone|--clone-no-blobs] [--clone-all-apps-filtered] [--] APPS
+  bootstrap.sh [--full-clone|--clone-no-blobs] [--clone-all-apps-filtered] [--] APPS
 
 This command will initialize the debug environment for app developers.
 
@@ -27,7 +27,7 @@ The following options can be provided:
   --clone-all-apps-filtered
                     Do not only reduce the history of the server repository but also
                     the cloned apps.
-  
+
   APPS              The apps to add to the development setup on top of the default apps
 
 The default apps to be installed: ${APPS_TO_INSTALL[@]}
@@ -84,7 +84,7 @@ if [ -f ".env" ]; then
 		echo "❌ Repository path does not exist"
 	fi
 
-	for i in stable26 stable27 stable28
+	for i in stable26 stable27 stable28 stable29 stable30
 	do
 		echo "Stable $i repository path: ${STABLE_ROOT_PATH}/${i}"
 		STABLE_VERSION=$(grep "OC_VersionString" "${STABLE_ROOT_PATH}/${i}/version.php" | cut -d "'" -f 2)
@@ -104,7 +104,7 @@ case $SERVER_CLONE in
 	squashed)
 		CLONE_PARAMS=(--depth 1)
 		;;
-	clone-no-blobs)
+	filter-blobs)
 		CLONE_PARAMS=(--filter blob:none)
 		;;
 	full)
@@ -143,7 +143,7 @@ function install_server() {
 	(
 		(
 			echo "🌏 Fetching server (this might take a while to finish)" &&
-				git clone ${CLONE_PARAMS[@]+"${CLONE_PARAMS[@]}"} https://github.com/nextcloud/server.git --depth 1 --branch $BRANCH_VERSION workspace/$BRANCH_VERSION --progress 2>&1 &&
+				git clone ${CLONE_PARAMS[@]+"${CLONE_PARAMS[@]}"} https://github.com/nextcloud/server.git --branch $BRANCH_VERSION workspace/$BRANCH_VERSION --progress 2>&1 &&
 				cd workspace/$BRANCH_VERSION && git submodule update --init --progress 2>&1
 		) || echo "❌ Failed to clone Nextcloud server code"
 	) | indent
@@ -187,6 +187,7 @@ echo "⏩ Performing system checks"
 is_installed docker
 is_installed git
 
+DCC=
 docker-compose version >/dev/null 2>/dev/null && DCC='docker-compose'
 docker compose version >/dev/null 2>/dev/null && DCC='docker compose'
 
@@ -304,5 +305,5 @@ cat <<EOF
 
 For more details about the individual setup options see
 the README.md file or checkout the repo at
-https://github.com/juliushaertl/nextcloud-docker-dev
+https://github.com/juliusknorr/nextcloud-docker-dev
 EOF

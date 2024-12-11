@@ -100,7 +100,7 @@ wait_for_other_containers() {
 		"oci")
 			output " - Oracle"
 			retry_with_timeout "(echo > /dev/tcp/database-$SQL/1521) 2>/dev/null" 30 "⚠ Unable to connect to the Oracle server"
-			sleep 2
+			sleep 45
 			;;
 		"sqlite")
 			output " - SQLite"
@@ -233,7 +233,7 @@ install() {
 
 	output "🔧 Starting auto installation"
 	if [ "$SQL" = "oci" ]; then
-		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name=nextcloud --database-host="$SQLHOST" --database-port=1521 --database-user=nextcloud --database-pass=nextcloud
+		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name=FREE --database-host="$SQLHOST" --database-port=1521 --database-user=system --database-pass=oracle
 	elif [ "$SQL" = "pgsql" ]; then
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL" --database-name="$DBNAME" --database-host="$SQLHOST" --database-user=postgres --database-pass=postgres
 	elif [ "$SQL" = "mysql" ]; then
@@ -388,7 +388,7 @@ check_source() {
 		output "Server source is mounted, continuing"
 	else
 		# Only autoinstall when not running in docker compose
-		if [ -n "$NEXTCLOUD_AUTOINSTALL_APPS" ] && [ ! -f "$WEBROOT"/config/version.php ]
+		if [ -n "$VIRTUAL_HOST" ] && [ ! -f "$WEBROOT"/version.php ]
 		then
 			output "======================================================================================="
 			output " 🚨 Could not find a valid Nextcloud source in $WEBROOT                                "

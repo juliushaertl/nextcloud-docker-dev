@@ -1,4 +1,4 @@
-FROM php:7.1-apache
+FROM php:8.4-apache
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
@@ -23,14 +23,14 @@ RUN install-php-extensions \
     redis \
     smbclient \
     sysvsem \
-    xdebug \
+    xdebug-beta \
     zip \
-    blackfire \
+    # blackfire \
     @composer
 
 # dev tools separate install so we quickly change without rebuilding all php extensions
 RUN apt update && apt-get install -y --no-install-recommends \
-    git curl vim nano sudo cron smbclient iproute2 lnav wget iputils-ping gnupg2 jq ripgrep rsync mariadb-client \
+    git curl vim sudo cron smbclient iproute2 lnav wget iputils-ping gnupg2 jq ripgrep rsync mariadb-client \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHPUnit
