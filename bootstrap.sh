@@ -215,6 +215,7 @@ EOT
 fi
 
 ./scripts/update-hosts
+./scripts/create-aliases
 
 if [[ $(uname -m) == 'arm64' ]]; then
 	echo "Setting custom containers for arm platform"
