@@ -41,6 +41,7 @@ services:
           - stable28${DOMAIN_SUFFIX}
           - stable29${DOMAIN_SUFFIX}
           - stable30${DOMAIN_SUFFIX}
+          - stable31${DOMAIN_SUFFIX}
           - mail${DOMAIN_SUFFIX}
           - collabora${DOMAIN_SUFFIX}
           - codedev${DOMAIN_SUFFIX}
@@ -583,6 +584,36 @@ services:
     volumes:
       - '${STABLE_ROOT_PATH}/stable30:/var/www/html'
       - '${STABLE_ROOT_PATH}/stable30/apps-extra:/var/www/html/apps-extra'
+      - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
+      - /var/www/html/data
+      - /var/www/html/config
+      - /var/www/html/apps-writable
+      - ./data/skeleton/:/skeleton
+      - ./data/additional.config.php:/var/www/html/config/additional.config.php:ro
+      - ./data/shared:/shared
+    depends_on:
+      - database-${SQL:-mysql}
+      - redis
+      - mail
+      - ${PROXY_SERVICE:-proxy}
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+  stable31:
+    image: ghcr.io/juliusknorr/nextcloud-dev-php${PHP_VERSION:-81}:latest
+    environment:
+      SQL: ${SQL:-mysql}
+      NEXTCLOUD_AUTOINSTALL: "YES"
+      NEXTCLOUD_AUTOINSTALL_APPS:
+      WITH_REDIS: "YES"
+      VIRTUAL_HOST: stable31${DOMAIN_SUFFIX}
+      ADDITIONAL_APPS_PATH:
+      NEXTCLOUD_TRUSTED_DOMAINS:
+      PRIMARY: ${PRIMARY:-local}
+      PHP_XDEBUG_MODE: ${PHP_XDEBUG_MODE:-develop}
+    volumes:
+      - '${STABLE_ROOT_PATH}/stable31:/var/www/html'
+      - '${STABLE_ROOT_PATH}/stable31/apps-extra:/var/www/html/apps-extra'
       - '${ADDITIONAL_APPS_PATH:-./data/apps-extra}:/var/www/html/apps-shared'
       - /var/www/html/data
       - /var/www/html/config
