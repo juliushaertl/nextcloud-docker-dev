@@ -9,6 +9,8 @@ In order to run a stable version you need to have the corresponding git checkout
 Assuming you have already cloned the repository into `~/nextcloud-docker-dev/workspace/server` you can run the following commands to create a new worktree for the stable28 branch:
 
 ```bash
+# make sure the stable version is fetched
+git fetch origin stable28:stable28
 # create a new worktree for the stable28 branch
 cd ~/nextcloud-docker-dev/workspace/server
 git worktree add ../stable28 stable28
