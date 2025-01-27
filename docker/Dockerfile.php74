@@ -11,7 +11,7 @@ RUN install-php-extensions \
     exif \
     gd \
     gmp \
-    imagick \
+    imagick@master \
     intl \
     ldap \
     memcached \
