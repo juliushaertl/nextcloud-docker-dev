@@ -11,7 +11,7 @@ RUN install-php-extensions \
     exif \
     gd \
     gmp \
-    imagick \
+    imagick@master \
     intl \
     ldap \
     memcached \
@@ -23,14 +23,14 @@ RUN install-php-extensions \
     redis \
     smbclient \
     sysvsem \
-    xdebug-beta \
+    xdebug \
     zip \
-    # blackfire \
+    blackfire \
     @composer
 
 # dev tools separate install so we quickly change without rebuilding all php extensions
 RUN apt update && apt-get install -y --no-install-recommends \
-    git curl vim sudo cron smbclient iproute2 lnav wget iputils-ping gnupg2 jq ripgrep rsync mariadb-client \
+    git curl vim nano sudo cron smbclient iproute2 lnav wget iputils-ping gnupg2 jq ripgrep rsync mariadb-client \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHPUnit
