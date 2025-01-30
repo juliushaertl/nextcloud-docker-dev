@@ -23,7 +23,7 @@ After the DSP container is running, configure the Deploy daemon in AppAPI admin 
 or via OCC CLI:
 
 ```bash
-./scripts/occ.sh nextcloud -- app_api:daemon:register dsp_http "DSP HTTP" docker-install http "http://nextcloud.local" --net=master_default --set-default
+./scripts/occ.sh nextcloud -- app_api:daemon:register dsp_http "DSP HTTP" docker-install http "nextcloud-appapi-dsp-http" "http://nextcloud.local" --net=master_default --set-default
 ```
 
 ## HTTPS AppAPI DSP
@@ -56,7 +56,7 @@ After the DSP container is running and the certificate is imported in Nextcloud,
 or via OCC CLI:
 
 ```bash
-./scripts/occ.sh nextcloud -- app_api:daemon:register dsp_https "DSP HTTPS" docker-install https "http://nextcloud.local" --net=host --set-default
+./scripts/occ.sh nextcloud -- app_api:daemon:register dsp_https "DSP HTTPS" docker-install https "nextcloud-appapi-dsp-https" "http://nextcloud.local" --net=host --set-default
 ```
 
 
