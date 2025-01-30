@@ -820,6 +820,9 @@ services:
       aliasgroup7: http://stable26${DOMAIN_SUFFIX}
       aliasgroup8: http://stable27${DOMAIN_SUFFIX}
       aliasgroup9: http://stable28${DOMAIN_SUFFIX}
+      aliasgroup10: http://stable29${DOMAIN_SUFFIX}
+      aliasgroup11: http://stable30${DOMAIN_SUFFIX}
+      aliasgroup12: http://stable31${DOMAIN_SUFFIX}
       dictionaries: de_DE en_US en_GB
       username: admin
       password: admin
