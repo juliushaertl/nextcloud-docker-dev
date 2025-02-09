@@ -41,6 +41,11 @@ OCC() {
 	sudo -E -u www-data php "$WEBROOT/occ" $@ | indent
 }
 
+is_installed() {
+	STATUS=$(OCC status)
+	[[ "$STATUS" = *"installed: true"* ]] 
+}
+
 update_permission() {
 	chown -R www-data:www-data "$WEBROOT"/apps-writable
 	chown -R www-data:www-data "$WEBROOT"/data
@@ -250,7 +255,14 @@ install() {
 		OCC maintenance:install --admin-user=$USER --admin-pass=$PASSWORD --database="$SQL"
 	fi;
 
-	output "🔧 Server installed"
+	if is_installed
+	then
+		output "🔧 Server installed"
+	else
+		output "Last nextcloud.log entry:"
+		output "$(tail -n 1 "$WEBROOT"/data/nextcloud.log | jq)"
+		fatal "🚨 Server installation failed."
+	fi
 
 	output "🔧 Provisioning apps"
 	OCC app:disable password_policy
@@ -356,8 +368,8 @@ add_hosts() {
 setup() {
 	update_permission
 	configure_xdebug_mode
-	STATUS=$(OCC status)
-	if [[ "$STATUS" = *"installed: true"* ]] || [[ ! -f $WEBROOT/config/config.php ]]
+
+	if is_installed || [[ ! -f $WEBROOT/config/config.php ]]
 	then
 		output "🚀 Nextcloud already installed ... skipping setup"
 
