@@ -842,7 +842,7 @@ services:
       tail -f /dev/null
 
   onlyoffice:
-    image: onlyoffice/documentserver:8.2
+    image: onlyoffice/documentserver:8.3
     environment:
       VIRTUAL_HOST: onlyoffice${DOMAIN_SUFFIX}
       USE_UNAUTHORIZED_STORAGE: "true"
