@@ -201,6 +201,7 @@ EOF
 		OCC config:system:set gss.jwt.key --value 'random-key-but-super-long-because-this-is-required'
 		OCC config:system:set gss.mode --value 'master'
 		OCC config:system:set gss.master.admin 0 --value 'admin'
+		OCC config:system:set gss.master.admin 1 --value 'akadmin'
 		OCC config:system:set gss.master.csp-allow 0 --value "*${DOMAIN_SUFFIX}"
 		OCC config:system:set 'gss.user.discovery.module' --value '\OCA\GlobalSiteSelector\UserDiscoveryModules\ManualUserMapping'
 		OCC config:system:set 'gss.discovery.manual.mapping.file' --value '/var/www/mapping.json'
